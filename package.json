@@ -1,18 +1,26 @@
 {
+  "name": "lexos",
+  "displayName": "Lexos",
+  "description": "A very simple lexer generator",
   "version": "0.0.0",
   "private": true,
-  "keywords": [],
+  "keywords": [
+    "lexer",
+    "lex",
+    "tokenize",
+    "tokenizer"
+  ],
   "type": "commonjs",
   "exports": {
     "types": "./dist/types/index.d.ts",
-    "import": "./dist/esm/lib.mjs",
-    "require": "./dist/cjs/lib.cjs",
-    "default": "./dist/cjs/lib.cjs"
+    "import": "./dist/esm/lexos.mjs",
+    "require": "./dist/cjs/lexos.cjs",
+    "default": "./dist/cjs/lexos.cjs"
   },
-  "main": "./dist/cjs/lib.cjs",
-  "module": "./dist/esm/lib.mjs",
-  "jsnext:main": "./dist/esm/lib.mjs",
-  "browser": "./dist/umd/lib.umd.js",
+  "main": "./dist/cjs/lexos.cjs",
+  "module": "./dist/esm/lexos.mjs",
+  "jsnext:main": "./dist/esm/lexos.mjs",
+  "browser": "./dist/umd/lexos.umd.js",
   "types": "./dist/types/index.d.ts",
   "typings": "./dist/types/index.d.ts",
   "files": [
@@ -65,15 +73,16 @@
   },
   "author": {
     "name": "Manuel Fernandez",
-    "email": "manferlo81@gmail.com"
+    "email": "manferlo81@gmail.com",
+    "url": "https://github.com/manferlo81"
+  },
+  "homepage": "https://github.com/manferlo81/lexos#readme",
+  "bugs": {
+    "url": "https://github.com/manferlo81/lexos/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/manferlo81/bundlib-starter.git"
+    "url": "git+https://github.com/manferlo81/lexos.git"
   },
-  "bugs": {
-    "url": "https://github.com/manferlo81/bundlib-starter/issues"
-  },
-  "homepage": "https://github.com/manferlo81/bundlib-starter#readme",
-  "license": ""
+  "license": "MIT"
 }
