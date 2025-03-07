@@ -1,14 +1,17 @@
-/** @type { import("jest").Config } */
+const isCI = process.env.CI
+
+/** @type { import("ts-jest").JestConfigWithTsJest } */
 const config = {
-  cacheDirectory: 'node_modules/.cache/jest',
-  preset: 'ts-jest',
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { }],
+  },
 
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**',
   ],
   coverageDirectory: 'coverage',
-  coverageReporters: process.env.CI
+  coverageReporters: isCI
     ? ['text', 'json', 'clover', 'cobertura']
     : ['text', 'html'],
 
@@ -16,6 +19,7 @@ const config = {
     '**/__test__/**/*.test.ts',
   ],
 
+  cacheDirectory: 'node_modules/.cache/jest',
   verbose: true,
 }
 
