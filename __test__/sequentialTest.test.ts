@@ -15,6 +15,7 @@ describe('sequentialTest function', () => {
     const inputsThatDoNotMatch = [
       '$#@*',
       '+_-=/*',
+      '     ',
     ]
     inputsThatDoNotMatch.forEach((input) => {
       expect(testId(input)).toBeFalsy()
@@ -44,7 +45,7 @@ describe('sequentialTest function', () => {
     inputsThatMatchSequentially.forEach((input) => {
       const expected = { value: input, length: input.length }
       expect(testId(input)).toEqual(expected)
-      expect(testId(`${input} and more`)).toEqual(expected)
+      expect(testId(`${input} >>>>>`)).toEqual(expected)
     })
   })
 

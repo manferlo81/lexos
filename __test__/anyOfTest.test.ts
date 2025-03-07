@@ -10,37 +10,19 @@ describe('anyOfTest function', () => {
     expect(typeof test === 'function').toBe(true)
   })
 
-  test('should return falsy if it doesn\'t match', () => {
+  test('should return falsy if it doesn\'t match any of the test', () => {
     const testId = anyOfTest([testInteger, testWord])
     const inputsThatDoNotMatch = [
       '??',
       '%^',
+      '>>>>>',
     ]
     inputsThatDoNotMatch.forEach((input) => {
       expect(testId(input)).toBeFalsy()
     })
   })
 
-  // test('should return falsy if it doesn\'t match the whole input', () => {
-  //   const testId = anyOfTest([testInteger, testWord])
-  //   const inputsThatMatch = [
-  //     'word1234',
-  //     '1234word',
-  //     '1a2b3c',
-  //     'a1b2v3',
-  //   ]
-  //   const inputsThatDoNotMatch = [
-  //     '??',
-  //     '%^',
-  //   ]
-  //   inputsThatMatch.forEach((matches) => {
-  //     inputsThatDoNotMatch.forEach((doNotMatch) => {
-  //       expect(testId(`${matches}${doNotMatch}`)).toBeFalsy()
-  //     })
-  //   })
-  // })
-
-  test('should return result if it matches', () => {
+  test('should return result if it matches one or more tests', () => {
     const testId = anyOfTest([testInteger, testWord])
     const inputsThatMatch = [
       'word1234',
@@ -52,6 +34,7 @@ describe('anyOfTest function', () => {
     const inputsThatDoNotMatch = [
       '??',
       '%^',
+      '>>>>>',
     ]
     inputsThatMatch.forEach((input) => {
       const expected = { value: input, length: input.length }
