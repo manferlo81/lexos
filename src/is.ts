@@ -8,4 +8,5 @@ export function isType(value: unknown, type: string) {
   return typeof value === type
 }
 
-export const isArray = Array.isArray as (value: unknown) => value is (unknown[] | readonly unknown[])
+type UnknownArray = unknown[] | readonly unknown[]
+export const isArray = Array.isArray as (value: unknown) => value is UnknownArray
