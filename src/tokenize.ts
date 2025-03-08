@@ -1,12 +1,12 @@
 import { getFirstTruthyResult } from './first-test'
 import { isRuleTokenResult, isTokenizerResult } from './is'
-import type { Rule, RuleResult } from './types/rule-types'
+import type { Rule, RuleOrTestResult } from './types/rule-types'
 import type { Token, TokenList, TokenType } from './types/token-types'
 import type { TokenizerResult } from './types/types'
 
-function processRuleResult<T extends TokenType>(result: RuleResult<T>, offsetPosition: number, tokens: TokenList<T>): { length: number, passed: boolean } {
+function processRuleResult<T extends TokenType>(result: RuleOrTestResult<T>, offsetPosition: number, tokens: TokenList<T>): { length: number, passed: boolean } {
 
-  //
+  // if it's a token rule
   if (isRuleTokenResult(result)) {
     const { type, value, length } = result
     const token: Token<T> = { type, value, pos: offsetPosition }
@@ -15,9 +15,9 @@ function processRuleResult<T extends TokenType>(result: RuleResult<T>, offsetPos
   }
 
   // return length to advance position if result didn't produce any token
-  if (!isTokenizerResult(result)) return {
-    length: result.length,
-    passed: true,
+  if (!isTokenizerResult(result)) {
+    const { length } = result
+    return { length, passed: true }
   }
 
   //
@@ -36,11 +36,14 @@ function processRuleResult<T extends TokenType>(result: RuleResult<T>, offsetPos
 
 export function tokenizeCode<T extends TokenType>(rules: Array<Rule<T>>, code: string): TokenizerResult<T> {
   // initialize variables
-  let currentPosition = 0
+  const codeLength = code.length
   const tokens: TokenList<T> = []
 
   //
-  while (currentPosition < code.length) {
+  let currentPosition = 0
+
+  //
+  while (currentPosition < codeLength) {
     // get result from first rule that applied
     const result = getFirstTruthyResult(rules, code, currentPosition)
 
@@ -63,7 +66,7 @@ export function tokenizeCode<T extends TokenType>(rules: Array<Rule<T>>, code: s
     // advance current position
     currentPosition += processedLength
 
-    //
+    // exit if lexer rule didn't process the whole input
     if (!passed) return {
       tokens,
       length: currentPosition,

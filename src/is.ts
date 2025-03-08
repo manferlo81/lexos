@@ -1,4 +1,4 @@
-import type { RuleResult, RuleTokenResult } from './types/rule-types'
+import type { RuleOrTestResult, TokenRuleResult } from './types/rule-types'
 import type { TokenType } from './types/token-types'
 import type { TokenizerResult } from './types/types'
 
@@ -15,10 +15,10 @@ export function isType(value: unknown, type: string) {
 type UnknownArray = unknown[] | readonly unknown[]
 export const isArray = Array.isArray as (value: unknown) => value is UnknownArray
 
-export function isRuleTokenResult<T extends TokenType>(result: RuleResult<T>): result is RuleTokenResult<T> {
+export function isRuleTokenResult<T extends TokenType>(result: RuleOrTestResult<T>): result is TokenRuleResult<T> {
   return 'type' in result
 }
 
-export function isTokenizerResult<T extends TokenType>(result: RuleResult<T>): result is TokenizerResult<T> {
+export function isTokenizerResult<T extends TokenType>(result: RuleOrTestResult<T>): result is TokenizerResult<T> {
   return 'tokens' in result
 }

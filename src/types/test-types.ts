@@ -1,4 +1,4 @@
-import type { FalsyReturn } from './helper-types'
+import type { CodeProcessingFunction } from './helper-types'
 
 export interface ExtendedTestResult {
   value: string
@@ -7,4 +7,4 @@ export interface ExtendedTestResult {
 
 export type TestResult = ExtendedTestResult
 
-export type Test = (code: string, currentPosition: number) => TestResult | FalsyReturn
+export type Test = CodeProcessingFunction<TestResult>

@@ -1,4 +1,4 @@
-import { regexpTest } from '../src'
+import { regexpTest } from '../../src'
 
 describe('regexpTest function', () => {
 

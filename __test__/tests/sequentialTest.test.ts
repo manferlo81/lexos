@@ -1,4 +1,4 @@
-import { regexpTest, sequentialTest } from '../src'
+import { regexpTest, sequentialTest } from '../../src'
 
 describe('sequentialTest function', () => {
 

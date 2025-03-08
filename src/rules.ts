@@ -1,43 +1,42 @@
 import { regexpTest, stringTest } from './tests'
 import { tokenizeCode } from './tokenize'
-import type { LexerRule, RuleList } from './types/rule-types'
-import type { Test, TestResult } from './types/test-types'
+import type { CodeProcessingFunction, FalsyReturn } from './types/helper-types'
+import type { LexerRule, RuleList, RuleResult, TokenRule, TokenRuleResult } from './types/rule-types'
+import type { ExtendedTestResult, Test } from './types/test-types'
 import type { TokenType } from './types/token-types'
+import type { TokenizerResult } from './types/types'
 
-type CreateRuleCallback<T extends TokenType> = (match: TestResult) => ReturnType<LexerRule<T>>
-
-function createRule<T extends TokenType>(test: Test, callback: CreateRuleCallback<T>): LexerRule<T> {
+function createRule<T extends TokenType, R extends RuleResult<T>>(test: Test, callback: (result: ExtendedTestResult) => R | FalsyReturn): CodeProcessingFunction<R> {
   return (code, pos) => {
-    const match = test(code, pos)
-    if (!match) return
-    return callback(match)
+    const result = test(code, pos)
+    if (!result) return
+    return callback(result)
   }
 }
 
-export function rule<T extends TokenType>(test: Test, type: T): LexerRule<T> {
-  return createRule(test, ({ value, length }) => {
-    const token = { value, pos: 0, type }
-    return { length, tokens: [token], done: true }
+export function testRule<T extends TokenType>(test: Test, type: T): TokenRule<T> {
+  return createRule(test, ({ value, length }): TokenRuleResult<T> => {
+    return { type, value, length }
   })
 }
 
-export function parentRule<T extends TokenType = never>(test: Test, rules: RuleList<T>): LexerRule<T> {
-  return createRule(test, ({ value }) => {
+export function lexerRule<T extends TokenType = never>(test: Test, rules: RuleList<T>): LexerRule<T> {
+  return createRule(test, ({ value }): TokenizerResult<T> | FalsyReturn => {
     const { tokens, length, done } = tokenizeCode(rules, value)
     if (!length) return
     return { tokens, length, done }
   })
 }
 
-export function regexpRule<T extends TokenType>(regexp: RegExp, type: T): LexerRule<T> {
-  return rule(
+export function regexpRule<T extends TokenType>(regexp: RegExp, type: T): TokenRule<T> {
+  return testRule(
     regexpTest(regexp),
     type,
   )
 }
 
-export function stringRule<T extends TokenType>(value: string, type: T, insensitive?: boolean): LexerRule<T> {
-  return rule(
+export function stringRule<T extends TokenType>(value: string, type: T, insensitive?: boolean): TokenRule<T> {
+  return testRule(
     stringTest(value, insensitive),
     type,
   )

@@ -1,4 +1,4 @@
-import { moreOfTest, regexpTest } from '../src'
+import { moreOfTest, regexpTest } from '../../src'
 
 describe('moreOfTest function', () => {
 

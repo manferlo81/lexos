@@ -1,4 +1,4 @@
-import { stringTest } from '../src'
+import { stringTest } from '../../src'
 
 describe('stringTest function', () => {
 

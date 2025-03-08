@@ -12,10 +12,10 @@ describe('exports', () => {
       oneOfTest: expect.any(Function),
       moreOfTest: expect.any(Function),
       sequentialTest: expect.any(Function),
-      rule: expect.any(Function),
+      testRule: expect.any(Function),
       regexpRule: expect.any(Function),
       stringRule: expect.any(Function),
-      parentRule: expect.any(Function),
+      lexerRule: expect.any(Function),
     }
     expect(lexos).toEqual(expected)
   })
