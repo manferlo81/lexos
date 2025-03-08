@@ -1,47 +1,70 @@
 import { getFirstTruthyResult } from './first-test'
-import type { Rule } from './types/rule-types'
-import type { Token, TokenType } from './types/token-types'
+import { isRuleTokenResult, isTokenizerResult } from './is'
+import type { Rule, RuleResult } from './types/rule-types'
+import type { Token, TokenList, TokenType } from './types/token-types'
 import type { TokenizerResult } from './types/types'
+
+function processRuleResult<T extends TokenType>(result: RuleResult<T>, offsetPosition: number, tokens: TokenList<T>): { length: number, passed: boolean } {
+
+  //
+  if (isRuleTokenResult(result)) {
+    const { type, value, length } = result
+    const token: Token<T> = { type, value, pos: offsetPosition }
+    tokens.push(token)
+    return { length, passed: true }
+  }
+
+  // return length to advance position if result didn't produce any token
+  if (!isTokenizerResult(result)) return {
+    length: result.length,
+    passed: true,
+  }
+
+  //
+  const { tokens: ruleTokens, done: passed, length } = result
+
+  // offset token positions
+  const tokensToAdd = ruleTokens.map(({ type, value, pos }) => ({ type, value, pos: offsetPosition + pos }))
+
+  // add rule tokens to tokens
+  tokens.push(...tokensToAdd)
+
+  //
+  return { length, passed }
+
+}
 
 export function tokenizeCode<T extends TokenType>(rules: Array<Rule<T>>, code: string): TokenizerResult<T> {
   // initialize variables
   let currentPosition = 0
-  const tokens: Array<Token<T>> = []
+  const tokens: TokenList<T> = []
 
   //
-  Loop: while (currentPosition < code.length) {
+  while (currentPosition < code.length) {
     // get result from first rule that applied
     const result = getFirstTruthyResult(rules, code, currentPosition)
 
-    // return failing result if no rule applied or rule didn't process any code
-    if (!result?.length) return {
+    // return failing result if no rule applied
+    if (!result) return {
       tokens,
       length: currentPosition,
       done: false,
     }
 
-    // save current position to offset tokens
-    const tokenOffsetPosition = currentPosition
+    const { length: processedLength, passed } = processRuleResult(result, currentPosition, tokens)
 
-    // advance current position
-    const { length: processedLength } = result
-    currentPosition += processedLength
-
-    // advance current position if result didn't produce any token
-    if (!('tokens' in result)) {
-      continue Loop
+    // return failing result if rule didn't process any code
+    if (!processedLength) return {
+      tokens,
+      length: currentPosition,
+      done: false,
     }
 
+    // advance current position
+    currentPosition += processedLength
+
     //
-    const { tokens: ruleTokens, done } = result
-
-    // offset token positions
-    const tokensToAdd = ruleTokens.map(({ pos, ...rest }) => ({ ...rest, pos: tokenOffsetPosition + pos }))
-
-    // add rule tokens to tokens
-    tokens.push(...tokensToAdd)
-
-    if (!done) return {
+    if (!passed) return {
       tokens,
       length: currentPosition,
       done: false,
