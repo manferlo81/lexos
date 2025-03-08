@@ -3,7 +3,9 @@ const isCI = process.env.CI
 /** @type { import("ts-jest").JestConfigWithTsJest } */
 const config = {
   transform: {
-    '^.+\\.ts$': ['ts-jest', { }],
+    '^.+\\.ts$': ['ts-jest', {
+      tsconfig: './tsconfig-test.json',
+    }],
   },
 
   collectCoverage: true,

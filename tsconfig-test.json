@@ -1,9 +1,9 @@
 {
   "extends": "./tsconfig-base.json",
   "compilerOptions": {
-    "target": "ESNext"
+    "target": "ES2020"
   },
   "include": [
-    "src"
+    "__test__"
   ]
 }
