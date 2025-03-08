@@ -17,7 +17,7 @@ describe('oneOfTest function', () => {
       '-word-1234',
     ]
     inputsThatDoNotMatch.forEach((input) => {
-      expect(testWordOrNumber(input)).toBeFalsy()
+      expect(testWordOrNumber(input, 0)).toBeFalsy()
     })
   })
 
@@ -29,8 +29,8 @@ describe('oneOfTest function', () => {
     ]
     inputsThatMatch.forEach((input) => {
       const expected = { value: input, length: input.length }
-      expect(testWordOrNumber(input)).toEqual(expected)
-      expect(testWordOrNumber(`${input} ???`)).toEqual(expected)
+      expect(testWordOrNumber(input, 0)).toEqual(expected)
+      expect(testWordOrNumber(`${input} ???`, 0)).toEqual(expected)
     })
   })
 

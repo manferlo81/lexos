@@ -18,7 +18,7 @@ describe('sequentialTest function', () => {
       '     ',
     ]
     inputsThatDoNotMatch.forEach((input) => {
-      expect(testId(input)).toBeFalsy()
+      expect(testId(input, 0)).toBeFalsy()
     })
   })
 
@@ -32,7 +32,7 @@ describe('sequentialTest function', () => {
       '1234text6789',
     ]
     inputThatDoNotMathSequentially.forEach((value) => {
-      expect(testId(value)).toBeFalsy()
+      expect(testId(value, 0)).toBeFalsy()
     })
   })
 
@@ -44,8 +44,8 @@ describe('sequentialTest function', () => {
     ]
     inputsThatMatchSequentially.forEach((input) => {
       const expected = { value: input, length: input.length }
-      expect(testId(input)).toEqual(expected)
-      expect(testId(`${input} >>>>>`)).toEqual(expected)
+      expect(testId(input, 0)).toEqual(expected)
+      expect(testId(`${input} >>>>>`, 0)).toEqual(expected)
     })
   })
 

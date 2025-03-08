@@ -14,7 +14,7 @@ describe('regexpTest function', () => {
       'other test',
     ]
     inputsThatDoNotMatch.forEach((input) => {
-      expect(testInteger(input)).toBeFalsy()
+      expect(testInteger(input, 0)).toBeFalsy()
     })
   })
 
@@ -25,13 +25,13 @@ describe('regexpTest function', () => {
       'x45',
     ]
     inputsThatMatchAfter.forEach((input) => {
-      expect(testInteger(input)).toBeFalsy()
+      expect(testInteger(input, 0)).toBeFalsy()
     })
   })
 
   test('should return falsy if it matches but generates an empty value', () => {
-    const test = regexpTest(/\d*/)
-    expect(test('text')).toBeFalsy()
+    const testPossibleNumber = regexpTest(/\d*/)
+    expect(testPossibleNumber('text', 0)).toBeFalsy()
   })
 
   test('should return result if it matches', () => {
@@ -42,8 +42,8 @@ describe('regexpTest function', () => {
     ]
     inputsThatMatch.forEach((input) => {
       const expected = { value: input, length: input.length }
-      expect(testInteger(input)).toEqual(expected)
-      expect(testInteger(`${input} and more`)).toEqual(expected)
+      expect(testInteger(input, 0)).toEqual(expected)
+      expect(testInteger(`${input} and more`, 0)).toEqual(expected)
     })
   })
 

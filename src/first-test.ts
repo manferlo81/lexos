@@ -7,9 +7,9 @@ import type { TokenizerResult } from './types/types'
 export function getFirstTruthyResult(tests: Test[], code: string, pos: number): TestResult | Void
 export function getFirstTruthyResult<T extends TokenType>(tests: RuleList<T>, code: string, pos: number): TokenizerResult<T> | TestResult | Void
 export function getFirstTruthyResult<T extends TokenType>(tests: RuleList<T>, code: string, pos: number): TestResult | TokenizerResult<T> | Void {
-  const partial = code.substring(pos)
+  // const partial = code.substring(pos)
   for (const test of tests) {
-    const result = test(partial)
+    const result = test(code, pos)
     if (result) return result
   }
 }

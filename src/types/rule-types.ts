@@ -15,7 +15,7 @@ import type { TokenizerResult } from './types'
 //   done: boolean
 // }
 
-export type TokenRule<T extends TokenType> = (partial: string) => TokenizerResult<T> | FalsyReturn
+export type TokenRule<T extends TokenType> = (code: string, currentPosition: number) => TokenizerResult<T> | FalsyReturn
 
 export type Rule<T extends TokenType> = TokenRule<T> | Test
 export type RuleList<T extends TokenType> = Array<Rule<T>>

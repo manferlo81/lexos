@@ -7,4 +7,4 @@ export interface ExtendedTestResult {
 
 export type TestResult = ExtendedTestResult
 
-export type Test = (partial: string) => TestResult | FalsyReturn
+export type Test = (code: string, currentPosition: number) => TestResult | FalsyReturn

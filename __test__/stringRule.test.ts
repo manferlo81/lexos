@@ -17,7 +17,7 @@ describe('stringRule function', () => {
         'tEXT',
       ]
       values.forEach((input) => {
-        expect(rule(input)).toBeFalsy()
+        expect(rule(input, 0)).toBeFalsy()
       })
     })
 
@@ -30,8 +30,8 @@ describe('stringRule function', () => {
       values.forEach((input) => {
         const length = input.length
         const expected = { length, tokens: [{ value: input, pos: 0, type }], done: true }
-        expect(rule(input)).toEqual(expected)
-        expect(rule(`${input}-more`)).toEqual(expected)
+        expect(rule(input, 0)).toEqual(expected)
+        expect(rule(`${input}-more`, 0)).toEqual(expected)
       })
     })
 
@@ -41,7 +41,7 @@ describe('stringRule function', () => {
 
     test('should return falsy is it doesn\'t match', () => {
       const rule = stringRule('text', 'Text', true)
-      expect(rule('word')).toBeFalsy()
+      expect(rule('word', 0)).toBeFalsy()
     })
 
     test('should return result if input matches', () => {
@@ -55,8 +55,8 @@ describe('stringRule function', () => {
       values.forEach((input) => {
         const length = input.length
         const expected = { length, tokens: [{ value: input, pos: 0, type }], done: true }
-        expect(rule(input)).toEqual(expected)
-        expect(rule(`${input}-more`)).toEqual(expected)
+        expect(rule(input, 0)).toEqual(expected)
+        expect(rule(`${input}-more`, 0)).toEqual(expected)
       })
     })
 

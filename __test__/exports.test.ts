@@ -10,7 +10,7 @@ describe('exports', () => {
       regexpTest: expect.any(Function),
       stringTest: expect.any(Function),
       oneOfTest: expect.any(Function),
-      anyOfTest: expect.any(Function),
+      moreOfTest: expect.any(Function),
       sequentialTest: expect.any(Function),
       rule: expect.any(Function),
       regexpRule: expect.any(Function),

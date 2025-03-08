@@ -4,13 +4,13 @@ import type { RuleList, TokenRule } from './types/rule-types'
 import type { Test, TestResult } from './types/test-types'
 import type { TokenType } from './types/token-types'
 
-type CreateRuleCallback<T extends TokenType> = (match: TestResult, partial: string) => ReturnType<TokenRule<T>>
+type CreateRuleCallback<T extends TokenType> = (match: TestResult) => ReturnType<TokenRule<T>>
 
 function createRule<T extends TokenType>(test: Test, callback: CreateRuleCallback<T>): TokenRule<T> {
-  return (partial) => {
-    const match = test(partial)
+  return (code, pos) => {
+    const match = test(code, pos)
     if (!match) return
-    return callback(match, partial)
+    return callback(match)
   }
 }
 

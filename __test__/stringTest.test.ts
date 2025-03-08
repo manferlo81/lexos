@@ -22,7 +22,7 @@ describe('stringTest function', () => {
         'anything',
       ]
       inputsThatDoNotMatch.forEach((input) => {
-        expect(testKeyword(input)).toBeFalsy()
+        expect(testKeyword(input, 0)).toBeFalsy()
       })
     })
 
@@ -34,7 +34,7 @@ describe('stringTest function', () => {
         'keyWord',
       ]
       inputsThatDoNotMatchCasing.forEach((input) => {
-        expect(testKeyword(input)).toBeFalsy()
+        expect(testKeyword(input, 0)).toBeFalsy()
       })
     })
 
@@ -42,8 +42,8 @@ describe('stringTest function', () => {
       const inputThatMatches = 'keyword'
       const testKeyword = stringTest(inputThatMatches)
       const expected = { value: inputThatMatches, length: inputThatMatches.length }
-      expect(testKeyword(inputThatMatches)).toEqual(expected)
-      expect(testKeyword(`${inputThatMatches} and more`)).toEqual(expected)
+      expect(testKeyword(inputThatMatches, 0)).toEqual(expected)
+      expect(testKeyword(`${inputThatMatches} and more`, 0)).toEqual(expected)
     })
 
   })
@@ -63,7 +63,7 @@ describe('stringTest function', () => {
         'anything',
       ]
       inputsThatDoNotMatch.forEach((input) => {
-        expect(testKeyword(input)).toBeFalsy()
+        expect(testKeyword(input, 0)).toBeFalsy()
       })
     })
 
@@ -77,8 +77,8 @@ describe('stringTest function', () => {
       ]
       inputsThatMatch.forEach((input) => {
         const expected = { value: input, length: input.length }
-        expect(testKeyword(input)).toEqual(expected)
-        expect(testKeyword(`${input} and more`)).toEqual(expected)
+        expect(testKeyword(input, 0)).toEqual(expected)
+        expect(testKeyword(`${input} and more`, 0)).toEqual(expected)
       })
     })
 
