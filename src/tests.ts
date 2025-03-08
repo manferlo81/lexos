@@ -57,7 +57,7 @@ export function sequentialTest(tests: Test[]): Test {
   return (code, currentPos) => {
     let pos = 0
     for (const test of tests) {
-      const result = getFirstTruthyResult([test], code, currentPos + pos)
+      const result = test(code, currentPos + pos)
       if (!result) return
       const { length } = result
       pos += length
@@ -68,18 +68,18 @@ export function sequentialTest(tests: Test[]): Test {
 }
 
 export function moreOfTest(tests: Test[]): Test {
-  return (code, pos_) => {
-    let pos = 0
-    Loop: while (pos_ + pos < code.length) {
-      const result = getFirstTruthyResult(tests, code, pos_ + pos)
+  return (code, currentPos) => {
+    let localPos = 0
+    Loop: while (currentPos + localPos < code.length) {
+      const result = getFirstTruthyResult(tests, code, currentPos + localPos)
       if (!result) {
-        if (pos === 0) return
+        if (localPos === 0) return
         break Loop
       }
       const { length } = result
-      pos += length
+      localPos += length
     }
-    return { value: code.substring(pos_, pos_ + pos), length: pos }
+    return { value: code.substring(currentPos, currentPos + localPos), length: localPos }
   }
 }
 
@@ -90,4 +90,10 @@ export function oneOfTest(tests: Test[]): Test {
       if (result) return result
     }
   }
+}
+
+export function oneOfStringTest(values: string[], insensitive?: boolean) {
+  return oneOfTest(
+    values.map((value) => stringTest(value, insensitive)),
+  )
 }

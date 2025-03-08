@@ -1,5 +1,5 @@
 import type { CodeProcessingFunction } from './helper-types'
-import type { TestResult } from './test-types'
+import type { Test, TestResult } from './test-types'
 import type { TokenType } from './token-types'
 import type { TokenizerResult } from './types'
 
@@ -15,5 +15,5 @@ export type LexerRule<T extends TokenType> = CodeProcessingFunction<TokenizerRes
 export type RuleResult<T extends TokenType> = TokenRuleResult<T> | TokenizerResult<T>
 export type RuleOrTestResult<T extends TokenType> = RuleResult<T> | TestResult
 
-export type Rule<T extends TokenType> = CodeProcessingFunction<RuleOrTestResult<T>>
+export type Rule<T extends TokenType> = TokenRule<T> | LexerRule<T> | Test
 export type RuleList<T extends TokenType> = Array<Rule<T>>

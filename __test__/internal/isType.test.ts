@@ -1,6 +1,6 @@
-import { isType } from '../src/is'
+import { isType } from '../../src/is'
 
-describe('isType function', () => {
+describe('isType internal function', () => {
 
   const strings = [
     'string',

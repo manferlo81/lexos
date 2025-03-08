@@ -1,4 +1,4 @@
-import { lexerRule, regexpRule, regexpTest, stringRule } from '../../src'
+import { lexerRule, regexpRule, regexpTest } from '../../src'
 
 describe('lexerRule function', () => {
 
@@ -8,69 +8,111 @@ describe('lexerRule function', () => {
   })
 
   test('should return falsy if input doesn\'t match', () => {
-    const realNumberRule = lexerRule(regexpTest(/\d+\.\d+/), [
+    const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
       regexpRule(/\d+/, 'Digits'),
       regexpRule(/\./, 'DecimalPoint'),
     ])
     const inputsThatDoNotMatch = [
-      '147',
-      '.12',
-      '56.',
+      '147 + 2',
+      '10 / 2',
+      '56',
     ]
     inputsThatDoNotMatch.forEach((input) => {
-      expect(realNumberRule(input, 0)).toBeFalsy()
+      expect(expressionRule(input, 0)).toBeFalsy()
     })
   })
 
-  test('should return falsy if the rule didn\'t process any code', () => {
-    const realNumberRule = lexerRule(regexpTest(/\d+\.\d+/), [
+  test('should return result once the test is triggered', () => {
+    const realNumberRule = lexerRule(regexpTest(/\{.*\}/), [
 
     ])
     const inputsThatDoNotMatch = [
-      '45.45',
+      '{45 + 2}',
     ]
     inputsThatDoNotMatch.forEach((input) => {
-      expect(realNumberRule(input, 0)).toBeFalsy()
+      expect(realNumberRule(input, 0)).toEqual({
+        done: false,
+        length: 0,
+        tokens: [],
+      })
     })
   })
 
   test('should return result if input matches', () => {
     const digitsType = 'Digits'
-    const decimalPointType = 'DecimalPoint'
+    const operatorType = 'Operator'
 
-    const realNumberRule = lexerRule(regexpTest(/\d+\.\d+/), [
+    const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
+      regexpTest(/[{}]/),
+      regexpTest(/\s+/),
       regexpRule(/\d+/, digitsType),
-      stringRule('.', decimalPointType),
+      regexpRule(
+        /[+\-*/]/,
+        operatorType,
+      ),
     ])
 
     const inputsThatMatch = [
-      ['147', '0'],
-      ['0', '12'],
-      ['56', '0'],
-      ['89', '55'],
-      ['89', '55', 'and more'],
+      ['147', '+', '5'],
+      ['3', '*', '12'],
+      ['56', '-', '7'],
+      ['89', '/', '55'],
+      ['89', '+', '55', 'and more'],
     ]
-    inputsThatMatch.forEach(([integerPart, decimalPart, more]) => {
-      const match = [integerPart, decimalPart].join('.')
-      const input = more ? [match, more].join(' ') : match
+    inputsThatMatch.forEach(([a, operator, b, more]) => {
+      const operation = [a, operator, b].join(' ')
+      const expression = `{${operation}}`
+      const input = more ? [expression, more].join(' ') : expression
 
-      const result = realNumberRule(input, 0)
-
-      const expected = {
-        length: match.length,
+      expect(expressionRule(input, 0)).toEqual({
+        length: expression.length,
         done: true,
-        tokens: expect.any(Array) as never,
-      }
-      expect(result).toEqual(expected)
+        tokens: [
+          { type: digitsType, value: a, pos: 1 },
+          { type: operatorType, value: operator, pos: a.length + 2 },
+          { type: digitsType, value: b, pos: a.length + 4 },
+        ],
+      })
 
-      if (!result) throw Error()
-      const { tokens } = result
+    })
+  })
 
-      expect(tokens).toEqual([
-        { type: digitsType, value: integerPart, pos: 0 },
-        { type: decimalPointType, value: '.', pos: integerPart.length },
-        { type: digitsType, value: decimalPart, pos: integerPart.length + 1 },
-      ])
+  test('should return result if input matches', () => {
+    const digitsType = 'Digits'
+    const operatorType = 'Operator'
+
+    const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
+      regexpTest(/[{}]/),
+      regexpTest(/\s+/),
+      regexpRule(/\d+/, digitsType),
+      regexpRule(
+        /[+\-*/]/,
+        operatorType,
+      ),
+    ])
+
+    const inputsThatMatch = [
+      ['147', '+', '5'],
+      ['3', '*', '12'],
+      ['56', '-', '7'],
+      ['89', '/', '55'],
+      ['89', '+', '55', 'and more'],
+    ]
+    inputsThatMatch.forEach(([a, operator, b, more]) => {
+      const operation = [a, operator, b].join(' ')
+      const expression = `{${operation}}`
+      const input = more ? [expression, more].join(' ') : expression
+
+      expect(expressionRule(input, 0)).toEqual({
+        length: expression.length,
+        done: true,
+        tokens: [
+          { type: digitsType, value: a, pos: 1 },
+          { type: operatorType, value: operator, pos: a.length + 2 },
+          { type: digitsType, value: b, pos: a.length + 4 },
+        ],
+      })
+
     })
   })
 
