@@ -26,9 +26,11 @@ describe('regexpRule function', () => {
     ]
     inputsThatMatch.forEach((input) => {
       const expected = {
-        type,
-        value: input,
         length: input.length,
+        token: {
+          type,
+          value: input,
+        },
       }
       expect(integerRule(input, 0)).toEqual(expected)
       expect(integerRule(`${input} and more`, 0)).toEqual(expected)

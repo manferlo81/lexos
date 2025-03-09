@@ -1,8 +1,8 @@
+import type { Typed, Valuable } from './helper-types'
+
 export type TokenType = string | number
 
-export interface Token<T extends TokenType> {
-  type: T
-  value: string
+export interface Token<T extends TokenType> extends Typed<T>, Valuable {
   pos: number
 }
 

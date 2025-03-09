@@ -1,15 +1,15 @@
 import { getFirstTruthyResult } from './first-test'
 import { isRuleTokenResult, isTokenizerResult } from './is'
-import type { Rule, RuleOrTestResult } from './types/rule-types'
+import type { AnyRuleResult, RuleList } from './types/rule-types'
 import type { Token, TokenList, TokenType } from './types/token-types'
 import type { TokenizerResult } from './types/types'
 
-function processRuleResult<T extends TokenType>(result: RuleOrTestResult<T>, offsetPosition: number, tokens: TokenList<T>): { length: number, passed: boolean } {
+function processRuleResult<T extends TokenType>(result: AnyRuleResult<T>, offsetPosition: number, tokens: TokenList<T>): { length: number, passed: boolean } {
 
   // if it's a token rule
   if (isRuleTokenResult(result)) {
-    const { type, value, length } = result
-    const token: Token<T> = { type, value, pos: offsetPosition }
+    const { length, token: ruleToken } = result
+    const token: Token<T> = { ...ruleToken, pos: offsetPosition }
     tokens.push(token)
     return { length, passed: true }
   }
@@ -34,7 +34,7 @@ function processRuleResult<T extends TokenType>(result: RuleOrTestResult<T>, off
 
 }
 
-export function tokenizeCode<T extends TokenType>(rules: Array<Rule<T>>, code: string): TokenizerResult<T> {
+export function tokenizeCode<T extends TokenType>(rules: RuleList<T>, code: string): TokenizerResult<T> {
   // initialize variables
   const codeLength = code.length
   const tokens: TokenList<T> = []

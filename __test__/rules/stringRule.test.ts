@@ -36,7 +36,13 @@ describe('stringRule function', () => {
         'keyword',
       ]
       values.forEach((input) => {
-        const expected = { type, value: input, length: input.length }
+        const expected = {
+          length: input.length,
+          token: {
+            type,
+            value: input,
+          },
+        }
         expect(rule(input, 0)).toEqual(expected)
         expect(rule(`${input} and more`, 0)).toEqual(expected)
       })
@@ -78,7 +84,13 @@ describe('stringRule function', () => {
         'KEYWORD',
       ]
       inputsThatMatch.forEach((input) => {
-        const expected = { value: input, length: input.length, type }
+        const expected = {
+          length: input.length,
+          token: {
+            type,
+            value: input,
+          },
+        }
         expect(rule(input, 0)).toEqual(expected)
         expect(rule(`${input} and more`, 0)).toEqual(expected)
       })

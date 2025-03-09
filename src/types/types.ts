@@ -1,8 +1,8 @@
-import type { Token, TokenType } from './token-types'
+import type { Lengthy } from './helper-types'
+import type { TokenList, TokenType } from './token-types'
 
-export interface TokenizerResult<T extends TokenType> {
-  tokens: Array<Token<T>>
-  length: number
+export interface TokenizerResult<T extends TokenType> extends Lengthy {
+  tokens: TokenList<T>
   done: boolean
 }
 

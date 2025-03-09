@@ -1,5 +1,6 @@
 import { getFirstTruthyResult } from './first-test'
-import type { Test } from './types/test-types'
+import type { MultiList } from './types/helper-types'
+import type { MultiTestList, Test } from './types/test-types'
 
 export function regexpTest(regexp: RegExp): Test {
   // return test
@@ -31,6 +32,8 @@ function makeInsensitive(value: string, insensitive?: boolean) {
   return insensitive ? value.toLowerCase() : value
 }
 
+export function stringTest(value: '', insensitive?: boolean): never
+export function stringTest(value: string, insensitive?: boolean): Test
 export function stringTest(value: string, insensitive?: boolean): Test {
   // throw if value length is zero
   const { length } = value
@@ -60,7 +63,7 @@ export function stringTest(value: string, insensitive?: boolean): Test {
   }
 }
 
-export function sequentialTest(tests: Test[]): Test {
+export function sequentialTest(tests: MultiTestList): Test {
   // return test
   return (code, currentPos) => {
     // initialize position
@@ -90,7 +93,7 @@ export function sequentialTest(tests: Test[]): Test {
   }
 }
 
-export function oneOfTest(tests: Test[]): Test {
+export function oneOfTest(tests: MultiTestList): Test {
   // return test
   return (code, currentPos) => {
     // iterate through tests
@@ -103,14 +106,14 @@ export function oneOfTest(tests: Test[]): Test {
   }
 }
 
-export function oneOfStringTest(values: string[], insensitive?: boolean) {
+export function oneOfStringTest(values: MultiList<string>, insensitive?: boolean) {
   // create tests from values
-  const tests = values.map((value) => stringTest(value, insensitive))
+  const tests = values.map((value) => stringTest(value, insensitive)) as MultiTestList
   // return one-of test
   return oneOfTest(tests)
 }
 
-export function moreOfTest(tests: Test[]): Test {
+export function moreOfTest(tests: MultiTestList): Test {
   // return test
   return (code, currentPos) => {
     // initialize variables and constants

@@ -26,9 +26,11 @@ describe('testRule function', () => {
     ]
     inputsThatMatch.forEach((input) => {
       const expected = {
-        type,
-        value: input,
         length: input.length,
+        token: {
+          type,
+          value: input,
+        },
       }
       expect(starStringRule(input, 0)).toEqual(expected)
       expect(starStringRule(`${input} and more`, 0)).toEqual(expected)
@@ -54,9 +56,11 @@ describe('testRule function', () => {
 
     inputsThatMatch.forEach((input) => {
       const expected = {
-        type,
-        value: input,
         length: 4,
+        token: {
+          type,
+          value: input,
+        },
       }
       expect(starStringRule(input, 0)).toEqual(expected)
       expect(starStringRule(`${input} and more`, 0)).toEqual(expected)

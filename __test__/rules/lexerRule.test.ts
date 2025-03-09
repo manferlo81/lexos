@@ -3,7 +3,7 @@ import { lexerRule, regexpRule, regexpTest } from '../../src'
 describe('lexerRule function', () => {
 
   test('should be a function', () => {
-    const rule = lexerRule(() => null, [])
+    const rule = lexerRule(() => null, [] as never)
     expect(typeof rule === 'function').toBe(true)
   })
 
@@ -23,14 +23,14 @@ describe('lexerRule function', () => {
   })
 
   test('should return result once the test is triggered', () => {
-    const realNumberRule = lexerRule(regexpTest(/\{.*\}/), [
+    const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
 
-    ])
+    ] as never)
     const inputsThatDoNotMatch = [
       '{45 + 2}',
     ]
     inputsThatDoNotMatch.forEach((input) => {
-      expect(realNumberRule(input, 0)).toEqual({
+      expect(expressionRule(input, 0)).toEqual({
         done: false,
         length: 0,
         tokens: [],

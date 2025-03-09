@@ -1,8 +1,7 @@
-import type { CodeProcessingFunction } from './helper-types'
+import type { CodeProcessingFunction, Lengthy, List, MultiList, Valuable } from './helper-types'
 
-export interface TestResult {
-  value: string
-  length: number
-}
+export interface TestResult extends Lengthy, Valuable {}
 
 export type Test = CodeProcessingFunction<TestResult>
+export type TestList = List<Test>
+export type MultiTestList = MultiList<Test>
