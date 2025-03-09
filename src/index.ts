@@ -1,6 +1,6 @@
 export { createLexer } from './lexer'
-export { lexerRule, regexpRule, stringRule, testRule } from './rules'
-export { moreOfTest, oneOfTest, regexpTest, sequentialTest, stringTest } from './tests'
+export { lexerRule, oneOfStringRule, regexpRule, stringRule, testRule } from './rules'
+export { moreOfTest, oneOfStringTest, oneOfTest, regexpTest, sequentialTest, stringTest } from './tests'
 export type { LexerRule, Rule, RuleList, RuleOrTestResult, RuleResult, TokenRule, TokenRuleResult } from './types/rule-types'
 export type { Test, TestResult } from './types/test-types'
 export type { Token, TokenList, TokenType } from './types/token-types'

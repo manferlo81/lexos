@@ -3,24 +3,26 @@ import type { Test } from './types/test-types'
 
 export function regexpTest(regexp: RegExp): Test {
   // return test
-  return (code, pos) => {
-    const partial = code.substring(pos)
+  return (code, currentPos) => {
+    //
+    const partial = code.substring(currentPos)
+
     // match regexp against partial
     const match = regexp.exec(partial)
 
-    // return falsy if no match
+    // return no match if no match
     if (!match) return
 
-    // return falsy if it doesn't match the very beginning of partial
+    // return no match if it doesn't match the very beginning of partial
     const { index } = match
     if (index !== 0) return
 
-    // return falsy if value is empty
+    // return no match if value is empty
     const [value] = match
     const { length } = value
     if (!length) return
 
-    // return result
+    // return match result
     return { value, length }
   }
 }
@@ -38,62 +40,103 @@ export function stringTest(value: string, insensitive?: boolean): Test {
   const valueToCompare = makeInsensitive(value, insensitive)
 
   // return test
-  return (code, pos) => {
+  return (code, currentPos) => {
+    // return no match if there is not enough code to process
+    const end = currentPos + length
+    if (end > code.length) return
+
     // normalize partial value to compare
-    const partialToLength = code.substring(pos, pos + length)
+    const partialToLength = code.substring(currentPos, end)
     const partialToCompare = makeInsensitive(partialToLength, insensitive)
 
-    // return result if values match
-    if (partialToCompare === valueToCompare) {
-      return {
-        value: partialToLength,
-        length,
-      }
+    // return no match if values don't match
+    if (partialToCompare !== valueToCompare) return
+
+    // return match result if values match
+    return {
+      value: partialToLength,
+      length,
     }
   }
 }
 
 export function sequentialTest(tests: Test[]): Test {
+  // return test
   return (code, currentPos) => {
-    let pos = 0
-    for (const test of tests) {
-      const result = test(code, currentPos + pos)
-      if (!result) return
-      const { length } = result
-      pos += length
-    }
-    const value = code.substring(currentPos, currentPos + pos)
-    return { value, length: pos }
-  }
-}
-
-export function moreOfTest(tests: Test[]): Test {
-  return (code, currentPos) => {
+    // initialize position
     let localPos = 0
-    Loop: while (currentPos + localPos < code.length) {
-      const result = getFirstTruthyResult(tests, code, currentPos + localPos)
-      if (!result) {
-        if (localPos === 0) return
-        break Loop
-      }
+
+    // loop though tests
+    for (const test of tests) {
+      // run test against code on current position
+      const result = test(code, currentPos + localPos)
+
+      // return no match if test didn't match
+      if (!result) return
+
+      // advance position and continue loop
       const { length } = result
       localPos += length
     }
-    return { value: code.substring(currentPos, currentPos + localPos), length: localPos }
+
+    // return no match if no code was processed
+    if (!localPos) return
+
+    // return match result
+    return {
+      value: code.substring(currentPos, currentPos + localPos),
+      length: localPos,
+    }
   }
 }
 
 export function oneOfTest(tests: Test[]): Test {
-  return (code, pos) => {
+  // return test
+  return (code, currentPos) => {
+    // iterate through tests
     for (const test of tests) {
-      const result = test(code, pos)
+      // return result if it matches
+      const result = test(code, currentPos)
       if (result) return result
     }
+    // return no match (void) if no test matched
   }
 }
 
 export function oneOfStringTest(values: string[], insensitive?: boolean) {
-  return oneOfTest(
-    values.map((value) => stringTest(value, insensitive)),
-  )
+  // create tests from values
+  const tests = values.map((value) => stringTest(value, insensitive))
+  // return one-of test
+  return oneOfTest(tests)
+}
+
+export function moreOfTest(tests: Test[]): Test {
+  // return test
+  return (code, currentPos) => {
+    // initialize variables and constants
+    const codeLength = code.length
+    let posOffset = 0
+
+    // loop
+    Loop: while (currentPos + posOffset < codeLength) {
+      // get result of first test that matched
+      const result = getFirstTruthyResult(tests, code, currentPos + posOffset)
+
+      // break out of the loop if no test matched
+      if (!result) break Loop
+
+      // advance position and continue loop
+      const { length } = result
+      posOffset += length
+    }
+
+    // return no match if no code was processed
+    if (!posOffset) return
+
+    // return match result
+    return {
+      value: code.substring(currentPos, currentPos + posOffset),
+      length: posOffset,
+    }
+  }
 }
