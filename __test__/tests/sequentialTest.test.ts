@@ -10,6 +10,18 @@ describe('sequentialTest function', () => {
     expect(typeof testId === 'function').toBe(true)
   })
 
+  test('should return falsy if no test passed', () => {
+    const testId = sequentialTest([] as never)
+    const inputsThatDoNotMatch = [
+      '$#@*',
+      '+_-=/*',
+      '     ',
+    ]
+    inputsThatDoNotMatch.forEach((input) => {
+      expect(testId(input, 0)).toBeFalsy()
+    })
+  })
+
   test('should return falsy if input doesn\'t match', () => {
     const testId = sequentialTest([testWord, testInteger, testWord])
     const inputsThatDoNotMatch = [
