@@ -7,4 +7,3 @@ export type { Rule, SingleTokenRuleResult as RuleResult, RuleToken, SingleTokenR
 export type { Test, TestResult } from './types/test-types'
 export type { Token, TokenType } from './types/token-types'
 export type { GetNextToken, Lexer, Tokenizer } from './types/types'
-

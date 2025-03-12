@@ -61,6 +61,6 @@ export function lexerRule<T extends TokenType = never>(test: Test, rules: Array<
 export function regexpLexerRule<T extends TokenType = never>(regexp: RegExp, rules: Array<Rule<T>>) {
   return lexerRule(
     regexpTest(regexp),
-    rules
+    rules,
   )
 }
