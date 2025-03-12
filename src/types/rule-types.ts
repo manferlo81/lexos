@@ -1,20 +1,20 @@
-import type { CodeProcessingFunction, Lengthy, List, Typed, Valuable } from './helper-types'
+import type { CodeProcessingFunction, FalsyReturn, Lengthy, Typed, Valued } from './internal/helper-types'
 import type { Test, TestResult } from './test-types'
 import type { TokenType } from './token-types'
-import type { TokenizerResult } from './types'
+import type { GetNextToken } from './types'
 
-export type LexerRule<T extends TokenType> = CodeProcessingFunction<TokenizerResult<T>>
+export interface RuleToken<T extends TokenType> extends Typed<T>, Valued {}
 
-export interface RuleToken<T extends TokenType> extends Typed<T>, Valuable {}
-
-export interface TokenRuleResult<T extends TokenType> extends Lengthy {
+export interface SingleTokenRuleResult<T extends TokenType> extends Lengthy {
   token: RuleToken<T>
 }
 
-export type TokenRule<T extends TokenType> = CodeProcessingFunction<TokenRuleResult<T>>
+export interface MultiTokenRuleResult<T extends TokenType> extends Lengthy {
+  getToken: GetNextToken<T>
+}
 
-export type RuleResult<T extends TokenType> = TokenRuleResult<T> | TokenizerResult<T>
-export type AnyRuleResult<T extends TokenType> = RuleResult<T> | TestResult
+export type SingleTokenRule<T extends TokenType> = CodeProcessingFunction<SingleTokenRuleResult<T> | FalsyReturn>
+export type MultiTokenRule<T extends TokenType> = CodeProcessingFunction<MultiTokenRuleResult<T> | FalsyReturn>
 
-export type Rule<T extends TokenType> = TokenRule<T> | LexerRule<T> | Test
-export type RuleList<T extends TokenType = never> = List<Rule<T>>
+export type Rule<T extends TokenType> = SingleTokenRule<T> | MultiTokenRule<T> | Test
+export type RuleResult<T extends TokenType> = SingleTokenRuleResult<T> | MultiTokenRuleResult<T> | TestResult

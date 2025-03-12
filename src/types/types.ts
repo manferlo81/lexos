@@ -1,9 +1,6 @@
-import type { Lengthy } from './helper-types'
-import type { TokenList, TokenType } from './token-types'
+import type { Token, TokenType } from './token-types'
 
-export interface TokenizerResult<T extends TokenType> extends Lengthy {
-  tokens: TokenList<T>
-  done: boolean
-}
+export type GetNextToken<T extends TokenType> = () => Token<T> | null
 
-export type Tokenizer<T extends TokenType> = (code: string) => TokenizerResult<T>
+export type Lexer<T extends TokenType> = (input: string) => GetNextToken<T>
+export type Tokenizer<T extends TokenType> = (input: string) => Array<Token<T>>

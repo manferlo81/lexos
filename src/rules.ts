@@ -1,60 +1,59 @@
-import { oneOfStringTest, regexpTest, stringTest } from './tests'
-import { tokenizeCode } from './tokenize'
-import type { CodeProcessingFunction, FalsyReturn, MultiList } from './types/helper-types'
-import type { LexerRule, RuleList, RuleResult, TokenRule, TokenRuleResult } from './types/rule-types'
-import type { Test, TestList, TestResult } from './types/test-types'
+import { oneOfStringTest } from './composite'
+import { createGetNextToken } from './get-next-token'
+import { regexpTest, stringTest } from './tests'
+import type { CodeProcessingFunction, Void } from './types/internal/helper-types'
+import type { MultiTokenRule, Rule, SingleTokenRule, SingleTokenRuleResult } from './types/rule-types'
+import type { Test, TestResult } from './types/test-types'
 import type { TokenType } from './types/token-types'
-import type { TokenizerResult } from './types/types'
 
-type CreateRuleResult<R extends RuleResult<TokenType>> = (result: TestResult) => R | FalsyReturn
+type CreateRuleResult<R> = (result: TestResult, currentPosition: number) => R
 
-function createRule<R extends RuleResult<TokenType>>(test: Test, createResult: CreateRuleResult<R>): CodeProcessingFunction<R> {
+function createRule<R>(test: Test, createResult: CreateRuleResult<R>): CodeProcessingFunction<R | Void> {
   // return rule
-  return (code, currentPos) => {
+  return (input, currentPosition) => {
     // test code at current position
-    const result = test(code, currentPos)
+    const result = test(input, currentPosition)
 
     // return no match if test didn't match
     if (!result) return
 
     // callback result creator function
-    return createResult(result)
+    return createResult(result, currentPosition)
   }
 }
 
-export function testRule<T extends TokenType>(test: Test, type: T): TokenRule<T> {
-  // create result function
-  const createResult: CreateRuleResult<TokenRuleResult<T>> = ({ value, length }) => ({ length, token: { type, value } })
+export function testRule<T extends TokenType>(test: Test, type: T): SingleTokenRule<T> {
   // return rule
-  return createRule(test, createResult)
+  return createRule(test, ({ length, value }): SingleTokenRuleResult<T> => {
+    return { length, token: { type, value } }
+  })
 }
 
-export function lexerRule(test: Test, rules: TestList): LexerRule<never>
-export function lexerRule<T extends TokenType = never>(test: Test, rules: RuleList<T>): LexerRule<T>
-export function lexerRule<T extends TokenType = never>(test: Test, rules: RuleList<T>): LexerRule<T> {
-  // create result function
-  const tokenize: CreateRuleResult<TokenizerResult<T>> = ({ value }) => tokenizeCode(rules, value)
-  // return rule
-  return createRule(test, tokenize)
-}
-
-export function regexpRule<T extends TokenType>(regexp: RegExp, type: T): TokenRule<T> {
-  // create test function from RegExp
+export function regexpRule<T extends TokenType>(regexp: RegExp, type: T): SingleTokenRule<T> {
+  // create test
   const test = regexpTest(regexp)
   // return rule
   return testRule(test, type)
 }
 
-export function stringRule<T extends TokenType>(value: string, type: T, insensitive?: boolean): TokenRule<T> {
-  // create test function from string
+export function stringRule<T extends TokenType>(value: string, type: T, insensitive?: boolean): SingleTokenRule<T> {
+  // create test
   const test = stringTest(value, insensitive)
   // return rule
   return testRule(test, type)
 }
 
-export function oneOfStringRule<T extends TokenType>(values: MultiList<string>, type: T, insensitive?: boolean) {
+export function oneOfStringRule<T extends TokenType>(values: string[], type: T, insensitive?: boolean): SingleTokenRule<T> {
   // create one-of test function from string list
   const test = oneOfStringTest(values, insensitive)
   // return rule
   return testRule(test, type)
+}
+
+export function lexerRule<T extends TokenType = never>(test: Test, rules: Array<Rule<T>>): MultiTokenRule<T> {
+  // return rule
+  return createRule(test, ({ length, value }, currentPosition) => {
+    const getToken = createGetNextToken(value, rules, currentPosition)
+    return { length, getToken }
+  })
 }

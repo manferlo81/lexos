@@ -1,4 +1,5 @@
 import { lexerRule, regexpRule, regexpTest } from '../../src'
+import type { MultiTokenRuleResult } from '../../src/types/rule-types'
 
 describe('lexerRule function', () => {
 
@@ -22,18 +23,17 @@ describe('lexerRule function', () => {
     })
   })
 
-  test('should return result once the test is triggered', () => {
+  test('should return multi token result once triggered', () => {
     const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
 
-    ] as never)
+    ])
     const inputsThatDoNotMatch = [
       '{45 + 2}',
     ]
     inputsThatDoNotMatch.forEach((input) => {
       expect(expressionRule(input, 0)).toEqual({
-        done: false,
-        length: 0,
-        tokens: [],
+        length: 8,
+        getToken: expect.any(Function) as unknown,
       })
     })
   })
@@ -64,16 +64,18 @@ describe('lexerRule function', () => {
       const expression = `{${operation}}`
       const input = more ? [expression, more].join(' ') : expression
 
-      expect(expressionRule(input, 0)).toEqual({
+      const ruleResult = expressionRule(input, 0)
+
+      expect(ruleResult).toEqual({
         length: expression.length,
-        done: true,
-        tokens: [
-          { type: digitsType, value: a, pos: 1 },
-          { type: operatorType, value: operator, pos: a.length + 2 },
-          { type: digitsType, value: b, pos: a.length + 4 },
-        ],
+        getToken: expect.any(Function) as unknown,
       })
 
+      const { getToken } = ruleResult as MultiTokenRuleResult<never>
+      expect(getToken()).toEqual({ type: digitsType, value: a, pos: 1 })
+      expect(getToken()).toEqual({ type: operatorType, value: operator, pos: a.length + 2 })
+      expect(getToken()).toEqual({ type: digitsType, value: b, pos: a.length + 4 })
+      expect(getToken()).toBeNull()
     })
   })
 
@@ -103,15 +105,18 @@ describe('lexerRule function', () => {
       const expression = `{${operation}}`
       const input = more ? [expression, more].join(' ') : expression
 
-      expect(expressionRule(input, 0)).toEqual({
+      const ruleResult = expressionRule(input, 0)
+      expect(ruleResult).toEqual({
         length: expression.length,
-        done: true,
-        tokens: [
-          { type: digitsType, value: a, pos: 1 },
-          { type: operatorType, value: operator, pos: a.length + 2 },
-          { type: digitsType, value: b, pos: a.length + 4 },
-        ],
+        getToken: expect.any(Function) as unknown,
       })
+
+      const { getToken } = ruleResult as MultiTokenRuleResult<never>
+
+      expect(getToken()).toEqual({ type: digitsType, value: a, pos: 1 })
+      expect(getToken()).toEqual({ type: operatorType, value: operator, pos: a.length + 2 })
+      expect(getToken()).toEqual({ type: digitsType, value: b, pos: a.length + 4 })
+      expect(getToken()).toBeNull()
 
     })
   })

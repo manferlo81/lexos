@@ -2,12 +2,12 @@ import { stringTest } from '../../src'
 
 describe('stringTest function', () => {
 
-  test('should throw if an empty string is passed', () => {
-    const exec = () => stringTest('')
-    expect(exec).toThrow()
-  })
-
   describe('case sensitive', () => {
+
+    test('should throw if an empty string is passed', () => {
+      const exec = () => stringTest('')
+      expect(exec).toThrow('Zero length string test')
+    })
 
     test('should be a function', () => {
       const testKeyword = stringTest('keyword')
@@ -49,6 +49,11 @@ describe('stringTest function', () => {
   })
 
   describe('case insensitive', () => {
+
+    test('should throw if an empty string is passed', () => {
+      const exec = () => stringTest('', true)
+      expect(exec).toThrow('Zero length string test')
+    })
 
     test('should be a function', () => {
       const testKeyword = stringTest('keyword', true)

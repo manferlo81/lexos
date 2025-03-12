@@ -6,7 +6,7 @@ describe('stringRule function', () => {
 
     test('should throw if an empty string is passed', () => {
       const exec = () => stringRule('', 'EmptyString')
-      expect(exec).toThrow()
+      expect(exec).toThrow('Zero length string test')
     })
 
     test('should be a function', () => {
@@ -54,7 +54,7 @@ describe('stringRule function', () => {
 
     test('should throw if an empty string is passed', () => {
       const exec = () => stringRule('', 'EmptyString', true)
-      expect(exec).toThrow()
+      expect(exec).toThrow('Zero length string test')
     })
 
     test('should be a function', () => {

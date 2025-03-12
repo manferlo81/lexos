@@ -1,6 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 export type Void = void
-
 export type Falsy = null | undefined | false
 export type FalsyReturn = Falsy | Void
 
@@ -12,11 +11,8 @@ export interface Lengthy {
   length: number
 }
 
-export interface Valuable {
+export interface Valued {
   value: string
 }
 
-export type CodeProcessingFunction<R> = (code: string, currentPosition: number) => R | FalsyReturn
-
-export type List<T> = [first: T, ...more: T[]]
-export type MultiList<T> = [first: T, second: T, ...more: T[]]
+export type CodeProcessingFunction<R> = (input: string, currentPosition: number) => R
