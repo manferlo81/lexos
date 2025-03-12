@@ -17,6 +17,7 @@ describe('Exports', () => {
       stringRule: expect.any(Function),
       oneOfStringRule: expect.any(Function),
       lexerRule: expect.any(Function),
+      regexpLexerRule: expect.any(Function),
     }
     expect(lexos).toEqual(expected)
   })

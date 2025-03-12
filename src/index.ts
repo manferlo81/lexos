@@ -1,9 +1,10 @@
 export { moreOfTest, oneOfStringTest, oneOfTest, sequentialTest } from './composite'
 export { createLexer } from './lexer'
-export { lexerRule, oneOfStringRule, regexpRule, stringRule, testRule } from './rules'
+export { lexerRule, oneOfStringRule, regexpLexerRule, regexpRule, stringRule, testRule } from './rules'
 export { regexpTest, stringTest } from './tests'
 export { createTokenizer } from './tokenizer'
 export type { Rule, SingleTokenRuleResult as RuleResult, RuleToken, SingleTokenRule } from './types/rule-types'
 export type { Test, TestResult } from './types/test-types'
 export type { Token, TokenType } from './types/token-types'
 export type { GetNextToken, Lexer, Tokenizer } from './types/types'
+
