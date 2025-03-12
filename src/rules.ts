@@ -1,6 +1,5 @@
-import { oneOfStringTest } from './composite'
 import { createGetNextToken } from './get-next-token'
-import { regexpTest, stringTest } from './tests'
+import { oneOfStringTest, regexpTest, stringTest } from './tests'
 import type { CodeProcessingFunction, Void } from './types/internal/helper-types'
 import type { MultiTokenRule, Rule, SingleTokenRule, SingleTokenRuleResult } from './types/rule-types'
 import type { Test, TestResult } from './types/test-types'
@@ -59,6 +58,7 @@ export function lexerRule<T extends TokenType = never>(test: Test, rules: Array<
 }
 
 export function regexpLexerRule<T extends TokenType = never>(regexp: RegExp, rules: Array<Rule<T>>) {
+  // return rule
   return lexerRule(
     regexpTest(regexp),
     rules,

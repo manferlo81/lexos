@@ -1,5 +1,4 @@
-import { stringTest } from './tests'
-import { createOneOf } from './tools/one-of'
+import { oneOfRule } from './one-of'
 import type { Test } from './types/test-types'
 
 export function sequentialTest(tests: Test[]): Test {
@@ -30,21 +29,9 @@ export function sequentialTest(tests: Test[]): Test {
   }
 }
 
-export function oneOfTest(tests: Test[]): Test {
-  // return test
-  return createOneOf(tests)
-}
-
-export function oneOfStringTest(values: string[], insensitive?: boolean) {
-  // create tests from values
-  const tests = values.map((value) => stringTest(value, insensitive))
-  // return one-of test
-  return oneOfTest(tests)
-}
-
 export function moreOfTest(tests: Test[]): Test {
   // create test
-  const test = createOneOf(tests)
+  const test = oneOfRule(tests)
   // return test
   return (input, currentPosition) => {
     // initialize variables and constants

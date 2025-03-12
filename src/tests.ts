@@ -1,3 +1,4 @@
+import { oneOfRule } from './one-of'
 import { makeInsensitive } from './tools/string-case'
 import type { Test } from './types/test-types'
 
@@ -49,4 +50,11 @@ export function stringTest(value: string, insensitive?: boolean): Test {
 
     // fail otherwise
   }
+}
+
+export function oneOfStringTest(values: string[], insensitive?: boolean): Test {
+  // create tests from values
+  const tests = values.map((value) => stringTest(value, insensitive))
+  // return one-of test
+  return oneOfRule(tests)
 }

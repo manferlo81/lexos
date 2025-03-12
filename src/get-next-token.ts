@@ -1,4 +1,4 @@
-import { createOneOf } from './tools/one-of'
+import { oneOfRule } from './one-of'
 import type { MultiTokenRuleResult, Rule } from './types/rule-types'
 import type { TokenType } from './types/token-types'
 import type { GetNextToken } from './types/types'
@@ -6,7 +6,7 @@ import type { GetNextToken } from './types/types'
 export function createGetNextToken<T extends TokenType>(input: string, rules: Array<Rule<T>>, offset: number): GetNextToken<T> {
   // initialize
   const inputLength = input.length
-  const oneOf = createOneOf(rules)
+  const oneOf = oneOfRule(rules)
 
   let currentPosition = 0
   let triggered: MultiTokenRuleResult<T> | null = null
