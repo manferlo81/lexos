@@ -1,12 +1,10 @@
-import { oneOfRule } from './one-of'
 import type { MultiTokenRuleResult, Rule } from './types/rule-types'
 import type { TokenType } from './types/token-types'
 import type { GetNextToken } from './types/types'
 
-export function createGetNextToken<T extends TokenType>(input: string, rules: Array<Rule<T>>, offset: number): GetNextToken<T> {
+export function createGetNextToken<T extends TokenType>(input: string, unifiedRule: Rule<T>, offset: number, lastToken: null): GetNextToken<T> {
   // initialize
   const inputLength = input.length
-  const oneOf = oneOfRule(rules)
 
   let currentPosition = 0
   let triggered: MultiTokenRuleResult<T> | null = null
@@ -29,10 +27,10 @@ export function createGetNextToken<T extends TokenType>(input: string, rules: Ar
     }
 
     // return null if the end of input has been reached
-    if (currentPosition >= inputLength) return null
+    if (currentPosition >= inputLength) return lastToken
 
     // find first rule that matches
-    const result = oneOf(input, currentPosition)
+    const result = unifiedRule(input, currentPosition)
 
     // throw if no rule matched
     if (!result) throw new SyntaxError(`Unknown token at position ${currentPosition + offset}`)

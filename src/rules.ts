@@ -1,4 +1,5 @@
 import { createGetNextToken } from './get-next-token'
+import { oneOfRule } from './one-of'
 import { oneOfStringTest, regexpTest, stringTest } from './tests'
 import type { CodeProcessingFunction, Void } from './types/internal/helper-types'
 import type { MultiTokenRule, Rule, SingleTokenRule, SingleTokenRuleResult } from './types/rule-types'
@@ -52,7 +53,7 @@ export function oneOfStringRule<T extends TokenType>(values: string[], type: T, 
 export function lexerRule<T extends TokenType = never>(test: Test, rules: Array<Rule<T>>): MultiTokenRule<T> {
   // return rule
   return createRule(test, ({ length, value }, currentPosition) => {
-    const getToken = createGetNextToken(value, rules, currentPosition)
+    const getToken = createGetNextToken(value, oneOfRule(rules), currentPosition, null)
     return { length, getToken }
   })
 }

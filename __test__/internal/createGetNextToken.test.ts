@@ -1,25 +1,35 @@
-import { oneOfStringRule, regexpLexerRule, regexpTest, stringRule } from '../../src'
+import { oneOfRule, oneOfStringRule, regexpLexerRule, regexpTest, stringRule } from '../../src'
 import { createGetNextToken } from '../../src/get-next-token'
 
 describe('createGetNextToken internal function', () => {
 
   test('should create a function', () => {
-    const getNextToken = createGetNextToken('a + b = c', [
-      regexpTest(/\s+/),
-      oneOfStringRule(['a', 'b', 'c'], 'VAR'),
-      oneOfStringRule(['+', '='], 'OP'),
-    ], 0)
+    const getNextToken = createGetNextToken(
+      'a + b = c',
+      oneOfRule([
+        regexpTest(/\s+/),
+        oneOfStringRule(['a', 'b', 'c'], 'VAR'),
+        oneOfStringRule(['+', '='], 'OP'),
+      ]),
+      0,
+      null,
+    )
     expect(typeof getNextToken === 'function').toBe(true)
   })
 
   test('should throw on unknown token', () => {
     const variableType = 'VAR'
     const operatorType = 'OP'
-    const getNextToken = createGetNextToken('a + z = c', [
-      regexpTest(/\s+/),
-      oneOfStringRule(['a', 'b', 'c'], variableType),
-      oneOfStringRule(['+', '='], operatorType),
-    ], 0)
+    const getNextToken = createGetNextToken(
+      'a + z = c',
+      oneOfRule([
+        regexpTest(/\s+/),
+        oneOfStringRule(['a', 'b', 'c'], variableType),
+        oneOfStringRule(['+', '='], operatorType),
+      ]),
+      0,
+      null,
+    )
     expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 0 })
     expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 2 })
     expect(getNextToken).toThrow('position 4')
@@ -29,15 +39,20 @@ describe('createGetNextToken internal function', () => {
     const variableType = 'VAR'
     const keywordType = 'KW'
     const curlyType = 'CURLY'
-    const getNextToken = createGetNextToken(' evaluate { a + b - c }', [
-      regexpTest(/\s+/),
-      stringRule('evaluate', keywordType),
-      regexpLexerRule(/{.*}/, [
+    const getNextToken = createGetNextToken(
+      ' evaluate { a + b - c }',
+      oneOfRule([
         regexpTest(/\s+/),
-        oneOfStringRule(['{', '}'], curlyType),
-        oneOfStringRule(['a', 'b', 'c'], variableType),
+        stringRule('evaluate', keywordType),
+        regexpLexerRule(/{.*}/, [
+          regexpTest(/\s+/),
+          oneOfStringRule(['{', '}'], curlyType),
+          oneOfStringRule(['a', 'b', 'c'], variableType),
+        ]),
       ]),
-    ], 0)
+      0,
+      null,
+    )
     expect(getNextToken()).toEqual({ type: keywordType, value: 'evaluate', pos: 1 })
     expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 10 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 12 })
@@ -47,11 +62,16 @@ describe('createGetNextToken internal function', () => {
   test('should get tokens one by one', () => {
     const variableType = 'VAR'
     const operatorType = 'OP'
-    const getNextToken = createGetNextToken('a + b = c', [
-      regexpTest(/\s+/),
-      oneOfStringRule(['a', 'b', 'c'], variableType),
-      oneOfStringRule(['+', '='], operatorType),
-    ], 0)
+    const getNextToken = createGetNextToken(
+      'a + b = c',
+      oneOfRule([
+        regexpTest(/\s+/),
+        oneOfStringRule(['a', 'b', 'c'], variableType),
+        oneOfStringRule(['+', '='], operatorType),
+      ]),
+      0,
+      null,
+    )
     expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 0 })
     expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 2 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'b', pos: 4 })
@@ -65,16 +85,21 @@ describe('createGetNextToken internal function', () => {
     const operatorType = 'OP'
     const curlyType = 'CURLY'
     const keywordType = 'KW'
-    const getNextToken = createGetNextToken(' evaluate { a + b - c }', [
-      regexpTest(/\s+/),
-      stringRule('evaluate', keywordType),
-      regexpLexerRule(/{.*}/, [
+    const getNextToken = createGetNextToken(
+      ' evaluate { a + b - c }',
+      oneOfRule([
         regexpTest(/\s+/),
-        oneOfStringRule(['{', '}'], curlyType),
-        oneOfStringRule(['a', 'b', 'c'], variableType),
-        oneOfStringRule(['+', '-'], operatorType),
+        stringRule('evaluate', keywordType),
+        regexpLexerRule(/{.*}/, [
+          regexpTest(/\s+/),
+          oneOfStringRule(['{', '}'], curlyType),
+          oneOfStringRule(['a', 'b', 'c'], variableType),
+          oneOfStringRule(['+', '-'], operatorType),
+        ]),
       ]),
-    ], 0)
+      0,
+      null,
+    )
     expect(getNextToken()).toEqual({ type: keywordType, value: 'evaluate', pos: 1 })
     expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 10 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 12 })
@@ -91,16 +116,21 @@ describe('createGetNextToken internal function', () => {
     const operatorType = 'OP'
     const curlyType = 'CURLY'
     const keywordType = 'KW'
-    const getNextToken = createGetNextToken(' evaluate { a + b - c } evaluate { c }', [
-      regexpTest(/\s+/),
-      stringRule('evaluate', keywordType),
-      regexpLexerRule(/{[^}]*}/, [
+    const getNextToken = createGetNextToken(
+      ' evaluate { a + b - c } evaluate { c }',
+      oneOfRule([
         regexpTest(/\s+/),
-        oneOfStringRule(['{', '}'], curlyType),
-        oneOfStringRule(['a', 'b', 'c'], variableType),
-        oneOfStringRule(['+', '-'], operatorType),
+        stringRule('evaluate', keywordType),
+        regexpLexerRule(/{[^}]*}/, [
+          regexpTest(/\s+/),
+          oneOfStringRule(['{', '}'], curlyType),
+          oneOfStringRule(['a', 'b', 'c'], variableType),
+          oneOfStringRule(['+', '-'], operatorType),
+        ]),
       ]),
-    ], 0)
+      0,
+      null,
+    )
     expect(getNextToken()).toEqual({ type: keywordType, value: 'evaluate', pos: 1 })
     expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 10 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 12 })
