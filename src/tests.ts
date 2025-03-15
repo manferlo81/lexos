@@ -1,13 +1,14 @@
-import { oneOfRule } from './one-of'
+import { createOneOf } from './one-of'
+import { isArray, isType } from './tools/is'
 import { makeInsensitive } from './tools/string-case'
-import type { Test } from './types/test-types'
+import type { AnyTest, Test } from './types/test-types'
 
 export function regexpTest(regexp: RegExp): Test {
 
   // return test
-  return (input, currentPosition) => {
+  return (input, pos) => {
     // test partial against RegExp
-    const partial = input.substring(currentPosition)
+    const partial = input.substring(pos)
     const result = regexp.exec(partial)
 
     // fail if RegExp didn't match
@@ -25,7 +26,7 @@ export function regexpTest(regexp: RegExp): Test {
   }
 }
 
-export function stringTest(value: string, insensitive?: boolean): Test {
+function singleStringTest(value: string, insensitive?: unknown): Test {
 
   // throw if value length is zero
   const length = value.length
@@ -52,9 +53,24 @@ export function stringTest(value: string, insensitive?: boolean): Test {
   }
 }
 
-export function oneOfStringTest(values: string[], insensitive?: boolean): Test {
-  // create tests from values
-  const tests = values.map((value) => stringTest(value, insensitive))
-  // return one-of test
-  return oneOfRule(tests)
+export function stringTest(value: string | string[], insensitive?: boolean): Test {
+  if (isArray(value)) return createOneOf(value.map((value) => singleStringTest(value, insensitive)))
+  return singleStringTest(value, insensitive)
+}
+
+export function ruleTest(test: AnyTest): Test {
+
+  // return function as test if it's a function
+  if (isType(test, 'function')) return test
+
+  // return string test if it's a string
+  if (isType(test, 'string')) return singleStringTest(test)
+
+  // return regexp test if it's a regexp
+  if (!isArray(test)) return regexpTest(test)
+
+  // return one-of test if it's an array
+  const tests = test.map((value) => ruleTest(value))
+  return createOneOf(tests)
+
 }

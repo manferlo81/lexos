@@ -1,11 +1,13 @@
 import { createGetNextToken } from './get-next-token'
-import { oneOfRule } from './one-of'
 import type { Rule } from './types/rule-types'
 import type { Token, TokenType } from './types/token-types'
 import type { Tokenizer } from './types/types'
+import { unifyRules } from './unify-rules'
 
-export function createTokenizer<T extends TokenType = never>(rules: Array<Rule<T>>): Tokenizer<T> {
-  const unifiedRule = oneOfRule(rules)
+export function createTokenizer<T extends TokenType = never>(rules: Rule<T> | Array<Rule<T>>): Tokenizer<T> {
+  // unify rules
+  const unifiedRule = unifyRules(rules)
+
   // return tokenize function
   return (input: string) => {
     // initialize

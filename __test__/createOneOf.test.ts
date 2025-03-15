@@ -1,17 +1,17 @@
-import { oneOfRule, regexpTest, testRule } from '../../src'
+import { createOneOf, regexpTest, testRule } from '../src'
 
-describe('oneOfRule function', () => {
+describe('createOneOf function', () => {
 
   const testInteger = regexpTest(/[1-9]\d*/)
   const testWord = regexpTest(/[a-z]+/i)
 
   test('should be a function', () => {
-    const testWordOrNumber = oneOfRule([testWord, testInteger])
+    const testWordOrNumber = createOneOf([testWord, testInteger])
     expect(typeof testWordOrNumber === 'function').toBe(true)
   })
 
   test('should return falsy if doesn\'t match any test or rule', () => {
-    const testWordOrNumber = oneOfRule([testWord, testInteger])
+    const testWordOrNumber = createOneOf([testWord, testInteger])
     const inputsThatDoNotMatch = [
       '$$-1234-word',
       '-word-1234',
@@ -22,7 +22,7 @@ describe('oneOfRule function', () => {
   })
 
   test('should return first test result that matches', () => {
-    const testWordOrNumber = oneOfRule([testWord, testInteger])
+    const testWordOrNumber = createOneOf([testWord, testInteger])
     const inputsThatMatch = [
       '1234',
       'word',
@@ -37,7 +37,7 @@ describe('oneOfRule function', () => {
   test('should return first rule result that matches', () => {
     const wordType = 'WORD'
     const integerType = 'INT'
-    const testWordOrNumber = oneOfRule([
+    const testWordOrNumber = createOneOf([
       testRule(testWord, wordType),
       testRule(testInteger, integerType),
     ])
@@ -54,7 +54,7 @@ describe('oneOfRule function', () => {
 
   test('should return first test or rule result that matches', () => {
     const integerType = 'INT'
-    const testWordOrNumber = oneOfRule([testWord, testRule(testInteger, integerType)])
+    const testWordOrNumber = createOneOf([testWord, testRule(testInteger, integerType)])
     const inputsThatMatch = [
       ['1234', integerType] as const,
       ['word', null] as const,

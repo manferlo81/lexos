@@ -15,4 +15,4 @@ export interface Valued {
   value: string
 }
 
-export type CodeProcessingFunction<R> = (input: string, currentPosition: number) => R
+export type CodeProcessingFunction<R> = (input: string, pos: number) => R

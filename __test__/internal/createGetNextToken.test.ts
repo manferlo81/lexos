@@ -1,4 +1,4 @@
-import { oneOfRule, oneOfStringRule, regexpLexerRule, regexpTest, stringRule } from '../../src'
+import { createOneOf, lexerRule, regexpTest, stringRule } from '../../src'
 import { createGetNextToken } from '../../src/get-next-token'
 
 describe('createGetNextToken internal function', () => {
@@ -6,10 +6,10 @@ describe('createGetNextToken internal function', () => {
   test('should create a function', () => {
     const getNextToken = createGetNextToken(
       'a + b = c',
-      oneOfRule([
+      createOneOf([
         regexpTest(/\s+/),
-        oneOfStringRule(['a', 'b', 'c'], 'VAR'),
-        oneOfStringRule(['+', '='], 'OP'),
+        stringRule(['a', 'b', 'c'], 'VAR'),
+        stringRule(['+', '='], 'OP'),
       ]),
       0,
       null,
@@ -22,10 +22,10 @@ describe('createGetNextToken internal function', () => {
     const operatorType = 'OP'
     const getNextToken = createGetNextToken(
       'a + z = c',
-      oneOfRule([
+      createOneOf([
         regexpTest(/\s+/),
-        oneOfStringRule(['a', 'b', 'c'], variableType),
-        oneOfStringRule(['+', '='], operatorType),
+        stringRule(['a', 'b', 'c'], variableType),
+        stringRule(['+', '='], operatorType),
       ]),
       0,
       null,
@@ -41,13 +41,13 @@ describe('createGetNextToken internal function', () => {
     const curlyType = 'CURLY'
     const getNextToken = createGetNextToken(
       ' evaluate { a + b - c }',
-      oneOfRule([
+      createOneOf([
         regexpTest(/\s+/),
         stringRule('evaluate', keywordType),
-        regexpLexerRule(/{.*}/, [
+        lexerRule(/{.*}/, [
           regexpTest(/\s+/),
-          oneOfStringRule(['{', '}'], curlyType),
-          oneOfStringRule(['a', 'b', 'c'], variableType),
+          stringRule(['{', '}'], curlyType),
+          stringRule(['a', 'b', 'c'], variableType),
         ]),
       ]),
       0,
@@ -64,10 +64,10 @@ describe('createGetNextToken internal function', () => {
     const operatorType = 'OP'
     const getNextToken = createGetNextToken(
       'a + b = c',
-      oneOfRule([
+      createOneOf([
         regexpTest(/\s+/),
-        oneOfStringRule(['a', 'b', 'c'], variableType),
-        oneOfStringRule(['+', '='], operatorType),
+        stringRule(['a', 'b', 'c'], variableType),
+        stringRule(['+', '='], operatorType),
       ]),
       0,
       null,
@@ -87,14 +87,14 @@ describe('createGetNextToken internal function', () => {
     const keywordType = 'KW'
     const getNextToken = createGetNextToken(
       ' evaluate { a + b - c }',
-      oneOfRule([
+      createOneOf([
         regexpTest(/\s+/),
         stringRule('evaluate', keywordType),
-        regexpLexerRule(/{.*}/, [
+        lexerRule(/{.*}/, [
           regexpTest(/\s+/),
-          oneOfStringRule(['{', '}'], curlyType),
-          oneOfStringRule(['a', 'b', 'c'], variableType),
-          oneOfStringRule(['+', '-'], operatorType),
+          stringRule(['{', '}'], curlyType),
+          stringRule(['a', 'b', 'c'], variableType),
+          stringRule(['+', '-'], operatorType),
         ]),
       ]),
       0,
@@ -118,14 +118,14 @@ describe('createGetNextToken internal function', () => {
     const keywordType = 'KW'
     const getNextToken = createGetNextToken(
       ' evaluate { a + b - c } evaluate { c }',
-      oneOfRule([
+      createOneOf([
         regexpTest(/\s+/),
         stringRule('evaluate', keywordType),
-        regexpLexerRule(/{[^}]*}/, [
+        lexerRule(/{[^}]*}/, [
           regexpTest(/\s+/),
-          oneOfStringRule(['{', '}'], curlyType),
-          oneOfStringRule(['a', 'b', 'c'], variableType),
-          oneOfStringRule(['+', '-'], operatorType),
+          stringRule(['{', '}'], curlyType),
+          stringRule(['a', 'b', 'c'], variableType),
+          stringRule(['+', '-'], operatorType),
         ]),
       ]),
       0,

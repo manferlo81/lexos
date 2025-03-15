@@ -2,89 +2,109 @@ import { stringTest } from '../../src'
 
 describe('stringTest function', () => {
 
-  describe('case sensitive', () => {
+  describe('string test', () => {
 
-    test('should throw if an empty string is passed', () => {
-      const exec = () => stringTest('')
-      expect(exec).toThrow('Zero length string test')
-    })
+    describe('string test case sensitive', () => {
 
-    test('should be a function', () => {
-      const testKeyword = stringTest('keyword')
-      expect(typeof testKeyword === 'function').toBe(true)
-    })
-
-    test('should return falsy if it doesn\'t match', () => {
-      const testKeyword = stringTest('keyword')
-      const inputsThatDoNotMatch = [
-        'other',
-        'text',
-        'anything',
-      ]
-      inputsThatDoNotMatch.forEach((input) => {
-        expect(testKeyword(input, 0)).toBeFalsy()
+      test('should throw if zero length value passed', () => {
+        const exec = () => stringTest('')
+        expect(exec).toThrow('Zero length string test')
       })
-    })
 
-    test('should return falsy if it matches value but not casing', () => {
-      const testKeyword = stringTest('keyword')
-      const inputsThatDoNotMatchCasing = [
-        'Keyword',
-        'KeyWord',
-        'keyWord',
-      ]
-      inputsThatDoNotMatchCasing.forEach((input) => {
-        expect(testKeyword(input, 0)).toBeFalsy()
+      test('should be a function', () => {
+        const test = stringTest('string')
+        expect(typeof test === 'function').toBe(true)
       })
+
+      test('should return result if input matches', () => {
+        const keyword = 'keyword'
+        const testKeyword = stringTest(keyword)
+        const expected = { value: keyword, length: keyword.length }
+        expect(testKeyword(keyword, 0)).toEqual(expected)
+        expect(testKeyword(`more ${keyword}`, 5)).toEqual(expected)
+        expect(testKeyword(`${keyword} and more`, 0)).toEqual(expected)
+        expect(testKeyword(`more ${keyword} and more`, 5)).toEqual(expected)
+      })
+
+      test('should return falsy if input doesn\'t match', () => {
+        const testKeyword = stringTest('keyword')
+        const inputsThatDoNotMatch = [
+          'otherword',
+          'Keyword',
+          'KeyWord',
+          'keyWord',
+          '  keyword',
+        ]
+        inputsThatDoNotMatch.forEach((input) => {
+          expect(testKeyword(input, 0)).toBeFalsy()
+          expect(testKeyword(input, 1)).toBeFalsy()
+        })
+      })
+
     })
 
-    test('should return result if it matches', () => {
-      const inputThatMatches = 'keyword'
-      const testKeyword = stringTest(inputThatMatches)
-      const expected = { value: inputThatMatches, length: inputThatMatches.length }
-      expect(testKeyword(inputThatMatches, 0)).toEqual(expected)
-      expect(testKeyword(`${inputThatMatches} and more`, 0)).toEqual(expected)
+    describe('string test case insensitive', () => {
+
+      test('should be a function', () => {
+        const test = stringTest('string', true)
+        expect(typeof test === 'function').toBe(true)
+      })
+
+      test('should return result if input matches', () => {
+        const testKeyword = stringTest('keyword', true)
+        const inputsThatMatch = [
+          'keyword',
+          'Keyword',
+          'KeyWord',
+          'keyWord',
+        ]
+        inputsThatMatch.forEach((input) => {
+          const expected = { value: input, length: input.length }
+          expect(testKeyword(input, 0)).toEqual(expected)
+          expect(testKeyword(`more ${input}`, 5)).toEqual(expected)
+          expect(testKeyword(`${input} and more`, 0)).toEqual(expected)
+          expect(testKeyword(`more ${input} and more`, 5)).toEqual(expected)
+        })
+      })
+
+      test('should return falsy if input doesn\'t match', () => {
+        const testKeyword = stringTest('keyword', true)
+        const inputsThatDoNotMatch = [
+          'other word',
+          'anything',
+          '  keyword',
+          '  Keyword',
+          '  KeyWord',
+          '  keyWord',
+        ]
+        inputsThatDoNotMatch.forEach((input) => {
+          expect(testKeyword(input, 0)).toBeFalsy()
+          expect(testKeyword(input, 1)).toBeFalsy()
+        })
+      })
+
     })
 
   })
 
-  describe('case insensitive', () => {
+  describe('string array test', () => {
 
-    test('should throw if an empty string is passed', () => {
-      const exec = () => stringTest('', true)
-      expect(exec).toThrow('Zero length string test')
-    })
+    describe('string array test case sensitive', () => {
 
-    test('should be a function', () => {
-      const testKeyword = stringTest('keyword', true)
-      expect(typeof testKeyword === 'function').toBe(true)
-    })
-
-    test('should return falsy if it doesn\'t match', () => {
-      const testKeyword = stringTest('keyword', true)
-      const inputsThatDoNotMatch = [
-        'other',
-        'text',
-        'anything',
-      ]
-      inputsThatDoNotMatch.forEach((input) => {
-        expect(testKeyword(input, 0)).toBeFalsy()
+      test('should be a function', () => {
+        const test = stringTest(['string', 'array'])
+        expect(typeof test === 'function').toBe(true)
       })
+
     })
 
-    test('should return result if it matches ignoring casing', () => {
-      const testKeyword = stringTest('keyword', true)
-      const inputsThatMatch = [
-        'keyword',
-        'Keyword',
-        'KeyWord',
-        'keyWord',
-      ]
-      inputsThatMatch.forEach((input) => {
-        const expected = { value: input, length: input.length }
-        expect(testKeyword(input, 0)).toEqual(expected)
-        expect(testKeyword(`${input} and more`, 0)).toEqual(expected)
+    describe('string array test case insensitive', () => {
+
+      test('should be a function', () => {
+        const test = stringTest(['string', 'array'], true)
+        expect(typeof test === 'function').toBe(true)
       })
+
     })
 
   })
