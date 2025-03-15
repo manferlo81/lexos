@@ -1,10 +1,10 @@
 import type { CodeProcessingFunction, FalsyReturn } from './types/internal/helper-types'
-import type { Rule, RuleResult } from './types/rule-types'
+import type { Rule, RuleList, RuleResult } from './types/rule-types'
 import type { Test } from './types/test-types'
 import type { TokenType } from './types/token-types'
 
 export function createOneOf(rules: Test[]): Test
-export function createOneOf<T extends TokenType>(rules: Array<Rule<T>>): Rule<T>
+export function createOneOf<T extends TokenType>(rules: RuleList<T>): Rule<T>
 export function createOneOf<T extends TokenType>(rules: Array<Rule<T>>): CodeProcessingFunction<RuleResult<T> | FalsyReturn> {
 
   // return first rule if only one provided

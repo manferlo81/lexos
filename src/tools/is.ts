@@ -5,8 +5,8 @@ interface TypeOfMap {
   object: object | null
 }
 
-export function isType<K extends keyof TypeOfMap>(value: unknown, type: K): value is TypeOfMap[K] {
-  return typeof value == type
+export function isType<K extends keyof TypeOfMap>(value: unknown, ...types: K[]): value is TypeOfMap[K] {
+  return types.includes(typeof value as K)
 }
 
 type UnknownArray = unknown[] | readonly unknown[]

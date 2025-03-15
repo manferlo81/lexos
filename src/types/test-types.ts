@@ -4,5 +4,6 @@ export interface TestResult extends Lengthy, Valued {}
 
 export type Test = CodeProcessingFunction<TestResult | FalsyReturn>
 
-export type CompilableTest = RegExp | string | AnyTest[]
+export type StringifyableTest = string | number
+export type CompilableTest = RegExp | StringifyableTest | AnyTest[]
 export type AnyTest = CompilableTest | Test

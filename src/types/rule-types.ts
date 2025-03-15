@@ -16,5 +16,8 @@ export interface MultiTokenRuleResult<T extends TokenType> extends Lengthy {
 export type SingleTokenRule<T extends TokenType> = CodeProcessingFunction<SingleTokenRuleResult<T> | FalsyReturn>
 export type MultiTokenRule<T extends TokenType> = CodeProcessingFunction<MultiTokenRuleResult<T> | FalsyReturn>
 
-export type Rule<T extends TokenType> = SingleTokenRule<T> | MultiTokenRule<T> | Test
 export type RuleResult<T extends TokenType> = SingleTokenRuleResult<T> | MultiTokenRuleResult<T> | TestResult
+
+export type Rule<T extends TokenType> = SingleTokenRule<T> | MultiTokenRule<T> | Test
+export type RuleList<T extends TokenType> = Array<Rule<T>>
+export type UnifiableRules<T extends TokenType> = Rule<T> | RuleList<T>

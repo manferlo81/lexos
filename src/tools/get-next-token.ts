@@ -1,12 +1,13 @@
-import type { MultiTokenRuleResult, Rule } from './types/rule-types'
-import type { TokenType } from './types/token-types'
-import type { GetNextToken } from './types/types'
+import type { MultiTokenRuleResult, Rule } from '../types/rule-types'
+import type { TokenType } from '../types/token-types'
+import type { GetNextToken } from '../types/types'
 
 export function createGetNextToken<T extends TokenType>(input: string, unifiedRule: Rule<T>, offset: number, lastToken: null): GetNextToken<T> {
   // initialize
   const inputLength = input.length
 
   let currentPosition = 0
+  let lastTokenEmitted = false
   let triggered: MultiTokenRuleResult<T> | null = null
 
   const getNextToken: GetNextToken<T> = () => {
@@ -27,7 +28,11 @@ export function createGetNextToken<T extends TokenType>(input: string, unifiedRu
     }
 
     // return null if the end of input has been reached
-    if (currentPosition >= inputLength) return lastToken
+    if (currentPosition >= inputLength) {
+      if (lastTokenEmitted) return null
+      lastTokenEmitted = true
+      return lastToken
+    }
 
     // find first rule that matches
     const result = unifiedRule(input, currentPosition)

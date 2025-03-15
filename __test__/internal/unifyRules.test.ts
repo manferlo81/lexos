@@ -1,5 +1,5 @@
 import { regexpTest, stringRule, type Rule } from '../../src'
-import { unifyRules } from '../../src/unify-rules'
+import { unifyRules } from '../../src/tools/unify-rules'
 
 describe('unifyRules internal function', () => {
 

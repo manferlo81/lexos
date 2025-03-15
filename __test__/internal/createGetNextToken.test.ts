@@ -1,5 +1,5 @@
 import { createOneOf, lexerRule, regexpTest, stringRule } from '../../src'
-import { createGetNextToken } from '../../src/get-next-token'
+import { createGetNextToken } from '../../src/tools/get-next-token'
 
 describe('createGetNextToken internal function', () => {
 
@@ -57,6 +57,30 @@ describe('createGetNextToken internal function', () => {
     expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 10 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 12 })
     expect(getNextToken).toThrow('position 14')
+  })
+
+  test('should return null after last token', () => {
+    const variableType = 'VAR'
+    const operatorType = 'OP'
+    const getNextToken = createGetNextToken(
+      'a + b = c',
+      createOneOf([
+        regexpTest(/\s+/),
+        stringRule(['a', 'b', 'c'], variableType),
+        stringRule(['+', '='], operatorType),
+      ]),
+      0,
+      null,
+    )
+    expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 0 })
+    expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 2 })
+    expect(getNextToken()).toEqual({ type: variableType, value: 'b', pos: 4 })
+    expect(getNextToken()).toEqual({ type: operatorType, value: '=', pos: 6 })
+    expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 8 })
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
   })
 
   test('should get tokens one by one', () => {
