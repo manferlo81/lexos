@@ -1,4 +1,5 @@
 import { lexerRule, regexpRule, regexpTest } from '../../src'
+import type { FalsyReturn } from '../../src/types/internal/helper-types'
 import type { MultiTokenRuleResult } from '../../src/types/rule-types'
 
 describe('lexerRule function', () => {
@@ -9,7 +10,7 @@ describe('lexerRule function', () => {
   })
 
   test('should return falsy if input doesn\'t match', () => {
-    const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
+    const expressionRule = lexerRule(/\{.*\}/, [
       regexpRule(/\d+/, 'Digits'),
       regexpRule(/\./, 'DecimalPoint'),
     ])
@@ -24,7 +25,7 @@ describe('lexerRule function', () => {
   })
 
   test('should return multi token result once triggered', () => {
-    const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
+    const expressionRule = lexerRule(/\{.*\}/, [
 
     ])
     const inputsThatDoNotMatch = [
@@ -42,7 +43,7 @@ describe('lexerRule function', () => {
     const digitsType = 'Digits'
     const operatorType = 'Operator'
 
-    const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
+    const expressionRule = lexerRule(/\{.*\}/, [
       regexpTest(/[{}]/),
       regexpTest(/\s+/),
       regexpRule(/\d+/, digitsType),
@@ -71,19 +72,22 @@ describe('lexerRule function', () => {
         getToken: expect.any(Function) as unknown,
       })
 
-      const { getToken } = ruleResult as MultiTokenRuleResult<never>
+      const { getToken } = ruleResult as MultiTokenRuleResult<never, never>
+
       expect(getToken()).toEqual({ type: digitsType, value: a, pos: 1 })
       expect(getToken()).toEqual({ type: operatorType, value: operator, pos: a.length + 2 })
       expect(getToken()).toEqual({ type: digitsType, value: b, pos: a.length + 4 })
+      expect(getToken()).toBeNull()
+      expect(getToken()).toBeNull()
       expect(getToken()).toBeNull()
     })
   })
 
-  test('should return result if input matches', () => {
+  test('should return result if input matches (with last token)', () => {
     const digitsType = 'Digits'
     const operatorType = 'Operator'
 
-    const expressionRule = lexerRule(regexpTest(/\{.*\}/), [
+    const expressionRule = lexerRule(/\{.*\}/, [
       regexpTest(/[{}]/),
       regexpTest(/\s+/),
       regexpRule(/\d+/, digitsType),
@@ -91,7 +95,7 @@ describe('lexerRule function', () => {
         /[+\-*/]/,
         operatorType,
       ),
-    ])
+    ], 'LT')
 
     const inputsThatMatch = [
       ['147', '+', '5'],
@@ -106,18 +110,21 @@ describe('lexerRule function', () => {
       const input = more ? [expression, more].join(' ') : expression
 
       const ruleResult = expressionRule(input, 0)
+
       expect(ruleResult).toEqual({
         length: expression.length,
         getToken: expect.any(Function) as unknown,
       })
 
-      const { getToken } = ruleResult as MultiTokenRuleResult<never>
+      const { getToken } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
 
       expect(getToken()).toEqual({ type: digitsType, value: a, pos: 1 })
       expect(getToken()).toEqual({ type: operatorType, value: operator, pos: a.length + 2 })
       expect(getToken()).toEqual({ type: digitsType, value: b, pos: a.length + 4 })
+      expect(getToken()).toBe('LT')
       expect(getToken()).toBeNull()
-
+      expect(getToken()).toBeNull()
+      expect(getToken()).toBeNull()
     })
   })
 

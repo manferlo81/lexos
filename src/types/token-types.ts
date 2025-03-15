@@ -7,3 +7,4 @@ export interface Token<T extends TokenType> extends Typed<T>, Valued {
 }
 
 export type TokenList<T extends TokenType> = Array<Token<T>>
+export type TokenListWithLastToken<T extends TokenType, L> = Array<Token<T> | L>

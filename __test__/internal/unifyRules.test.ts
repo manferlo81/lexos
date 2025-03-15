@@ -4,7 +4,7 @@ import { unifyRules } from '../../src/tools/unify-rules'
 describe('unifyRules internal function', () => {
 
   test('should return input if it\'s a function', () => {
-    const inputRule: Rule<never> = () => null
+    const inputRule: Rule<never, never> = () => null
     const outputRule = unifyRules(inputRule)
     expect(outputRule).toBe(inputRule)
   })

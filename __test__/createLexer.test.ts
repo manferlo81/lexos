@@ -42,11 +42,42 @@ describe('createLexer function', () => {
     expect(getNextToken()).toEqual({ type: 'OPERATOR', value: '=', pos: 6 })
     expect(getNextToken()).toEqual({ type: 'VARIABLE', value: 'c', pos: 8 })
     expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
+  })
+
+  test('should tokenize input (with last token)', () => {
+    const lexer = createLexer([
+      regexpTest(/[^\S]+/),
+      regexpRule(/[a-z]+/i, 'VARIABLE'),
+      regexpRule(/[+=]/i, 'OPERATOR'),
+    ], 'LT')
+    const getNextToken = lexer('a + b = c')
+    expect(getNextToken()).toEqual({ type: 'VARIABLE', value: 'a', pos: 0 })
+    expect(getNextToken()).toEqual({ type: 'OPERATOR', value: '+', pos: 2 })
+    expect(getNextToken()).toEqual({ type: 'VARIABLE', value: 'b', pos: 4 })
+    expect(getNextToken()).toEqual({ type: 'OPERATOR', value: '=', pos: 6 })
+    expect(getNextToken()).toEqual({ type: 'VARIABLE', value: 'c', pos: 8 })
+    expect(getNextToken()).toBe('LT')
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
   })
 
   test('should tokenize empty input', () => {
     const lexer = createLexer([])
     const getNextToken = lexer('')
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
+  })
+
+  test('should tokenize empty input (with last token)', () => {
+    const lexer = createLexer([], 'LT')
+    const getNextToken = lexer('')
+    expect(getNextToken()).toBe('LT')
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
   })
 

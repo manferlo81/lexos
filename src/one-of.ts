@@ -4,8 +4,8 @@ import type { Test } from './types/test-types'
 import type { TokenType } from './types/token-types'
 
 export function createOneOf(rules: Test[]): Test
-export function createOneOf<T extends TokenType>(rules: RuleList<T>): Rule<T>
-export function createOneOf<T extends TokenType>(rules: Array<Rule<T>>): CodeProcessingFunction<RuleResult<T> | FalsyReturn> {
+export function createOneOf<T extends TokenType, L>(rules: RuleList<T, L>): Rule<T, L>
+export function createOneOf<T extends TokenType, L>(rules: RuleList<T, L>): CodeProcessingFunction<RuleResult<T, L> | FalsyReturn> {
 
   // return first rule if only one provided
   if (rules.length === 1) return rules[0]

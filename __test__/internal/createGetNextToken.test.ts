@@ -70,14 +70,14 @@ describe('createGetNextToken internal function', () => {
         stringRule(['+', '='], operatorType),
       ]),
       0,
-      null,
+      'LT',
     )
     expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 0 })
     expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 2 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'b', pos: 4 })
     expect(getNextToken()).toEqual({ type: operatorType, value: '=', pos: 6 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 8 })
-    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBe('LT')
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
@@ -101,6 +101,8 @@ describe('createGetNextToken internal function', () => {
     expect(getNextToken()).toEqual({ type: variableType, value: 'b', pos: 4 })
     expect(getNextToken()).toEqual({ type: operatorType, value: '=', pos: 6 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 8 })
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
   })
 
@@ -132,6 +134,8 @@ describe('createGetNextToken internal function', () => {
     expect(getNextToken()).toEqual({ type: operatorType, value: '-', pos: 18 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 20 })
     expect(getNextToken()).toEqual({ type: curlyType, value: '}', pos: 22 })
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
   })
 
@@ -167,6 +171,8 @@ describe('createGetNextToken internal function', () => {
     expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 33 })
     expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 35 })
     expect(getNextToken()).toEqual({ type: curlyType, value: '}', pos: 37 })
+    expect(getNextToken()).toBeNull()
+    expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
   })
 

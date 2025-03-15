@@ -2,15 +2,15 @@ import type { MultiTokenRuleResult, Rule } from '../types/rule-types'
 import type { TokenType } from '../types/token-types'
 import type { GetNextToken } from '../types/types'
 
-export function createGetNextToken<T extends TokenType>(input: string, unifiedRule: Rule<T>, offset: number, lastToken: null): GetNextToken<T> {
+export function createGetNextToken<T extends TokenType, L>(input: string, unifiedRule: Rule<T, L>, offset: number, lastToken: L): GetNextToken<T, L> {
   // initialize
   const inputLength = input.length
 
   let currentPosition = 0
   let lastTokenEmitted = false
-  let triggered: MultiTokenRuleResult<T> | null = null
+  let triggered: MultiTokenRuleResult<T, L> | null = null
 
-  const getNextToken: GetNextToken<T> = () => {
+  const getNextToken: GetNextToken<T, L> = () => {
 
     // get token from multi token result if triggered
     if (triggered) {

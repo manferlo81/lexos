@@ -43,9 +43,30 @@ describe('createTokenizer function', () => {
     ])
   })
 
+  test('should tokenize input (with last token)', () => {
+    const tokenize = createTokenizer([
+      regexpTest(/[^\S]+/),
+      regexpRule(/[a-z]+/i, 'VARIABLE'),
+      regexpRule(/[+=]/i, 'OPERATOR'),
+    ], 'LT')
+    expect(tokenize('a + b = c')).toEqual([
+      { type: 'VARIABLE', value: 'a', pos: 0 },
+      { type: 'OPERATOR', value: '+', pos: 2 },
+      { type: 'VARIABLE', value: 'b', pos: 4 },
+      { type: 'OPERATOR', value: '=', pos: 6 },
+      { type: 'VARIABLE', value: 'c', pos: 8 },
+      'LT',
+    ])
+  })
+
   test('should tokenize empty input', () => {
     const tokenize = createTokenizer([])
     expect(tokenize('')).toEqual([])
+  })
+
+  test('should tokenize empty input (with last token)', () => {
+    const tokenize = createTokenizer([], 'LT')
+    expect(tokenize('')).toEqual(['LT'])
   })
 
 })
