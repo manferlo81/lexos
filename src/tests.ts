@@ -1,5 +1,6 @@
 import { createOneOf } from './one-of'
 import { isArray, isType } from './tools/is'
+import { mapTests } from './tools/map-tests'
 import { makeInsensitive } from './tools/string-case'
 import type { AnyTest, StringifyableTest, Test } from './types/test-types'
 
@@ -55,10 +56,6 @@ function singleStringTest(value: StringifyableTest, insensitive?: unknown): Test
   }
 }
 
-function mapTests<T extends AnyTest, A extends unknown[]>(tests: T[], createTest: (test: T, ...args: A) => Test, ...args: A) {
-  return tests.map((test) => createTest(test, ...args))
-}
-
 export function stringTest(value: number): Test
 export function stringTest(values: number[]): Test
 export function stringTest(value: string, insensitive?: boolean): Test
@@ -69,16 +66,21 @@ export function stringTest(test: StringifyableTest | StringifyableTest[], insens
   return createOneOf(mapTests(test, singleStringTest, insensitive))
 }
 
-export function ruleTest(test: AnyTest): Test {
+export function ruleTest(test: Test): Test
+export function ruleTest(regexp: RegExp): Test
+export function ruleTest(value: string, insensitive?: boolean): Test
+export function ruleTest(values: StringifyableTest[], insensitive?: boolean): Test
+export function ruleTest(anyTest: AnyTest, param?: unknown): Test
+export function ruleTest(test: AnyTest, param?: unknown): Test {
 
   // return function as test if it's a function
   if (isType(test, 'function')) return test
 
   // return string test if it's a string
-  if (isType(test, 'string', 'number')) return singleStringTest(test)
+  if (isType(test, 'string', 'number')) return singleStringTest(test, param)
 
   // return one-of test if it's an array
-  if (isArray(test)) return createOneOf(mapTests(test, ruleTest))
+  if (isArray(test)) return createOneOf(mapTests(test, ruleTest, param))
 
   // return regexp test if it's a regexp
   return regexpTest(test)
