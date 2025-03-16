@@ -26,15 +26,14 @@ export function stringRule<T extends TokenType>(value: StringifyableTest | Strin
   )
 }
 
-export function lexerRule<T extends TokenType = never, L = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastToken?: undefined): MultiTokenRule<T, L>
-export function lexerRule<T extends TokenType = never, L = never, X extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastToken: X): MultiTokenRule<T, L | X>
-export function lexerRule<T extends TokenType = never, L = never, X = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastToken: X): MultiTokenRule<T, L | X>
-export function lexerRule<T extends TokenType = never, L = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastToken = null): MultiTokenRule<T, L | typeof lastToken> {
+export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastTokenType?: L | null): MultiTokenRule<T, L>
+export function lexerRule<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastTokenType: X): MultiTokenRule<T, L | X>
+export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastTokenType: L | null = null): MultiTokenRule<T, L> {
   // unify rules
   const unifiedRule = unifyRules(rules)
   // return rule
   return createRule(test, ({ length, value }, currentPosition) => {
-    const getToken = createGetNextToken(value, unifiedRule, currentPosition, lastToken)
+    const getToken = createGetNextToken(value, unifiedRule, currentPosition, lastTokenType)
     return { length, getToken }
   })
 }

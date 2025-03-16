@@ -2,10 +2,13 @@ import type { MultiTokenRuleResult, Rule } from '../types/rule-types'
 import type { TokenType } from '../types/token-types'
 import type { GetNextToken } from '../types/types'
 
-export function createGetNextToken<T extends TokenType, L>(input: string, unifiedRule: Rule<T, L>, offset: number, lastToken: L): GetNextToken<T, L> {
-  // initialize
+export function createGetNextToken<T extends TokenType = never, L extends TokenType = never>(input: string, unifiedRule: Rule<T, L>, offset: number, lastTokenType: L | null | undefined): GetNextToken<T, L>
+export function createGetNextToken<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(input: string, unifiedRule: Rule<T, L>, offset: number, lastTokenType: X): GetNextToken<T, L | X>
+export function createGetNextToken<T extends TokenType = never, L extends TokenType = never>(input: string, unifiedRule: Rule<T, L>, offset: number, lastTokenType: L | null | undefined): GetNextToken<T, L> {
+  // set constants
   const inputLength = input.length
 
+  // initialize variables
   let currentPosition = 0
   let lastTokenEmitted = false
   let triggered: MultiTokenRuleResult<T, L> | null = null
@@ -27,18 +30,22 @@ export function createGetNextToken<T extends TokenType, L>(input: string, unifie
       return getNextToken()
     }
 
+    // compute token position for easy access
+    const tokenPosition = currentPosition + offset
+
     // return null if the end of input has been reached
     if (currentPosition >= inputLength) {
       if (lastTokenEmitted) return null
       lastTokenEmitted = true
-      return lastToken
+      if (lastTokenType == null) return null
+      return { type: lastTokenType, pos: tokenPosition }
     }
 
     // find first rule that matches
     const result = unifiedRule(input, currentPosition)
 
     // throw if no rule matched
-    if (!result) throw new SyntaxError(`Unknown token at position ${currentPosition + offset}`)
+    if (!result) throw new SyntaxError(`Unknown token at position ${tokenPosition}`)
 
     // register as triggered if result is a multi token result
     // this has to be done before advancing current position
@@ -52,16 +59,13 @@ export function createGetNextToken<T extends TokenType, L>(input: string, unifie
     // get result length
     const length = result.length
 
-    // save current position for later use
-    const tokenOffset = currentPosition
-
     // advance current position
     currentPosition += length
 
     // return token if result is a single token result
     if ('token' in result) {
       const { token: { type, value } } = result
-      return { type, value, pos: tokenOffset + offset }
+      return { type, value, pos: tokenPosition }
     }
 
     // return next token if rule didn't produce a token

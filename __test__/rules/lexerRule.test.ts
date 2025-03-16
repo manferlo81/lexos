@@ -1,6 +1,7 @@
 import { lexerRule, regexpRule, regexpTest } from '../../src'
 import type { FalsyReturn } from '../../src/types/internal/helper-types'
 import type { MultiTokenRuleResult } from '../../src/types/rule-types'
+import { createToken } from '../tools/create-token'
 
 describe('lexerRule function', () => {
 
@@ -74,9 +75,15 @@ describe('lexerRule function', () => {
 
       const { getToken } = ruleResult as MultiTokenRuleResult<never, never>
 
-      expect(getToken()).toEqual({ type: digitsType, value: a, pos: 1 })
-      expect(getToken()).toEqual({ type: operatorType, value: operator, pos: a.length + 2 })
-      expect(getToken()).toEqual({ type: digitsType, value: b, pos: a.length + 4 })
+      const expectedTokens = [
+        createToken(digitsType, 1, a),
+        createToken(operatorType, a.length + 2, operator),
+        createToken(digitsType, a.length + 4, b),
+      ]
+
+      expectedTokens.forEach((token) => {
+        expect(getToken()).toEqual(token)
+      })
       expect(getToken()).toBeNull()
       expect(getToken()).toBeNull()
       expect(getToken()).toBeNull()
@@ -118,10 +125,16 @@ describe('lexerRule function', () => {
 
       const { getToken } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
 
-      expect(getToken()).toEqual({ type: digitsType, value: a, pos: 1 })
-      expect(getToken()).toEqual({ type: operatorType, value: operator, pos: a.length + 2 })
-      expect(getToken()).toEqual({ type: digitsType, value: b, pos: a.length + 4 })
-      expect(getToken()).toBe('LT')
+      const expectedTokens = [
+        createToken(digitsType, 1, a),
+        createToken(operatorType, a.length + 2, operator),
+        createToken(digitsType, a.length + 4, b),
+        createToken('LT', a.length + 5 + b.length),
+      ]
+
+      expectedTokens.forEach((token) => {
+        expect(getToken()).toEqual(token)
+      })
       expect(getToken()).toBeNull()
       expect(getToken()).toBeNull()
       expect(getToken()).toBeNull()

@@ -1,16 +1,13 @@
 import { createOneOf, lexerRule, regexpTest, stringRule } from '../../src'
 import { createGetNextToken } from '../../src/tools/get-next-token'
+import { createToken } from '../tools/create-token'
 
 describe('createGetNextToken internal function', () => {
 
   test('should create a function', () => {
     const getNextToken = createGetNextToken(
-      'a + b = c',
-      createOneOf([
-        regexpTest(/\s+/),
-        stringRule(['a', 'b', 'c'], 'VAR'),
-        stringRule(['+', '='], 'OP'),
-      ]),
+      '',
+      () => null,
       0,
       null,
     )
@@ -30,8 +27,15 @@ describe('createGetNextToken internal function', () => {
       0,
       null,
     )
-    expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 0 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 2 })
+
+    const expectedTokens = [
+      createToken(variableType, 0, 'a'),
+      createToken(operatorType, 2, '+'),
+    ]
+
+    expectedTokens.forEach((token) => {
+      expect(getNextToken()).toEqual(token)
+    })
     expect(getNextToken).toThrow('position 4')
   })
 
@@ -53,10 +57,58 @@ describe('createGetNextToken internal function', () => {
       0,
       null,
     )
-    expect(getNextToken()).toEqual({ type: keywordType, value: 'evaluate', pos: 1 })
-    expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 10 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 12 })
+
+    const expectedTokens = [
+      createToken(keywordType, 1, 'evaluate'),
+      createToken(curlyType, 10, '{'),
+      createToken(variableType, 12, 'a'),
+    ]
+
+    expectedTokens.forEach((token) => {
+      expect(getNextToken()).toEqual(token)
+    })
     expect(getNextToken).toThrow('position 14')
+  })
+
+  test('should return null as last token', () => {
+    const nullishLastTokens = [
+      null,
+      undefined,
+    ]
+    nullishLastTokens.forEach((lastToken) => {
+      const getNextToken = createGetNextToken(
+        '',
+        () => null,
+        0,
+        lastToken,
+      )
+      expect(getNextToken()).toBeNull()
+      expect(getNextToken()).toBeNull()
+    })
+  })
+
+  test('should return last token once', () => {
+    const falsyLastTokens = [
+      '' as const,
+      0 as const,
+    ]
+    const lastTokens = [
+      'T' as const,
+      'LT' as const,
+      1 as const,
+      -2 as const,
+      ...falsyLastTokens,
+    ]
+    lastTokens.forEach((lastToken) => {
+      const getNextToken = createGetNextToken(
+        '',
+        () => null,
+        0,
+        lastToken,
+      )
+      expect(getNextToken()).toEqual(createToken(lastToken, 0))
+      expect(getNextToken()).toBeNull()
+    })
   })
 
   test('should return null after last token', () => {
@@ -72,12 +124,19 @@ describe('createGetNextToken internal function', () => {
       0,
       'LT',
     )
-    expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 0 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 2 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'b', pos: 4 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '=', pos: 6 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 8 })
-    expect(getNextToken()).toBe('LT')
+
+    const expectedTokens = [
+      createToken(variableType, 0, 'a'),
+      createToken(operatorType, 2, '+'),
+      createToken(variableType, 4, 'b'),
+      createToken(operatorType, 6, '='),
+      createToken(variableType, 8, 'c'),
+      createToken('LT', 9),
+    ]
+
+    expectedTokens.forEach((token) => {
+      expect(getNextToken()).toEqual(token)
+    })
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
@@ -94,13 +153,21 @@ describe('createGetNextToken internal function', () => {
         stringRule(['+', '='], operatorType),
       ]),
       0,
-      null,
+      'LT',
     )
-    expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 0 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 2 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'b', pos: 4 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '=', pos: 6 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 8 })
+
+    const expectedTokens = [
+      createToken(variableType, 0, 'a'),
+      createToken(operatorType, 2, '+'),
+      createToken(variableType, 4, 'b'),
+      createToken(operatorType, 6, '='),
+      createToken(variableType, 8, 'c'),
+      createToken('LT', 9),
+    ]
+
+    expectedTokens.forEach((token) => {
+      expect(getNextToken()).toEqual(token)
+    })
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
@@ -112,7 +179,7 @@ describe('createGetNextToken internal function', () => {
     const curlyType = 'CURLY'
     const keywordType = 'KW'
     const getNextToken = createGetNextToken(
-      ' evaluate { a + b - c }',
+      ' evaluate { a + b - c }  ',
       createOneOf([
         regexpTest(/\s+/),
         stringRule('evaluate', keywordType),
@@ -121,19 +188,28 @@ describe('createGetNextToken internal function', () => {
           stringRule(['{', '}'], curlyType),
           stringRule(['a', 'b', 'c'], variableType),
           stringRule(['+', '-'], operatorType),
-        ]),
+        ], 'LLT'),
       ]),
       0,
-      null,
+      'LT',
     )
-    expect(getNextToken()).toEqual({ type: keywordType, value: 'evaluate', pos: 1 })
-    expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 10 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 12 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 14 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'b', pos: 16 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '-', pos: 18 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 20 })
-    expect(getNextToken()).toEqual({ type: curlyType, value: '}', pos: 22 })
+
+    const expectedTokens = [
+      createToken(keywordType, 1, 'evaluate'),
+      createToken(curlyType, 10, '{'),
+      createToken(variableType, 12, 'a'),
+      createToken(operatorType, 14, '+'),
+      createToken(variableType, 16, 'b'),
+      createToken(operatorType, 18, '-'),
+      createToken(variableType, 20, 'c'),
+      createToken(curlyType, 22, '}'),
+      createToken('LLT', 23),
+      createToken('LT', 25),
+    ]
+
+    expectedTokens.forEach((token) => {
+      expect(getNextToken()).toEqual(token)
+    })
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
@@ -159,18 +235,25 @@ describe('createGetNextToken internal function', () => {
       0,
       null,
     )
-    expect(getNextToken()).toEqual({ type: keywordType, value: 'evaluate', pos: 1 })
-    expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 10 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'a', pos: 12 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '+', pos: 14 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'b', pos: 16 })
-    expect(getNextToken()).toEqual({ type: operatorType, value: '-', pos: 18 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 20 })
-    expect(getNextToken()).toEqual({ type: curlyType, value: '}', pos: 22 })
-    expect(getNextToken()).toEqual({ type: keywordType, value: 'evaluate', pos: 24 })
-    expect(getNextToken()).toEqual({ type: curlyType, value: '{', pos: 33 })
-    expect(getNextToken()).toEqual({ type: variableType, value: 'c', pos: 35 })
-    expect(getNextToken()).toEqual({ type: curlyType, value: '}', pos: 37 })
+
+    const expectedTokens = [
+      createToken(keywordType, 1, 'evaluate'),
+      createToken(curlyType, 10, '{'),
+      createToken(variableType, 12, 'a'),
+      createToken(operatorType, 14, '+'),
+      createToken(variableType, 16, 'b'),
+      createToken(operatorType, 18, '-'),
+      createToken(variableType, 20, 'c'),
+      createToken(curlyType, 22, '}'),
+      createToken(keywordType, 24, 'evaluate'),
+      createToken(curlyType, 33, '{'),
+      createToken(variableType, 35, 'c'),
+      createToken(curlyType, 37, '}'),
+    ]
+
+    expectedTokens.forEach((token) => {
+      expect(getNextToken()).toEqual(token)
+    })
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
