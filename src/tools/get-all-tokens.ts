@@ -5,7 +5,7 @@ export function getAllTokens<T extends TokenType, L extends TokenType>(getNextTo
   // initialize
   const tokens: TokenListWithLastToken<T, L> = []
 
-  // iterate
+  // populate token list
   for (let token = getNextToken(); token; token = getNextToken()) tokens.push(token)
 
   // return tokens

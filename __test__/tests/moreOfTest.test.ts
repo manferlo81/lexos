@@ -1,4 +1,5 @@
 import { moreOfTest, regexpTest } from '../../src'
+import { expectedTestResult } from '../tools/create-result'
 
 describe('moreOfTest function', () => {
 
@@ -37,7 +38,7 @@ describe('moreOfTest function', () => {
       '>>>>>',
     ]
     inputsThatMatch.forEach((input) => {
-      const expected = { value: input, length: input.length }
+      const expected = expectedTestResult(input)
       expect(testId(input, 0)).toEqual(expected)
       inputsThatDoNotMatch.forEach((addition) => {
         expect(testId(`${input} ${addition}`, 0)).toEqual(expected)

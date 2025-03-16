@@ -3,6 +3,23 @@ import { createToken } from './tools/create-token'
 
 describe('createLexer function', () => {
 
+  test('should create lexer from array of rules', () => {
+    const lexer = createLexer([
+      () => null,
+    ])
+    expect(typeof lexer === 'function').toBe(true)
+  })
+
+  test('should create lexer from single rule', () => {
+    const lexer = createLexer((input) => {
+      return {
+        length: input.length,
+        token: { value: input, type: 'INPUT' },
+      }
+    })
+    expect(typeof lexer === 'function').toBe(true)
+  })
+
   test('should throw if no rule matched', () => {
     const neverMatch = () => null
     const lexer = createLexer([
@@ -16,7 +33,7 @@ describe('createLexer function', () => {
     const neverMatch = () => null
     const lexer = createLexer([
       regexpTest(/\s+/),
-      stringRule('print', 'KW'),
+      stringRule('KW', 'print'),
       neverMatch,
     ])
     const getNextToken = lexer('  print   a + b = c')
@@ -33,8 +50,8 @@ describe('createLexer function', () => {
   test('should tokenize input', () => {
     const lexer = createLexer([
       regexpTest(/[^\S]+/),
-      regexpRule(/[a-z]+/i, 'VARIABLE'),
-      regexpRule(/[+=]/i, 'OPERATOR'),
+      regexpRule('VARIABLE', /[a-z]+/i),
+      regexpRule('OPERATOR', /[+=]/i),
     ])
     const getNextToken = lexer('a + b = c')
     const expectedTokens = [
@@ -55,8 +72,8 @@ describe('createLexer function', () => {
   test('should tokenize input (with last token)', () => {
     const lexer = createLexer([
       regexpTest(/[^\S]+/),
-      regexpRule(/[a-z]+/i, 'VARIABLE'),
-      regexpRule(/[+=]/i, 'OPERATOR'),
+      regexpRule('VARIABLE', /[a-z]+/i),
+      regexpRule('OPERATOR', /[+=]/i),
     ], 'LT')
     const getNextToken = lexer('a + b = c')
     const expectedToken = [

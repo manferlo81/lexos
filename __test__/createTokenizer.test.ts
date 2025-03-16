@@ -3,6 +3,23 @@ import { createToken } from './tools/create-token'
 
 describe('createTokenizer function', () => {
 
+  test('should create tokenizer from array of rules', () => {
+    const tokenize = createTokenizer([
+      () => null,
+    ])
+    expect(typeof tokenize === 'function').toBe(true)
+  })
+
+  test('should create tokenizer from single rule', () => {
+    const tokenize = createTokenizer((input) => {
+      return {
+        length: input.length,
+        token: { value: input, type: 'INPUT' },
+      }
+    })
+    expect(typeof tokenize === 'function').toBe(true)
+  })
+
   test('should throw if no rule matched', () => {
     const neverMatch = () => null
     const tokenize = createTokenizer([
@@ -16,7 +33,7 @@ describe('createTokenizer function', () => {
     const neverMatch = () => null
     const tokenize = createTokenizer([
       regexpTest(/\s+/),
-      stringRule('print', 'KW'),
+      stringRule('KW', 'print'),
       neverMatch,
     ])
     const exec = () => tokenize('  print   a + b = c')
@@ -32,8 +49,8 @@ describe('createTokenizer function', () => {
   test('should tokenize input', () => {
     const tokenize = createTokenizer([
       regexpTest(/[^\S]+/),
-      regexpRule(/[a-z]+/i, 'VARIABLE'),
-      regexpRule(/[+=]/i, 'OPERATOR'),
+      regexpRule('VARIABLE', /[a-z]+/i),
+      regexpRule('OPERATOR', /[+=]/i),
     ])
     const expectedTokens = [
       createToken('VARIABLE', 0, 'a'),
@@ -48,8 +65,8 @@ describe('createTokenizer function', () => {
   test('should tokenize input (with last token)', () => {
     const tokenize = createTokenizer([
       regexpTest(/[^\S]+/),
-      regexpRule(/[a-z]+/i, 'VARIABLE'),
-      regexpRule(/[+=]/i, 'OPERATOR'),
+      regexpRule('VARIABLE', /[a-z]+/i),
+      regexpRule('OPERATOR', /[+=]/i),
     ], 'LT')
     const expectedTokens = [
       createToken('VARIABLE', 0, 'a'),

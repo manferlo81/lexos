@@ -5,15 +5,28 @@ import { createToken } from '../tools/create-token'
 
 describe('lexerRule function', () => {
 
-  test('should be a function', () => {
-    const rule = lexerRule(() => null, [] as never)
+  test('should create rule from array of rules', () => {
+    const rule = lexerRule(/[\s\S]*/, [])
+    expect(typeof rule === 'function').toBe(true)
+  })
+
+  test('should create rule from single rule', () => {
+    const rule = lexerRule(/[\s\S]*/, (input) => {
+      return {
+        length: input.length,
+        token: {
+          value: input,
+          type: 'INPUT',
+        },
+      }
+    })
     expect(typeof rule === 'function').toBe(true)
   })
 
   test('should return falsy if input doesn\'t match', () => {
     const expressionRule = lexerRule(/\{.*\}/, [
-      regexpRule(/\d+/, 'Digits'),
-      regexpRule(/\./, 'DecimalPoint'),
+      regexpRule('Digits', /\d+/),
+      regexpRule('DecimalPoint', /\./),
     ])
     const inputsThatDoNotMatch = [
       '147 + 2',
@@ -47,11 +60,8 @@ describe('lexerRule function', () => {
     const expressionRule = lexerRule(/\{.*\}/, [
       regexpTest(/[{}]/),
       regexpTest(/\s+/),
-      regexpRule(/\d+/, digitsType),
-      regexpRule(
-        /[+\-*/]/,
-        operatorType,
-      ),
+      regexpRule(digitsType, /\d+/),
+      regexpRule(operatorType, /[+\-*/]/),
     ])
 
     const inputsThatMatch = [
@@ -97,11 +107,8 @@ describe('lexerRule function', () => {
     const expressionRule = lexerRule(/\{.*\}/, [
       regexpTest(/[{}]/),
       regexpTest(/\s+/),
-      regexpRule(/\d+/, digitsType),
-      regexpRule(
-        /[+\-*/]/,
-        operatorType,
-      ),
+      regexpRule(digitsType, /\d+/),
+      regexpRule(operatorType, /[+\-*/]/),
     ], 'LT')
 
     const inputsThatMatch = [

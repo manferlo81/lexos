@@ -1,21 +1,35 @@
 import { stringRule } from '../../src'
+import { expectedTokenResult } from '../tools/create-result'
 
 describe('stringRule function', () => {
 
   describe('case sensitive', () => {
 
     test('should throw if an empty string is passed', () => {
-      const exec = () => stringRule('', 'EmptyString')
+      const exec = () => stringRule('EmptyString', '')
       expect(exec).toThrow('Zero length string test')
     })
 
     test('should be a function', () => {
-      const rule = stringRule('keyword', 'Keyword')
+      const rule = stringRule('Keyword', 'keyword')
       expect(typeof rule == 'function').toBe(true)
     })
 
+    test('should return result if input matches', () => {
+      const type = 'Keyword'
+      const rule = stringRule(type, 'keyword')
+      const values = [
+        'keyword',
+      ]
+      values.forEach((input) => {
+        const expected = expectedTokenResult(input, type)
+        expect(rule(input, 0)).toEqual(expected)
+        expect(rule(`${input} and more`, 0)).toEqual(expected)
+      })
+    })
+
     test('should return falsy is it doesn\'t match', () => {
-      const rule = stringRule('keyword', 'Keyword')
+      const rule = stringRule('KW', 'keyword')
       const inputsThatDoNotMatch = [
         'text',
         'other text',
@@ -29,53 +43,23 @@ describe('stringRule function', () => {
       })
     })
 
-    test('should return result if input matches', () => {
-      const type = 'Keyword'
-      const rule = stringRule('keyword', type)
-      const values = [
-        'keyword',
-      ]
-      values.forEach((input) => {
-        const expected = {
-          length: input.length,
-          token: {
-            type,
-            value: input,
-          },
-        }
-        expect(rule(input, 0)).toEqual(expected)
-        expect(rule(`${input} and more`, 0)).toEqual(expected)
-      })
-    })
-
   })
 
   describe('case insensitive', () => {
 
     test('should throw if an empty string is passed', () => {
-      const exec = () => stringRule('', 'EmptyString', true)
+      const exec = () => stringRule('EmptyString', '', true)
       expect(exec).toThrow('Zero length string test')
     })
 
     test('should be a function', () => {
-      const rule = stringRule('keyword', 'Keyword', true)
+      const rule = stringRule('Keyword', 'keyword', true)
       expect(typeof rule == 'function').toBe(true)
-    })
-
-    test('should return falsy is it doesn\'t match', () => {
-      const rule = stringRule('keyword', 'Keyword', true)
-      const inputsThatDoNotMatch = [
-        'word',
-      ]
-      inputsThatDoNotMatch.forEach((input) => {
-        expect(rule(input, 0)).toBeFalsy()
-      })
-
     })
 
     test('should return result if input matches', () => {
       const type = 'Keyword'
-      const rule = stringRule('keyword', type, true)
+      const rule = stringRule(type, 'keyword', true)
       const inputsThatMatch = [
         'keyword',
         'Keyword',
@@ -84,16 +68,21 @@ describe('stringRule function', () => {
         'KEYWORD',
       ]
       inputsThatMatch.forEach((input) => {
-        const expected = {
-          length: input.length,
-          token: {
-            type,
-            value: input,
-          },
-        }
+        const expected = expectedTokenResult(input, type)
         expect(rule(input, 0)).toEqual(expected)
         expect(rule(`${input} and more`, 0)).toEqual(expected)
       })
+    })
+
+    test('should return falsy is it doesn\'t match', () => {
+      const rule = stringRule('Keyword', 'keyword', true)
+      const inputsThatDoNotMatch = [
+        'word',
+      ]
+      inputsThatDoNotMatch.forEach((input) => {
+        expect(rule(input, 0)).toBeFalsy()
+      })
+
     })
 
   })

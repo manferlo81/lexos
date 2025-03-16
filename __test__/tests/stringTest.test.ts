@@ -1,4 +1,5 @@
 import { stringTest } from '../../src'
+import { expectedTestResult } from '../tools/create-result'
 
 describe('stringTest function', () => {
 
@@ -19,10 +20,10 @@ describe('stringTest function', () => {
       test('should return result if input matches', () => {
         const keyword = 'keyword'
         const testKeyword = stringTest(keyword)
-        const expected = { value: keyword, length: keyword.length }
+        const expected = expectedTestResult(keyword)
         expect(testKeyword(keyword, 0)).toEqual(expected)
-        expect(testKeyword(`more ${keyword}`, 5)).toEqual(expected)
         expect(testKeyword(`${keyword} and more`, 0)).toEqual(expected)
+        expect(testKeyword(`more ${keyword}`, 5)).toEqual(expected)
         expect(testKeyword(`more ${keyword} and more`, 5)).toEqual(expected)
       })
 
@@ -45,6 +46,11 @@ describe('stringTest function', () => {
 
     describe('string test case insensitive', () => {
 
+      test('should throw if zero length value passed', () => {
+        const exec = () => stringTest('', true)
+        expect(exec).toThrow('Zero length string test')
+      })
+
       test('should be a function', () => {
         const test = stringTest('string', true)
         expect(typeof test === 'function').toBe(true)
@@ -59,10 +65,10 @@ describe('stringTest function', () => {
           'keyWord',
         ]
         inputsThatMatch.forEach((input) => {
-          const expected = { value: input, length: input.length }
+          const expected = expectedTestResult(input)
           expect(testKeyword(input, 0)).toEqual(expected)
-          expect(testKeyword(`more ${input}`, 5)).toEqual(expected)
           expect(testKeyword(`${input} and more`, 0)).toEqual(expected)
+          expect(testKeyword(`more ${input}`, 5)).toEqual(expected)
           expect(testKeyword(`more ${input} and more`, 5)).toEqual(expected)
         })
       })
@@ -91,18 +97,74 @@ describe('stringTest function', () => {
 
     describe('string array test case sensitive', () => {
 
+      test('should throw if zero length value passed', () => {
+        const arraysWithZeroLengthValues = [
+          ['', 'string', 'array'],
+          ['string', 'array', ''],
+        ]
+        arraysWithZeroLengthValues.forEach((values) => {
+          const exec = () => stringTest(values)
+          expect(exec).toThrow('Zero length string test')
+        })
+      })
+
       test('should be a function', () => {
         const test = stringTest(['string', 'array'])
         expect(typeof test === 'function').toBe(true)
+      })
+
+      test('should return result if input matches', () => {
+        const test = stringTest(['string', 'array'])
+        const inputsThatMatch = [
+          'string',
+          'array',
+        ]
+        inputsThatMatch.forEach((input) => {
+          const expected = expectedTestResult(input)
+          expect(test(input, 0)).toEqual(expected)
+          expect(test(`${input} and more`, 0)).toEqual(expected)
+          expect(test(`more ${input}`, 5)).toEqual(expected)
+          expect(test(`more ${input} and more`, 5)).toEqual(expected)
+        })
       })
 
     })
 
     describe('string array test case insensitive', () => {
 
+      test('should throw if zero length value passed', () => {
+        const arraysWithZeroLengthValues = [
+          ['', 'string', 'array'],
+          ['string', 'array', ''],
+        ]
+        arraysWithZeroLengthValues.forEach((values) => {
+          const exec = () => stringTest(values, true)
+          expect(exec).toThrow('Zero length string test')
+        })
+      })
+
       test('should be a function', () => {
         const test = stringTest(['string', 'array'], true)
         expect(typeof test === 'function').toBe(true)
+      })
+
+      test('should return result if input matches', () => {
+        const test = stringTest(['string', 'array'], true)
+        const inputsThatMatch = [
+          'string',
+          'String',
+          'STRING',
+          'array',
+          'Array',
+          'ARRAY',
+        ]
+        inputsThatMatch.forEach((input) => {
+          const expected = expectedTestResult(input)
+          expect(test(input, 0)).toEqual(expected)
+          expect(test(`${input} and more`, 0)).toEqual(expected)
+          expect(test(`more ${input}`, 5)).toEqual(expected)
+          expect(test(`more ${input} and more`, 5)).toEqual(expected)
+        })
       })
 
     })

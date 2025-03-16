@@ -68,6 +68,8 @@ export function stringTest(test: StringifyableTest | StringifyableTest[], insens
 
 export function ruleTest(test: Test): Test
 export function ruleTest(regexp: RegExp): Test
+export function ruleTest(value: number): Test
+export function ruleTest(values: number[]): Test
 export function ruleTest(value: string, insensitive?: boolean): Test
 export function ruleTest(values: StringifyableTest[], insensitive?: boolean): Test
 export function ruleTest(anyTest: AnyTest, param?: unknown): Test

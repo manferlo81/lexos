@@ -17,7 +17,7 @@ describe('unifyRules internal function', () => {
   test('should create a one-of rule from array', () => {
     const rule = unifyRules([
       regexpTest(/\s+/),
-      stringRule(['one', 'two'], 'Num'),
+      stringRule('Num', ['one', 'two']),
     ])
     expect(rule('   one', 0)).toEqual({ value: '   ', length: 3 })
     expect(rule('   one', 2)).toEqual({ value: ' ', length: 1 })
