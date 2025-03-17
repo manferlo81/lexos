@@ -5,14 +5,8 @@ import { expectedTokenResult } from '../tools/create-result'
 describe('testRule function', () => {
 
   test('should be a function', () => {
-    const rule = testRule('Type', () => null)
+    const rule = testRule('ALL', (input) => ({ value: input, length: input.length }))
     expect (typeof rule === 'function').toBe(true)
-  })
-
-  test('should return falsy if input doesn\'t match', () => {
-    const testOk = stringTest('ok')
-    const okRule = testRule('Ok', testOk)
-    expect(okRule('not ok', 0)).toBeFalsy()
   })
 
   test('should return result if input matches', () => {
@@ -54,6 +48,12 @@ describe('testRule function', () => {
       expect(starStringRule(input, 0)).toEqual(expected)
       expect(starStringRule(`${input} and more`, 0)).toEqual(expected)
     })
+  })
+
+  test('should return falsy if input doesn\'t match', () => {
+    const testOk = stringTest('ok')
+    const okRule = testRule('Ok', testOk)
+    expect(okRule('not ok', 0)).toBeFalsy()
   })
 
 })

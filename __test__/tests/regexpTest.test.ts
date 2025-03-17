@@ -18,6 +18,8 @@ describe('regexpRule function', () => {
       const expected = expectedTestResult(input)
       expect(integerRule(input, 0)).toEqual(expected)
       expect(integerRule(`${input} and more`, 0)).toEqual(expected)
+      expect(integerRule(`more ${input}`, 5)).toEqual(expected)
+      expect(integerRule(`more ${input} and more`, 5)).toEqual(expected)
     })
   })
 
@@ -25,6 +27,8 @@ describe('regexpRule function', () => {
     const integerRule = regexpTest(/\d+/)
     const inputsThatDoNotMatch = [
       'text',
+      'more text',
+      'any other text',
     ]
     inputsThatDoNotMatch.forEach((input) => {
       expect(integerRule(input, 0)).toBeFalsy()

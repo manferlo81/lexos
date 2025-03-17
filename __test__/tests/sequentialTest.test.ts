@@ -1,9 +1,10 @@
-import { regexpTest, sequentialTest } from '../../src'
+import { regexpTest, sequentialTest, stringTest } from '../../src'
 import { expectedTestResult } from '../tools/create-result'
 
 describe('sequentialTest function', () => {
 
   const testInteger = regexpTest(/\d+/)
+  const testDash = stringTest('-')
   const testWord = regexpTest(/[a-z]+/i)
 
   test('should be a function', () => {
@@ -11,42 +12,34 @@ describe('sequentialTest function', () => {
     expect(typeof testId === 'function').toBe(true)
   })
 
-  test('should return falsy if input doesn\'t match', () => {
-    const testId = sequentialTest([testWord, testInteger, testWord])
-    const inputsThatDoNotMatch = [
-      '$#@*',
-      '+_-=/*',
-      '     ',
-    ]
-    inputsThatDoNotMatch.forEach((input) => {
-      expect(testId(input, 0)).toBeFalsy()
-    })
-  })
-
-  test('should return falsy if input doesn\'t match in the right order', () => {
-    const testId = sequentialTest([testWord, testInteger, testWord])
-    const inputThatDoNotMathSequentially = [
-      '1234',
-      'word',
-      '1234word',
-      'word7890',
-      '1234text6789',
-    ]
-    inputThatDoNotMathSequentially.forEach((value) => {
-      expect(testId(value, 0)).toBeFalsy()
-    })
-  })
-
   test('should return result only if input matches in the right order', () => {
-    const testId = sequentialTest([testWord, testInteger, testWord])
+    const testId = sequentialTest([testWord, testDash, testInteger])
     const inputsThatMatchSequentially = [
-      'word7890word',
-      'X99Z',
+      'word-7890',
+      'X-99',
     ]
     inputsThatMatchSequentially.forEach((input) => {
       const expected = expectedTestResult(input)
       expect(testId(input, 0)).toEqual(expected)
-      expect(testId(`${input} >>>>>`, 0)).toEqual(expected)
+      expect(testId(`${input} and more`, 0)).toEqual(expected)
+      expect(testId(`more ${input}`, 5)).toEqual(expected)
+      expect(testId(`more ${input} and more`, 5)).toEqual(expected)
+    })
+  })
+
+  test('should return falsy if input doesn\'t match', () => {
+    const testId = sequentialTest([testWord, testDash, testInteger])
+    const inputThatDoNotMathSequentially = [
+      '1234',
+      '-1234',
+      'word',
+      'word-',
+      '1234-word',
+      'word7890',
+      '1234-text-6789',
+    ]
+    inputThatDoNotMathSequentially.forEach((value) => {
+      expect(testId(value, 0)).toBeFalsy()
     })
   })
 

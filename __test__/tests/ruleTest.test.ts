@@ -16,8 +16,8 @@ describe('ruleTest function', () => {
   describe('RegExp test', () => {
 
     test('should be a function', () => {
-      const test = ruleTest(/\d+/)
-      expect(typeof test === 'function').toBe(true)
+      const testInteger = ruleTest(/\d+/)
+      expect(typeof testInteger === 'function').toBe(true)
     })
 
     test('should return result if input matches', () => {

@@ -13,8 +13,8 @@ describe('stringTest function', () => {
       })
 
       test('should be a function', () => {
-        const test = stringTest('string')
-        expect(typeof test === 'function').toBe(true)
+        const testKeyword = stringTest('keyword')
+        expect(typeof testKeyword === 'function').toBe(true)
       })
 
       test('should return result if input matches', () => {
@@ -52,8 +52,8 @@ describe('stringTest function', () => {
       })
 
       test('should be a function', () => {
-        const test = stringTest('string', true)
-        expect(typeof test === 'function').toBe(true)
+        const testKeyword = stringTest('keyword', true)
+        expect(typeof testKeyword === 'function').toBe(true)
       })
 
       test('should return result if input matches', () => {
