@@ -1,22 +1,22 @@
 import { createOneOf } from './one-of'
 import { isArray, isType } from './tools/is'
 import { mapTests } from './tools/map-tests'
+import { repairRegExp } from './tools/repair-regexp'
 import { makeInsensitive } from './tools/string-case'
 import type { AnyTest, StringifyableTest, Test } from './types/test-types'
 
 export function regexpTest(regexp: RegExp): Test {
 
+  const matchingRegExp = repairRegExp(regexp)
+
   // return test
   return (input, pos) => {
     // test partial against RegExp
     const partial = input.substring(pos)
-    const result = regexp.exec(partial)
+    const result = matchingRegExp.exec(partial)
 
     // fail if RegExp didn't match
     if (!result) return
-
-    // fail if it didn't match the very beginning
-    if (result.index !== 0) return
 
     // return successful result if it's not a zero length value...
     const value = result[0]
