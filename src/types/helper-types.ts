@@ -19,3 +19,5 @@ export interface Valued {
 }
 
 export type CodeProcessingFunction<R> = (input: string, pos: number) => R
+
+export type GetTokenTypeBase<R> = (value: string) => R

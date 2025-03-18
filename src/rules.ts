@@ -1,9 +1,9 @@
 import { regexpTest, ruleTest, stringTest } from './tests'
 import { singleTokenRule } from './tools/single-token-rule'
+import type { CodeProcessingFunction, FalsyReturn } from './types/helper-types'
 import type { SingleTokenRule, SingleTokenRuleResult } from './types/single-rule-types'
 import type { AnyTest, StringifyableTest, Test, TestResult } from './types/test-types'
 import type { GetActualTokenType, GetNullishTokenType, GetTokenType, TokenType } from './types/token-types'
-import type { CodeProcessingFunction, FalsyReturn } from 'd:/js/dev/lexos/src/types/helper-types'
 
 export function regexpRule(type: GetNullishTokenType, regexp: RegExp): Test
 export function regexpRule<T extends TokenType>(type: T | GetActualTokenType<T>, regexp: RegExp): SingleTokenRule<T>
