@@ -4,6 +4,7 @@ describe('Exports', () => {
 
   test('should export', () => {
     const expected: Record<keyof typeof lexos, unknown> = {
+      createTokenGenerator: expect.any(Function),
       createLexer: expect.any(Function),
       createTokenizer: expect.any(Function),
       createOneOf: expect.any(Function),
@@ -18,6 +19,7 @@ describe('Exports', () => {
       regexpRule: expect.any(Function),
       stringRule: expect.any(Function),
       lexerRule: expect.any(Function),
+
     }
     expect(lexos).toEqual(expected)
   })

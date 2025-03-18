@@ -1,3 +1,4 @@
+export { createTokenGenerator } from './generator'
 export { createLexer } from './lexer'
 export { lexerRule } from './lexer-rule'
 export { moreOfTest } from './more-of'

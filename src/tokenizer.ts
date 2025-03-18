@@ -1,5 +1,4 @@
-import { getAllTokens } from './tools/get-all-tokens'
-import { createGetNextToken } from './tools/get-next-token'
+import { createTokenGenerator } from './generator'
 import { unifyRules } from './tools/unify-rules'
 import type { Rule, RuleList, UnifiableRules } from './types/rule-types'
 import type { TokenType } from './types/token-types'
@@ -17,10 +16,10 @@ export function createTokenizer<T extends TokenType = never, L extends TokenType
 
   // return tokenize function
   return (input: string) => {
-    // initialize
-    const getNextToken = createGetNextToken(input, unifiedRule, 0, lastTokenType)
+    // create generator
+    const generator = createTokenGenerator(input, unifiedRule, 0, lastTokenType)
 
-    // get all tokens
-    return getAllTokens(getNextToken)
+    // return all tokens
+    return Array.from(generator)
   }
 }

@@ -1,23 +1,24 @@
 import { createOneOf, lexerRule, regexpTest, stringRule } from '../../src'
-import { createGetNextToken } from '../../src/tools/get-next-token'
+import { createTokenGenerator } from '../../src/generator'
 import { createToken } from '../tools/create-token'
 
-describe('createGetNextToken internal function', () => {
+describe('createTokenGenerator internal function', () => {
 
-  test('should create a function', () => {
-    const getNextToken = createGetNextToken(
+  test('should create a generator', () => {
+    const tokenGenerator = createTokenGenerator(
       '',
       () => null,
       0,
       null,
     )
-    expect(typeof getNextToken === 'function').toBe(true)
+    expect(typeof tokenGenerator === 'object').toBe(true)
+    expect(typeof tokenGenerator.next === 'function').toBe(true)
   })
 
   test('should throw on unknown token', () => {
     const variableType = 'VAR'
     const operatorType = 'OP'
-    const getNextToken = createGetNextToken(
+    const tokenGenerator = createTokenGenerator(
       'a + z = c',
       createOneOf([
         regexpTest(/\s+/),
@@ -34,16 +35,16 @@ describe('createGetNextToken internal function', () => {
     ]
 
     expectedTokens.forEach((token) => {
-      expect(getNextToken()).toEqual(token)
+      expect(tokenGenerator.next().value).toEqual(token)
     })
-    expect(getNextToken).toThrow('position 4')
+    expect(() => tokenGenerator.next()).toThrow('position 4')
   })
 
   test('should throw from lexer rule', () => {
     const variableType = 'VAR'
     const keywordType = 'KW'
     const curlyType = 'CURLY'
-    const getNextToken = createGetNextToken(
+    const tokenGenerator = createTokenGenerator(
       ' evaluate { a + b - c }',
       createOneOf([
         regexpTest(/\s+/),
@@ -65,25 +66,24 @@ describe('createGetNextToken internal function', () => {
     ]
 
     expectedTokens.forEach((token) => {
-      expect(getNextToken()).toEqual(token)
+      expect(tokenGenerator.next().value).toEqual(token)
     })
-    expect(getNextToken).toThrow('position 14')
+    expect(() => tokenGenerator.next()).toThrow('position 14')
   })
 
-  test('should return null as last token', () => {
+  test('should not generate last token', () => {
     const nullishLastTokens = [
       null,
       undefined,
     ]
     nullishLastTokens.forEach((lastToken) => {
-      const getNextToken = createGetNextToken(
+      const tokenGenerator = createTokenGenerator(
         '',
         () => null,
         0,
         lastToken,
       )
-      expect(getNextToken()).toBeNull()
-      expect(getNextToken()).toBeNull()
+      expect([...tokenGenerator]).toEqual([])
     })
   })
 
@@ -100,21 +100,22 @@ describe('createGetNextToken internal function', () => {
       ...falsyLastTokens,
     ]
     lastTokens.forEach((lastToken) => {
-      const getNextToken = createGetNextToken(
+      const tokenGenerator = createTokenGenerator(
         '',
         () => null,
         0,
         lastToken,
       )
-      expect(getNextToken()).toEqual(createToken(lastToken, 0))
-      expect(getNextToken()).toBeNull()
+      expect([...tokenGenerator]).toEqual([
+        createToken(lastToken, 0),
+      ])
     })
   })
 
-  test('should return null after last token', () => {
+  test('should generate last token', () => {
     const variableType = 'VAR'
     const operatorType = 'OP'
-    const getNextToken = createGetNextToken(
+    const tokenGenerator = createTokenGenerator(
       'a + b = c',
       createOneOf([
         regexpTest(/\s+/),
@@ -125,27 +126,20 @@ describe('createGetNextToken internal function', () => {
       'LT',
     )
 
-    const expectedTokens = [
+    expect([...tokenGenerator]).toEqual([
       createToken(variableType, 0, 'a'),
       createToken(operatorType, 2, '+'),
       createToken(variableType, 4, 'b'),
       createToken(operatorType, 6, '='),
       createToken(variableType, 8, 'c'),
       createToken('LT', 9),
-    ]
-
-    expectedTokens.forEach((token) => {
-      expect(getNextToken()).toEqual(token)
-    })
-    expect(getNextToken()).toBeNull()
-    expect(getNextToken()).toBeNull()
-    expect(getNextToken()).toBeNull()
+    ])
   })
 
   test('should get tokens one by one', () => {
     const variableType = 'VAR'
     const operatorType = 'OP'
-    const getNextToken = createGetNextToken(
+    const tokenGenerator = createTokenGenerator(
       'a + b = c',
       createOneOf([
         regexpTest(/\s+/),
@@ -156,21 +150,14 @@ describe('createGetNextToken internal function', () => {
       'LT',
     )
 
-    const expectedTokens = [
+    expect([...tokenGenerator]).toEqual([
       createToken(variableType, 0, 'a'),
       createToken(operatorType, 2, '+'),
       createToken(variableType, 4, 'b'),
       createToken(operatorType, 6, '='),
       createToken(variableType, 8, 'c'),
       createToken('LT', 9),
-    ]
-
-    expectedTokens.forEach((token) => {
-      expect(getNextToken()).toEqual(token)
-    })
-    expect(getNextToken()).toBeNull()
-    expect(getNextToken()).toBeNull()
-    expect(getNextToken()).toBeNull()
+    ])
   })
 
   test('should get tokens one by one, using lexer rule', () => {
@@ -178,7 +165,7 @@ describe('createGetNextToken internal function', () => {
     const operatorType = 'OP'
     const curlyType = 'CURLY'
     const keywordType = 'KW'
-    const getNextToken = createGetNextToken(
+    const tokenGenerator = createTokenGenerator(
       ' evaluate { a + b - c }  ',
       createOneOf([
         regexpTest(/\s+/),
@@ -194,7 +181,7 @@ describe('createGetNextToken internal function', () => {
       'LT',
     )
 
-    const expectedTokens = [
+    expect([...tokenGenerator]).toEqual([
       createToken(keywordType, 1, 'evaluate'),
       createToken(curlyType, 10, '{'),
       createToken(variableType, 12, 'a'),
@@ -205,14 +192,7 @@ describe('createGetNextToken internal function', () => {
       createToken(curlyType, 22, '}'),
       createToken('LLT', 23),
       createToken('LT', 25),
-    ]
-
-    expectedTokens.forEach((token) => {
-      expect(getNextToken()).toEqual(token)
-    })
-    expect(getNextToken()).toBeNull()
-    expect(getNextToken()).toBeNull()
-    expect(getNextToken()).toBeNull()
+    ])
   })
 
   test('should get back to position after lexer rule is done', () => {
@@ -220,7 +200,7 @@ describe('createGetNextToken internal function', () => {
     const operatorType = 'OP'
     const curlyType = 'CURLY'
     const keywordType = 'KW'
-    const getNextToken = createGetNextToken(
+    const tokenGenerator = createTokenGenerator(
       ' evaluate { a + b - c } evaluate { c }',
       createOneOf([
         regexpTest(/\s+/),
@@ -251,12 +231,7 @@ describe('createGetNextToken internal function', () => {
       createToken(curlyType, 37, '}'),
     ]
 
-    expectedTokens.forEach((token) => {
-      expect(getNextToken()).toEqual(token)
-    })
-    expect(getNextToken()).toBeNull()
-    expect(getNextToken()).toBeNull()
-    expect(getNextToken()).toBeNull()
+    expect([...tokenGenerator]).toEqual(expectedTokens)
   })
 
 })

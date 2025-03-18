@@ -1,3 +1,4 @@
+import { createTokenGenerator } from './generator'
 import { createGetNextToken } from './tools/get-next-token'
 import { unifyRules } from './tools/unify-rules'
 import type { Rule, RuleList, UnifiableRules } from './types/rule-types'
@@ -16,6 +17,10 @@ export function createLexer<T extends TokenType = never, L extends TokenType = n
 
   // return lexer
   return (input: string) => {
-    return createGetNextToken(input, unifiedRule, 0, lastTokenType)
+    // create generator
+    const generator = createTokenGenerator(input, unifiedRule, 0, lastTokenType)
+
+    // return get next token function
+    return createGetNextToken(generator)
   }
 }

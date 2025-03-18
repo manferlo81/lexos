@@ -1,6 +1,6 @@
+import { createTokenGenerator } from './generator'
 import { ruleTest } from './tests'
 import { createRule } from './tools/create-rule'
-import { createGetNextToken } from './tools/get-next-token'
 import { unifyRules } from './tools/unify-rules'
 import type { MultiTokenRule } from './types/multi-rule-types'
 import type { Rule, RuleList, UnifiableRules } from './types/rule-types'
@@ -19,7 +19,7 @@ export function lexerRule<T extends TokenType = never, L extends TokenType = nev
 
   // return rule
   return createRule(ruleTest(test), ({ length, value }, currentPosition) => {
-    const getToken = createGetNextToken(value, unifiedRule, currentPosition, lastTokenType)
-    return { length, getToken }
+    const generator = createTokenGenerator(value, unifiedRule, currentPosition, lastTokenType)
+    return { length, generator }
   })
 }

@@ -47,7 +47,7 @@ describe('lexerRule function', () => {
     inputsThatDoNotMatch.forEach((input) => {
       expect(expressionRule(input, 0)).toEqual({
         length: 8,
-        getToken: expect.any(Function) as unknown,
+        generator: expect.any(Object) as unknown,
       })
     })
   })
@@ -79,10 +79,10 @@ describe('lexerRule function', () => {
 
       expect(ruleResult).toEqual({
         length: expression.length,
-        getToken: expect.any(Function) as unknown,
+        generator: expect.any(Object) as unknown,
       })
 
-      const { getToken } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
+      const { generator } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
 
       const expectedTokens = [
         createToken(digitsType, 1, a),
@@ -91,11 +91,11 @@ describe('lexerRule function', () => {
       ]
 
       expectedTokens.forEach((token) => {
-        expect(getToken()).toEqual(token)
+        expect(generator.next().value).toEqual(token)
       })
-      expect(getToken()).toBeNull()
-      expect(getToken()).toBeNull()
-      expect(getToken()).toBeNull()
+      expect(generator.next().done).toBeTruthy()
+      expect(generator.next().done).toBeTruthy()
+      expect(generator.next().done).toBeTruthy()
     })
   })
 
@@ -126,10 +126,10 @@ describe('lexerRule function', () => {
 
       expect(ruleResult).toEqual({
         length: expression.length,
-        getToken: expect.any(Function) as unknown,
+        generator: expect.any(Object) as unknown,
       })
 
-      const { getToken } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
+      const { generator } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
 
       const expectedTokens = [
         createToken(digitsType, 1, a),
@@ -139,11 +139,11 @@ describe('lexerRule function', () => {
       ]
 
       expectedTokens.forEach((token) => {
-        expect(getToken()).toEqual(token)
+        expect(generator.next().value).toEqual(token)
       })
-      expect(getToken()).toBeNull()
-      expect(getToken()).toBeNull()
-      expect(getToken()).toBeNull()
+      expect(generator.next().done).toBeTruthy()
+      expect(generator.next().done).toBeTruthy()
+      expect(generator.next().done).toBeTruthy()
     })
   })
 
