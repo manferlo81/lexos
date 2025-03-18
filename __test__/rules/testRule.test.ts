@@ -50,6 +50,37 @@ describe('testRule function', () => {
     })
   })
 
+  test('should return result if input matches using dynamic type', () => {
+    const integerOrIdTest = regexpTest(/(?:0)|(?:[1-9][0-9]*)|([a-zA-Z][\w_$]*)/)
+    const integerType = 'INT'
+    const idType = 'ID'
+
+    const starStringRule = testRule(
+      (value) => {
+        if (Number.isFinite(+value)) return integerType
+        return idType
+      },
+      integerOrIdTest,
+    )
+
+    const inputsThatMatch = [
+      ['1234', integerType],
+      ['89', integerType],
+      ['0', integerType],
+      ['12', integerType],
+      ['AnId', idType],
+      ['Id2025', idType],
+    ]
+
+    inputsThatMatch.forEach(([input, type]) => {
+      const expected = expectedTokenResult(input, type)
+      expect(starStringRule(input, 0)).toEqual(expected)
+      expect(starStringRule(`${input} and more`, 0)).toEqual(expected)
+      expect(starStringRule(`more ${input}`, 5)).toEqual(expected)
+      expect(starStringRule(`more ${input} and more`, 5)).toEqual(expected)
+    })
+  })
+
   test('should return falsy if input doesn\'t match', () => {
     const testOk = stringTest('ok')
     const okRule = testRule('Ok', testOk)

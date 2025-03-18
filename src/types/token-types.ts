@@ -2,6 +2,8 @@ import type { Typed, Valued } from './internal/helper-types'
 
 export type TokenType = string | number
 
+export type GetTokenType<T extends TokenType> = (value: string) => T
+
 export interface LastToken<T extends TokenType> extends Typed<T> {
   pos: number
 }
