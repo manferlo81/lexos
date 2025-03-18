@@ -73,8 +73,6 @@ export function* createTokenGenerator<T extends TokenType = never, L extends Tok
     return getNextToken()
   }
 
-  for (let token = getNextToken(); token; token = getNextToken()) {
-    yield token
-  }
+  for (let token = getNextToken(); token; token = getNextToken()) yield token
 
 }
