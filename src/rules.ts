@@ -1,6 +1,6 @@
 import { regexpTest, ruleTest, stringTest } from './tests'
 import { singleTokenRule } from './tools/single-token-rule'
-import type { SingleTokenRule } from './types/rule-types'
+import type { SingleTokenRule } from './types/single-rule-types'
 import type { AnyTest, StringifyableTest, Test } from './types/test-types'
 import type { GetTokenType, TokenType } from './types/token-types'
 

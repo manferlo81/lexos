@@ -1,10 +1,11 @@
-import type { MultiTokenRuleResult, Rule } from '../types/rule-types'
+import type { MultiTokenRuleResult } from '../types/multi-rule-types'
+import type { Rule } from '../types/rule-types'
 import type { TokenType } from '../types/token-types'
 import type { GetNextToken } from '../types/types'
 
-export function createGetNextToken<T extends TokenType = never, L extends TokenType = never>(input: string, unifiedRule: Rule<T, L>, offset: number, lastTokenType: L | null | undefined): GetNextToken<T, L>
-export function createGetNextToken<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(input: string, unifiedRule: Rule<T, L>, offset: number, lastTokenType: X): GetNextToken<T, L | X>
-export function createGetNextToken<T extends TokenType = never, L extends TokenType = never>(input: string, unifiedRule: Rule<T, L>, offset: number, lastTokenType: L | null | undefined): GetNextToken<T, L> {
+export function createGetNextToken<T extends TokenType = never, L extends TokenType = never>(input: string, rule: Rule<T, L>, offset: number, lastTokenType: L | null | undefined): GetNextToken<T, L>
+export function createGetNextToken<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(input: string, rule: Rule<T, L>, offset: number, lastTokenType: X): GetNextToken<T, L | X>
+export function createGetNextToken<T extends TokenType = never, L extends TokenType = never>(input: string, rule: Rule<T, L>, offset: number, lastTokenType: L | null | undefined): GetNextToken<T, L> {
   // set constants
   const inputLength = input.length
 
@@ -42,7 +43,7 @@ export function createGetNextToken<T extends TokenType = never, L extends TokenT
     }
 
     // find first rule that matches
-    const result = unifiedRule(input, currentPosition)
+    const result = rule(input, currentPosition)
 
     // throw if no rule matched
     if (!result) throw new SyntaxError(`Unknown token at position ${tokenPosition}`)

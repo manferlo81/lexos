@@ -63,8 +63,8 @@ export function stringTest(value: string, insensitive?: boolean): Test
 export function stringTest(values: StringifyableTest[], insensitive?: boolean): Test
 export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): Test
 export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): Test {
-  if (isType(test, 'string', 'number')) return singleStringTest(test, insensitive)
-  return createOneOf(mapTests(test, singleStringTest, insensitive))
+  if (isArray(test)) return createOneOf(mapTests(test, singleStringTest, insensitive))
+  return singleStringTest(test, insensitive)
 }
 
 export function ruleTest(test: Test): Test

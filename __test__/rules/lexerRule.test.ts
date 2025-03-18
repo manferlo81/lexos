@@ -1,6 +1,5 @@
 import { lexerRule, regexpRule, regexpTest } from '../../src'
-import type { FalsyReturn } from '../../src/types/internal/helper-types'
-import type { MultiTokenRuleResult } from '../../src/types/rule-types'
+import type { FalsyReturn } from '../../src/types/helper-types'
 import { createToken } from '../tools/create-token'
 
 describe('lexerRule function', () => {
@@ -83,7 +82,7 @@ describe('lexerRule function', () => {
         getToken: expect.any(Function) as unknown,
       })
 
-      const { getToken } = ruleResult as MultiTokenRuleResult<never, never>
+      const { getToken } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
 
       const expectedTokens = [
         createToken(digitsType, 1, a),

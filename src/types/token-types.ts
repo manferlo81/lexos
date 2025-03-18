@@ -1,4 +1,4 @@
-import type { Typed, Valued } from './internal/helper-types'
+import type { Typed, Valued } from './helper-types'
 
 export type TokenType = string | number
 

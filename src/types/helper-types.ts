@@ -1,6 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 export type Void = void
-export type Falsy = null | undefined | false
+export type Nullish = null | undefined
+export type Falsy = Nullish | false
+
+export type NullishReturn = Nullish | Void
 export type FalsyReturn = Falsy | Void
 
 export interface Typed<T> {
