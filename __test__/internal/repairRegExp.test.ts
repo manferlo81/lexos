@@ -1,6 +1,6 @@
 import { repairRegExp } from '../../src/tools/repair-regexp'
 
-describe('repairRegExp function', () => {
+describe('repairRegExp internal function', () => {
 
   test('should always return a new Regexp', () => {
     const regexp = /.*/y

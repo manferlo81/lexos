@@ -1,8 +1,12 @@
-import type { Typed, Valued } from './helper-types'
+import { type NullishReturn, type Typed, type Valued } from './helper-types'
 
 export type TokenType = string | number
 
-export type GetTokenType<T extends TokenType> = (value: string) => T
+type GetTokenTypeBase<R> = (value: string) => R
+
+export type GetActualTokenType<T extends TokenType> = GetTokenTypeBase<T>
+export type GetNullishTokenType = GetTokenTypeBase<NullishReturn>
+export type GetTokenType<T extends TokenType> = GetTokenTypeBase<T | NullishReturn>
 
 export interface LastToken<T extends TokenType> extends Typed<T> {
   pos: number

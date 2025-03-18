@@ -1,9 +1,9 @@
-import type { CodeProcessingFunction, Void } from '../types/helper-types'
+import type { CodeProcessingFunction, FalsyReturn } from '../types/helper-types'
 import type { Test, TestResult } from '../types/test-types'
 
 type CreateRuleResult<R> = (result: TestResult, pos: number) => R
 
-export function createRule<R>(test: Test, createResult: CreateRuleResult<R>): CodeProcessingFunction<R | Void> {
+export function createRule<R>(test: Test, createResult: CreateRuleResult<R>): CodeProcessingFunction<R | FalsyReturn> {
 
   // return rule
   return (input, pos) => {

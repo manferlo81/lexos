@@ -1,6 +1,6 @@
 import type { Test } from '../../src'
-import { regexpTest, stringTest, testRule } from '../../src'
-import { expectedTokenResult } from '../tools/create-result'
+import { regexpTest, testRule } from '../../src'
+import { expectedTestResult, expectedTokenResult } from '../tools/create-result'
 
 describe('testRule function', () => {
 
@@ -81,10 +81,40 @@ describe('testRule function', () => {
     })
   })
 
+  test('should return test result if dynamic type returns nullish', () => {
+    const integerOrIdTest = regexpTest(/(?:0)|(?:[1-9][0-9]*)|([a-zA-Z][\w_$]*)/)
+    const integerType = 'INT'
+
+    const starStringRule = testRule(
+      (value) => {
+        if (Number.isFinite(+value)) return integerType
+      },
+      integerOrIdTest,
+    )
+
+    const inputsThatMatch = [
+      ['1234', integerType] as const,
+      ['89', integerType] as const,
+      ['0', integerType] as const,
+      ['12', integerType] as const,
+      ['AnId', null] as const,
+      ['Id2025', null] as const,
+    ]
+
+    inputsThatMatch.forEach(([input, type]) => {
+      const expected = type
+        ? expectedTokenResult(input, type)
+        : expectedTestResult(input)
+      expect(starStringRule(input, 0)).toEqual(expected)
+      expect(starStringRule(`${input} and more`, 0)).toEqual(expected)
+      expect(starStringRule(`more ${input}`, 5)).toEqual(expected)
+      expect(starStringRule(`more ${input} and more`, 5)).toEqual(expected)
+    })
+  })
+
   test('should return falsy if input doesn\'t match', () => {
-    const testOk = stringTest('ok')
-    const okRule = testRule('Ok', testOk)
-    expect(okRule('not ok', 0)).toBeFalsy()
+    const boolStringRule = testRule('BOOL_STRING', ['yes', 'no'], true)
+    expect(boolStringRule('never yes no', 0)).toBeFalsy()
   })
 
 })
