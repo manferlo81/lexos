@@ -2,29 +2,35 @@ import { repairRegExp } from '../../src/tools/repair-regexp'
 
 describe('repairRegExp function', () => {
 
-  test('should return input RegExp if it matches start', () => {
-    const regexp = /^.*/
-    const repaired = repairRegExp(regexp)
-    expect(repaired).toBe(regexp)
-  })
-
-  test('should return a new RegExp matching start', () => {
-    const regexp = /.*/
+  test('should always return a new Regexp', () => {
+    const regexp = /.*/y
     const repaired = repairRegExp(regexp)
     expect(repaired).not.toBe(regexp)
-    expect(repaired.source.startsWith('^')).toBe(true)
+    expect(repaired).toEqual(regexp)
   })
 
-  test('should keep original flags', () => {
+  test('should remove RegExp start pattern', () => {
+    const regexp = /^.*/
+    const repaired = repairRegExp(regexp)
+    expect(repaired.source).toBe(regexp.source.substring(1))
+  })
+
+  test('should keep original flags and add sticky flag', () => {
     const regexps = [
       /.*/,
-      /^.*/,
+      /.*/g,
       /.*/i,
-      /^.*/i,
+      /.*/ig,
+      /.*/y,
+      /.*/gy,
+      /.*/iy,
+      /.*/igy,
     ]
     regexps.forEach((regexp) => {
       const repaired = repairRegExp(regexp)
-      expect(repaired.flags).toEqual(regexp.flags)
+      expect(repaired.global).toBe(regexp.global)
+      expect(repaired.ignoreCase).toBe(regexp.ignoreCase)
+      expect(repaired.sticky).toBe(true)
     })
   })
 

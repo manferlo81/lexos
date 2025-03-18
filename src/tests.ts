@@ -11,14 +11,15 @@ export function regexpTest(regexp: RegExp): Test {
 
   // return test
   return (input, pos) => {
-    // test partial against RegExp
-    const partial = input.substring(pos)
-    const result = matchingRegExp.exec(partial)
+
+    // test input against RegExp at current position
+    matchingRegExp.lastIndex = pos
+    const result = matchingRegExp.exec(input)
 
     // fail if RegExp didn't match
     if (!result) return
 
-    // return successful result if it's not a zero length value...
+    // return successful result if it's not a zero length value
     const value = result[0]
     const length = value.length
     if (length) return { value, length }

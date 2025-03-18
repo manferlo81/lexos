@@ -1,9 +1,10 @@
 export function repairRegExp(regexp: RegExp): RegExp {
+  const { sticky, source, flags } = regexp
+  const matchesStart = source.startsWith('^')
 
-  // return original RegExp if it matches the start
-  const source = regexp.source
-  if (source.startsWith('^')) return regexp
-
-  // return new RegExp matching start
-  return new RegExp(`^${source}`, regexp.flags)
+  // return new sticky RegExp keeping original flags
+  return new RegExp(
+    matchesStart ? source.substring(1) : source,
+    sticky ? flags : `${flags}y`,
+  )
 }
