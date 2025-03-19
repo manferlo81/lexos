@@ -1,22 +1,28 @@
-import type { CodeProcessingFunction, FalsyReturn, Nullish, Void } from '../types/helper-types'
-import type { SingleTokenRuleResult } from '../types/single-rule-types'
+import type { CodeProcessingFunction, FalsyReturn } from '../types/helper-types'
+import type { SingleTokenRule, SingleTokenRuleResult } from '../types/single-rule-types'
 import type { Test, TestResult } from '../types/test-types'
-import type { GetTokenType, TokenType } from '../types/token-types'
+import type { GetActualTokenType, GetNullishTokenType, GetTokenType, TokenType } from '../types/token-types'
 import { createRule } from './create-rule'
 import { isType } from './is'
 
-export function singleTokenRule<T extends TokenType>(type: T, test: Test): CodeProcessingFunction<SingleTokenRuleResult<T> | Void>
-export function singleTokenRule(type: (value: string) => Nullish, test: Test): CodeProcessingFunction<TestResult | Void>
-export function singleTokenRule<T extends TokenType>(type: T | GetTokenType<T>, test: Test): CodeProcessingFunction<SingleTokenRuleResult<T> | TestResult | FalsyReturn>
+export function singleTokenRule(type: GetNullishTokenType, test: Test): Test
+export function singleTokenRule<T extends TokenType>(type: T | GetActualTokenType<T>, test: Test): SingleTokenRule<T>
+export function singleTokenRule<T extends TokenType>(type: T | GetTokenType<T>, test: Test): SingleTokenRule<T> | Test
 export function singleTokenRule<T extends TokenType>(type: T | GetTokenType<T>, test: Test): CodeProcessingFunction<SingleTokenRuleResult<T> | TestResult | FalsyReturn> {
-  // create get type function
-  const getType: GetTokenType<T> = isType(type, 'function') ? type : () => type
 
-  // return rule
-  return createRule(test, (result): SingleTokenRuleResult<T> | TestResult => {
-    const { length, value } = result
-    const type = getType(value)
-    if (type == null || type === false) return result
-    return { length, token: { type, value } }
-  })
+  if (isType(type, 'function')) {
+    // return dynamic type rule
+    return createRule<SingleTokenRuleResult<T> | TestResult>(test, (result) => {
+      const value = result.value
+      const tokenType = type(value)
+      if (tokenType == null || tokenType === false) return result
+      return { length: result.length, token: { type: tokenType, value } }
+    })
+  }
+
+  // return static type rule
+  return createRule<SingleTokenRuleResult<T>>(
+    test,
+    (result) => ({ length: result.length, token: { type, value: result.value } }),
+  )
 }

@@ -7,7 +7,6 @@ import type { GetActualTokenType, GetNullishTokenType, GetTokenType, TokenType }
 
 export function regexpRule(type: GetNullishTokenType, regexp: RegExp): Test
 export function regexpRule<T extends TokenType>(type: T | GetActualTokenType<T>, regexp: RegExp): SingleTokenRule<T>
-
 export function regexpRule<T extends TokenType>(type: GetTokenType<T>, regexp: RegExp): SingleTokenRule<T> | Test
 export function regexpRule<T extends TokenType>(type: T | GetTokenType<T>, regexp: RegExp): CodeProcessingFunction<SingleTokenRuleResult<T> | TestResult | FalsyReturn> {
   return singleTokenRule(
