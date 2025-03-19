@@ -16,7 +16,7 @@ export function singleTokenRule<T extends TokenType>(type: T | GetTokenType<T>, 
   return createRule(test, (result): SingleTokenRuleResult<T> | TestResult => {
     const { length, value } = result
     const type = getType(value)
-    if (type == null) return result
+    if (type == null || type === false) return result
     return { length, token: { type, value } }
   })
 }

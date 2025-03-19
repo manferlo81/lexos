@@ -1,5 +1,6 @@
 import type { TestResult } from '../../src'
 import { createRule } from '../../src/tools/create-rule'
+import { createTestResult } from '../tools/create'
 import { expectTestResult } from '../tools/expect'
 
 describe('createRule internal function', () => {
@@ -26,7 +27,7 @@ describe('createRule internal function', () => {
   test('should call callback function with test result', () => {
     const callback = jest.fn(() => null)
     const input = 'a + b = c'
-    const test = (input: string) => expectTestResult(input)
+    const test = (input: string) => createTestResult(input)
     const rule = createRule(test, callback)
     rule(input, 0)
     expect(callback).toHaveBeenCalledTimes(1)
@@ -36,7 +37,7 @@ describe('createRule internal function', () => {
   test('should return callback result', () => {
     const callback = jest.fn((result: TestResult) => result)
     const input = 'a + b = c'
-    const test = (input: string) => expectTestResult(input)
+    const test = (input: string) => createTestResult(input)
     const rule = createRule(test, callback)
     const result = rule(input, 0)
     expect(result).toEqual(expectTestResult(input))
