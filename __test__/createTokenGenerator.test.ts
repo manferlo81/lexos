@@ -1,6 +1,5 @@
-import { createOneOf, lexerRule, regexpTest, stringRule } from '../../src'
-import { createTokenGenerator } from '../../src/generator'
-import { createToken } from '../tools/create-token'
+import { createOneOf, createTokenGenerator, lexerRule, regexpTest, stringRule } from '../src'
+import { createToken } from './tools/create-token'
 
 describe('createTokenGenerator internal function', () => {
 
@@ -35,7 +34,9 @@ describe('createTokenGenerator internal function', () => {
     ]
 
     expectedTokens.forEach((token) => {
-      expect(tokenGenerator.next().value).toEqual(token)
+      const { done, value } = tokenGenerator.next()
+      expect(done).toBeFalsy()
+      expect(value).toEqual(token)
     })
     expect(() => tokenGenerator.next()).toThrow('position 4')
   })
@@ -66,7 +67,9 @@ describe('createTokenGenerator internal function', () => {
     ]
 
     expectedTokens.forEach((token) => {
-      expect(tokenGenerator.next().value).toEqual(token)
+      const { done, value } = tokenGenerator.next()
+      expect(done).toBeFalsy()
+      expect(value).toEqual(token)
     })
     expect(() => tokenGenerator.next()).toThrow('position 14')
   })
@@ -201,10 +204,11 @@ describe('createTokenGenerator internal function', () => {
     const curlyType = 'CURLY'
     const keywordType = 'KW'
     const tokenGenerator = createTokenGenerator(
-      ' evaluate { a + b - c } evaluate { c }',
+      ' evaluate { a + b - c } evaluate { c } keyword',
       createOneOf([
         regexpTest(/\s+/),
         stringRule(keywordType, 'evaluate'),
+        stringRule(keywordType, 'keyword'),
         lexerRule(/{[^}]*}/, [
           regexpTest(/\s+/),
           stringRule(curlyType, ['{', '}']),
@@ -229,6 +233,7 @@ describe('createTokenGenerator internal function', () => {
       createToken(curlyType, 33, '{'),
       createToken(variableType, 35, 'c'),
       createToken(curlyType, 37, '}'),
+      createToken(keywordType, 39, 'keyword'),
     ]
 
     expect([...tokenGenerator]).toEqual(expectedTokens)
