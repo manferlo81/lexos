@@ -1,5 +1,5 @@
 import { stringRule } from '../../src'
-import { expectedTokenResult } from '../tools/create-result'
+import { expectSingleTokenResult } from '../tools/expect'
 
 describe('stringRule function', () => {
 
@@ -22,9 +22,11 @@ describe('stringRule function', () => {
         'keyword',
       ]
       values.forEach((input) => {
-        const expected = expectedTokenResult(input, type)
+        const expected = expectSingleTokenResult(input, type)
         expect(rule(input, 0)).toEqual(expected)
         expect(rule(`${input} and more`, 0)).toEqual(expected)
+        expect(rule(`more ${input}`, 5)).toEqual(expected)
+        expect(rule(`more ${input} and more`, 5)).toEqual(expected)
       })
     })
 
@@ -68,9 +70,11 @@ describe('stringRule function', () => {
         'KEYWORD',
       ]
       inputsThatMatch.forEach((input) => {
-        const expected = expectedTokenResult(input, type)
+        const expected = expectSingleTokenResult(input, type)
         expect(rule(input, 0)).toEqual(expected)
         expect(rule(`${input} and more`, 0)).toEqual(expected)
+        expect(rule(`more ${input}`, 5)).toEqual(expected)
+        expect(rule(`more ${input} and more`, 5)).toEqual(expected)
       })
     })
 

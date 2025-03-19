@@ -1,5 +1,5 @@
 import { regexpRule } from '../../src'
-import { expectedTokenResult } from '../tools/create-result'
+import { expectSingleTokenResult } from '../tools/expect'
 
 describe('regexpRule function', () => {
 
@@ -16,7 +16,7 @@ describe('regexpRule function', () => {
       '7890',
     ]
     inputsThatMatch.forEach((input) => {
-      const expected = expectedTokenResult(input, type)
+      const expected = expectSingleTokenResult(input, type)
       expect(integerRule(input, 0)).toEqual(expected)
       expect(integerRule(`${input} and more`, 0)).toEqual(expected)
     })

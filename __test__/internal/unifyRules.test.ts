@@ -1,11 +1,12 @@
+import type { Test } from '../../src'
 import { regexpTest, stringRule } from '../../src'
-import type { Rule } from '../../src'
 import { unifyRules } from '../../src/tools/unify-rules'
+import { expectSingleTokenResult, expectTestResult } from '../tools/expect'
 
 describe('unifyRules internal function', () => {
 
   test('should return input if it\'s a function', () => {
-    const inputRule: Rule<never, never> = () => null
+    const inputRule: Test = () => null
     const outputRule = unifyRules(inputRule)
     expect(outputRule).toBe(inputRule)
   })
@@ -20,12 +21,12 @@ describe('unifyRules internal function', () => {
       regexpTest(/\s+/),
       stringRule('Num', ['one', 'two']),
     ])
-    expect(rule('   one', 0)).toEqual({ value: '   ', length: 3 })
-    expect(rule('   one', 2)).toEqual({ value: ' ', length: 1 })
-    expect(rule('   one', 3)).toEqual({ length: 3, token: { value: 'one', type: 'Num' } })
-    expect(rule('   one two', 3)).toEqual({ length: 3, token: { value: 'one', type: 'Num' } })
-    expect(rule('   two', 3)).toEqual({ length: 3, token: { value: 'two', type: 'Num' } })
-    expect(rule('   one two', 7)).toEqual({ length: 3, token: { value: 'two', type: 'Num' } })
+    expect(rule('   one', 0)).toEqual(expectTestResult('   '))
+    expect(rule('   one', 2)).toEqual(expectTestResult(' '))
+    expect(rule('   one', 3)).toEqual(expectSingleTokenResult('one', 'Num'))
+    expect(rule('   one two', 3)).toEqual(expectSingleTokenResult('one', 'Num'))
+    expect(rule('   two', 3)).toEqual(expectSingleTokenResult('two', 'Num'))
+    expect(rule('   one two', 7)).toEqual(expectSingleTokenResult('two', 'Num'))
   })
 
 })

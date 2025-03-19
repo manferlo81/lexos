@@ -1,5 +1,5 @@
 import { stringTest } from '../../src'
-import { expectedTestResult } from '../tools/create-result'
+import { expectTestResult } from '../tools/expect'
 
 describe('stringTest function', () => {
 
@@ -20,7 +20,7 @@ describe('stringTest function', () => {
       test('should return result if input matches', () => {
         const keyword = 'keyword'
         const testKeyword = stringTest(keyword)
-        const expected = expectedTestResult(keyword)
+        const expected = expectTestResult(keyword)
         expect(testKeyword(keyword, 0)).toEqual(expected)
         expect(testKeyword(`${keyword} and more`, 0)).toEqual(expected)
         expect(testKeyword(`more ${keyword}`, 5)).toEqual(expected)
@@ -65,7 +65,7 @@ describe('stringTest function', () => {
           'keyWord',
         ]
         inputsThatMatch.forEach((input) => {
-          const expected = expectedTestResult(input)
+          const expected = expectTestResult(input)
           expect(testKeyword(input, 0)).toEqual(expected)
           expect(testKeyword(`${input} and more`, 0)).toEqual(expected)
           expect(testKeyword(`more ${input}`, 5)).toEqual(expected)
@@ -120,7 +120,7 @@ describe('stringTest function', () => {
           'array',
         ]
         inputsThatMatch.forEach((input) => {
-          const expected = expectedTestResult(input)
+          const expected = expectTestResult(input)
           expect(test(input, 0)).toEqual(expected)
           expect(test(`${input} and more`, 0)).toEqual(expected)
           expect(test(`more ${input}`, 5)).toEqual(expected)
@@ -159,7 +159,7 @@ describe('stringTest function', () => {
           'ARRAY',
         ]
         inputsThatMatch.forEach((input) => {
-          const expected = expectedTestResult(input)
+          const expected = expectTestResult(input)
           expect(test(input, 0)).toEqual(expected)
           expect(test(`${input} and more`, 0)).toEqual(expected)
           expect(test(`more ${input}`, 5)).toEqual(expected)

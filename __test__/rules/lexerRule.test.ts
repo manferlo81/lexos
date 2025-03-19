@@ -1,6 +1,5 @@
 import { lexerRule, regexpRule, regexpTest } from '../../src'
-import type { FalsyReturn } from '../../src/types/helper-types'
-import { createToken } from '../tools/create-token'
+import { expectMultiTokenResult, expectToken } from '../tools/expect'
 
 describe('lexerRule function', () => {
 
@@ -45,10 +44,7 @@ describe('lexerRule function', () => {
       '{45 + 2}',
     ]
     inputsThatDoNotMatch.forEach((input) => {
-      expect(expressionRule(input, 0)).toEqual({
-        length: 8,
-        generator: expect.any(Object) as unknown,
-      })
+      expect(expressionRule(input, 0)).toEqual(expectMultiTokenResult(8))
     })
   })
 
@@ -77,25 +73,15 @@ describe('lexerRule function', () => {
 
       const ruleResult = expressionRule(input, 0)
 
-      expect(ruleResult).toEqual({
-        length: expression.length,
-        generator: expect.any(Object) as unknown,
-      })
+      expect(ruleResult).toEqual(expectMultiTokenResult(expression.length))
 
-      const { generator } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
+      const { generator } = ruleResult as Extract<typeof ruleResult, object>
 
-      const expectedTokens = [
-        createToken(digitsType, 1, a),
-        createToken(operatorType, a.length + 2, operator),
-        createToken(digitsType, a.length + 4, b),
-      ]
-
-      expectedTokens.forEach((token) => {
-        expect(generator.next().value).toEqual(token)
-      })
-      expect(generator.next().done).toBeTruthy()
-      expect(generator.next().done).toBeTruthy()
-      expect(generator.next().done).toBeTruthy()
+      expect([...generator]).toEqual([
+        expectToken(digitsType, 1, a),
+        expectToken(operatorType, a.length + 2, operator),
+        expectToken(digitsType, a.length + 4, b),
+      ])
     })
   })
 
@@ -124,26 +110,16 @@ describe('lexerRule function', () => {
 
       const ruleResult = expressionRule(input, 0)
 
-      expect(ruleResult).toEqual({
-        length: expression.length,
-        generator: expect.any(Object) as unknown,
-      })
+      expect(ruleResult).toEqual(expectMultiTokenResult(expression.length))
 
-      const { generator } = ruleResult as Exclude<typeof ruleResult, FalsyReturn>
+      const { generator } = ruleResult as Extract<typeof ruleResult, object>
 
-      const expectedTokens = [
-        createToken(digitsType, 1, a),
-        createToken(operatorType, a.length + 2, operator),
-        createToken(digitsType, a.length + 4, b),
-        createToken('LT', a.length + 5 + b.length),
-      ]
-
-      expectedTokens.forEach((token) => {
-        expect(generator.next().value).toEqual(token)
-      })
-      expect(generator.next().done).toBeTruthy()
-      expect(generator.next().done).toBeTruthy()
-      expect(generator.next().done).toBeTruthy()
+      expect([...generator]).toEqual([
+        expectToken(digitsType, 1, a),
+        expectToken(operatorType, a.length + 2, operator),
+        expectToken(digitsType, a.length + 4, b),
+        expectToken('LT', a.length + 5 + b.length),
+      ])
     })
   })
 

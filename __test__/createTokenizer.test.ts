@@ -1,5 +1,5 @@
 import { createTokenizer, regexpRule, regexpTest, stringRule } from '../src'
-import { createToken } from './tools/create-token'
+import { expectToken } from './tools/expect'
 
 describe('createTokenizer function', () => {
 
@@ -52,14 +52,13 @@ describe('createTokenizer function', () => {
       regexpRule('VARIABLE', /[a-z]+/i),
       regexpRule('OPERATOR', /[+=]/i),
     ])
-    const expectedTokens = [
-      createToken('VARIABLE', 0, 'a'),
-      createToken('OPERATOR', 2, '+'),
-      createToken('VARIABLE', 4, 'b'),
-      createToken('OPERATOR', 6, '='),
-      createToken('VARIABLE', 8, 'c'),
-    ]
-    expect(tokenize('a + b = c')).toEqual(expectedTokens)
+    expect(tokenize('a + b = c')).toEqual([
+      expectToken('VARIABLE', 0, 'a'),
+      expectToken('OPERATOR', 2, '+'),
+      expectToken('VARIABLE', 4, 'b'),
+      expectToken('OPERATOR', 6, '='),
+      expectToken('VARIABLE', 8, 'c'),
+    ])
   })
 
   test('should tokenize input (with last token)', () => {
@@ -68,15 +67,14 @@ describe('createTokenizer function', () => {
       regexpRule('VARIABLE', /[a-z]+/i),
       regexpRule('OPERATOR', /[+=]/i),
     ], 'LT')
-    const expectedTokens = [
-      createToken('VARIABLE', 0, 'a'),
-      createToken('OPERATOR', 2, '+'),
-      createToken('VARIABLE', 4, 'b'),
-      createToken('OPERATOR', 6, '='),
-      createToken('VARIABLE', 8, 'c'),
-      createToken('LT', 9),
-    ]
-    expect(tokenize('a + b = c')).toEqual(expectedTokens)
+    expect(tokenize('a + b = c')).toEqual([
+      expectToken('VARIABLE', 0, 'a'),
+      expectToken('OPERATOR', 2, '+'),
+      expectToken('VARIABLE', 4, 'b'),
+      expectToken('OPERATOR', 6, '='),
+      expectToken('VARIABLE', 8, 'c'),
+      expectToken('LT', 9),
+    ])
   })
 
   test('should tokenize empty input', () => {
@@ -86,8 +84,9 @@ describe('createTokenizer function', () => {
 
   test('should tokenize empty input (with last token)', () => {
     const tokenize = createTokenizer([], 'LT')
-    const expectedToken = createToken('LT', 0)
-    expect(tokenize('')).toEqual([expectedToken])
+    expect(tokenize('')).toEqual([
+      expectToken('LT', 0),
+    ])
   })
 
 })

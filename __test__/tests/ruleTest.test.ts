@@ -1,5 +1,5 @@
 import { ruleTest } from '../../src'
-import { expectedTestResult } from '../tools/create-result'
+import { expectTestResult } from '../tools/expect'
 
 describe('ruleTest function', () => {
 
@@ -27,7 +27,7 @@ describe('ruleTest function', () => {
         '55',
       ]
       inputsThatMatch.forEach((input) => {
-        const expected = expectedTestResult(input)
+        const expected = expectTestResult(input)
         expect(testInteger(input, 0)).toEqual(expected)
         expect(testInteger(`${input} and more`, 0)).toEqual(expected)
         expect(testInteger(`more ${input}`, 5)).toEqual(expected)
@@ -77,7 +77,7 @@ describe('ruleTest function', () => {
       test('should return result if input matches', () => {
         const keyword = 'keyword'
         const testKeyword = ruleTest(keyword)
-        const expected = expectedTestResult(keyword)
+        const expected = expectTestResult(keyword)
         expect(testKeyword(keyword, 0)).toEqual(expected)
         expect(testKeyword(`${keyword} and more`, 0)).toEqual(expected)
         expect(testKeyword(`more ${keyword}`, 5)).toEqual(expected)
@@ -122,7 +122,7 @@ describe('ruleTest function', () => {
           'keyWord',
         ]
         inputsThatMatch.forEach((input) => {
-          const expected = expectedTestResult(input)
+          const expected = expectTestResult(input)
           expect(testKeyword(input, 0)).toEqual(expected)
           expect(testKeyword(`${input} and more`, 0)).toEqual(expected)
           expect(testKeyword(`more ${input}`, 5)).toEqual(expected)
@@ -173,7 +173,7 @@ describe('ruleTest function', () => {
           'array',
         ]
         inputsThatMatch.forEach((input) => {
-          const expected = expectedTestResult(input)
+          const expected = expectTestResult(input)
           expect(test(input, 0)).toEqual(expected)
           expect(test(`${input} and more`, 0)).toEqual(expected)
           expect(test(`more ${input}`, 5)).toEqual(expected)
@@ -212,7 +212,7 @@ describe('ruleTest function', () => {
           'ARRAY',
         ]
         inputsThatMatch.forEach((input) => {
-          const expected = expectedTestResult(input)
+          const expected = expectTestResult(input)
           expect(test(input, 0)).toEqual(expected)
           expect(test(`${input} and more`, 0)).toEqual(expected)
           expect(test(`more ${input}`, 5)).toEqual(expected)

@@ -1,5 +1,5 @@
 import { regexpTest } from '../../src'
-import { expectedTestResult } from '../tools/create-result'
+import { expectTestResult } from '../tools/expect'
 
 describe('regexpRule function', () => {
 
@@ -15,7 +15,7 @@ describe('regexpRule function', () => {
       '7890',
     ]
     inputsThatMatch.forEach((input) => {
-      const expected = expectedTestResult(input)
+      const expected = expectTestResult(input)
       expect(integerRule(input, 0)).toEqual(expected)
       expect(integerRule(`${input} and more`, 0)).toEqual(expected)
       expect(integerRule(`more ${input}`, 5)).toEqual(expected)

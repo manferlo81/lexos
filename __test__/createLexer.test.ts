@@ -1,5 +1,5 @@
 import { createLexer, regexpRule, regexpTest, stringRule } from '../src'
-import { createToken } from './tools/create-token'
+import { expectToken } from './tools/expect'
 
 describe('createLexer function', () => {
 
@@ -31,13 +31,14 @@ describe('createLexer function', () => {
 
   test('should throw if no rule matched, after started', () => {
     const neverMatch = () => null
+    const keywordType = 'KW'
     const lexer = createLexer([
       regexpTest(/\s+/),
-      stringRule('KW', 'print'),
+      stringRule(keywordType, 'print'),
       neverMatch,
     ])
     const getNextToken = lexer('  print   a + b = c')
-    expect(getNextToken()).toEqual({ type: 'KW', value: 'print', pos: 2 })
+    expect(getNextToken()).toEqual(expectToken(keywordType, 2, 'print'))
     expect(getNextToken).toThrow('position 10')
   })
 
@@ -55,11 +56,11 @@ describe('createLexer function', () => {
     ])
     const getNextToken = lexer('a + b = c')
     const expectedTokens = [
-      createToken('VARIABLE', 0, 'a'),
-      createToken('OPERATOR', 2, '+'),
-      createToken('VARIABLE', 4, 'b'),
-      createToken('OPERATOR', 6, '='),
-      createToken('VARIABLE', 8, 'c'),
+      expectToken('VARIABLE', 0, 'a'),
+      expectToken('OPERATOR', 2, '+'),
+      expectToken('VARIABLE', 4, 'b'),
+      expectToken('OPERATOR', 6, '='),
+      expectToken('VARIABLE', 8, 'c'),
     ]
     expectedTokens.forEach((token) => {
       expect(getNextToken()).toEqual(token)
@@ -77,12 +78,12 @@ describe('createLexer function', () => {
     ], 'LT')
     const getNextToken = lexer('a + b = c')
     const expectedToken = [
-      createToken('VARIABLE', 0, 'a'),
-      createToken('OPERATOR', 2, '+'),
-      createToken('VARIABLE', 4, 'b'),
-      createToken('OPERATOR', 6, '='),
-      createToken('VARIABLE', 8, 'c'),
-      createToken('LT', 9),
+      expectToken('VARIABLE', 0, 'a'),
+      expectToken('OPERATOR', 2, '+'),
+      expectToken('VARIABLE', 4, 'b'),
+      expectToken('OPERATOR', 6, '='),
+      expectToken('VARIABLE', 8, 'c'),
+      expectToken('LT', 9),
     ]
     expectedToken.forEach((token) => {
       expect(getNextToken()).toEqual(token)
@@ -103,7 +104,7 @@ describe('createLexer function', () => {
   test('should tokenize empty input (with last token)', () => {
     const lexer = createLexer([], 'LT')
     const getNextToken = lexer('')
-    expect(getNextToken()).toEqual(createToken('LT', 0))
+    expect(getNextToken()).toEqual(expectToken('LT', 0))
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()
     expect(getNextToken()).toBeNull()

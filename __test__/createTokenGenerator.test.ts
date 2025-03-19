@@ -1,5 +1,5 @@
 import { createOneOf, createTokenGenerator, lexerRule, regexpTest, stringRule } from '../src'
-import { createToken } from './tools/create-token'
+import { expectToken } from './tools/expect'
 
 describe('createTokenGenerator internal function', () => {
 
@@ -29,8 +29,8 @@ describe('createTokenGenerator internal function', () => {
     )
 
     const expectedTokens = [
-      createToken(variableType, 0, 'a'),
-      createToken(operatorType, 2, '+'),
+      expectToken(variableType, 0, 'a'),
+      expectToken(operatorType, 2, '+'),
     ]
 
     expectedTokens.forEach((token) => {
@@ -61,9 +61,9 @@ describe('createTokenGenerator internal function', () => {
     )
 
     const expectedTokens = [
-      createToken(keywordType, 1, 'evaluate'),
-      createToken(curlyType, 10, '{'),
-      createToken(variableType, 12, 'a'),
+      expectToken(keywordType, 1, 'evaluate'),
+      expectToken(curlyType, 10, '{'),
+      expectToken(variableType, 12, 'a'),
     ]
 
     expectedTokens.forEach((token) => {
@@ -110,7 +110,7 @@ describe('createTokenGenerator internal function', () => {
         lastToken,
       )
       expect([...tokenGenerator]).toEqual([
-        createToken(lastToken, 0),
+        expectToken(lastToken, 0),
       ])
     })
   })
@@ -130,12 +130,12 @@ describe('createTokenGenerator internal function', () => {
     )
 
     expect([...tokenGenerator]).toEqual([
-      createToken(variableType, 0, 'a'),
-      createToken(operatorType, 2, '+'),
-      createToken(variableType, 4, 'b'),
-      createToken(operatorType, 6, '='),
-      createToken(variableType, 8, 'c'),
-      createToken('LT', 9),
+      expectToken(variableType, 0, 'a'),
+      expectToken(operatorType, 2, '+'),
+      expectToken(variableType, 4, 'b'),
+      expectToken(operatorType, 6, '='),
+      expectToken(variableType, 8, 'c'),
+      expectToken('LT', 9),
     ])
   })
 
@@ -154,12 +154,12 @@ describe('createTokenGenerator internal function', () => {
     )
 
     expect([...tokenGenerator]).toEqual([
-      createToken(variableType, 0, 'a'),
-      createToken(operatorType, 2, '+'),
-      createToken(variableType, 4, 'b'),
-      createToken(operatorType, 6, '='),
-      createToken(variableType, 8, 'c'),
-      createToken('LT', 9),
+      expectToken(variableType, 0, 'a'),
+      expectToken(operatorType, 2, '+'),
+      expectToken(variableType, 4, 'b'),
+      expectToken(operatorType, 6, '='),
+      expectToken(variableType, 8, 'c'),
+      expectToken('LT', 9),
     ])
   })
 
@@ -185,16 +185,16 @@ describe('createTokenGenerator internal function', () => {
     )
 
     expect([...tokenGenerator]).toEqual([
-      createToken(keywordType, 1, 'evaluate'),
-      createToken(curlyType, 10, '{'),
-      createToken(variableType, 12, 'a'),
-      createToken(operatorType, 14, '+'),
-      createToken(variableType, 16, 'b'),
-      createToken(operatorType, 18, '-'),
-      createToken(variableType, 20, 'c'),
-      createToken(curlyType, 22, '}'),
-      createToken('LLT', 23),
-      createToken('LT', 25),
+      expectToken(keywordType, 1, 'evaluate'),
+      expectToken(curlyType, 10, '{'),
+      expectToken(variableType, 12, 'a'),
+      expectToken(operatorType, 14, '+'),
+      expectToken(variableType, 16, 'b'),
+      expectToken(operatorType, 18, '-'),
+      expectToken(variableType, 20, 'c'),
+      expectToken(curlyType, 22, '}'),
+      expectToken('LLT', 23),
+      expectToken('LT', 25),
     ])
   })
 
@@ -220,23 +220,21 @@ describe('createTokenGenerator internal function', () => {
       null,
     )
 
-    const expectedTokens = [
-      createToken(keywordType, 1, 'evaluate'),
-      createToken(curlyType, 10, '{'),
-      createToken(variableType, 12, 'a'),
-      createToken(operatorType, 14, '+'),
-      createToken(variableType, 16, 'b'),
-      createToken(operatorType, 18, '-'),
-      createToken(variableType, 20, 'c'),
-      createToken(curlyType, 22, '}'),
-      createToken(keywordType, 24, 'evaluate'),
-      createToken(curlyType, 33, '{'),
-      createToken(variableType, 35, 'c'),
-      createToken(curlyType, 37, '}'),
-      createToken(keywordType, 39, 'keyword'),
-    ]
-
-    expect([...tokenGenerator]).toEqual(expectedTokens)
+    expect([...tokenGenerator]).toEqual([
+      expectToken(keywordType, 1, 'evaluate'),
+      expectToken(curlyType, 10, '{'),
+      expectToken(variableType, 12, 'a'),
+      expectToken(operatorType, 14, '+'),
+      expectToken(variableType, 16, 'b'),
+      expectToken(operatorType, 18, '-'),
+      expectToken(variableType, 20, 'c'),
+      expectToken(curlyType, 22, '}'),
+      expectToken(keywordType, 24, 'evaluate'),
+      expectToken(curlyType, 33, '{'),
+      expectToken(variableType, 35, 'c'),
+      expectToken(curlyType, 37, '}'),
+      expectToken(keywordType, 39, 'keyword'),
+    ])
   })
 
 })

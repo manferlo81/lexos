@@ -1,6 +1,6 @@
 import type { Test } from '../../src'
 import { regexpTest, testRule } from '../../src'
-import { expectedTestResult, expectedTokenResult } from '../tools/create-result'
+import { expectSingleTokenResult, expectTestResult } from '../tools/expect'
 
 describe('testRule function', () => {
 
@@ -20,9 +20,11 @@ describe('testRule function', () => {
       '12',
     ]
     inputsThatMatch.forEach((input) => {
-      const expected = expectedTokenResult(input, type)
+      const expected = expectSingleTokenResult(input, type)
       expect(starStringRule(input, 0)).toEqual(expected)
       expect(starStringRule(`${input} and more`, 0)).toEqual(expected)
+      expect(starStringRule(`more ${input}`, 5)).toEqual(expected)
+      expect(starStringRule(`more ${input} and more`, 5)).toEqual(expected)
     })
   })
 
@@ -44,9 +46,11 @@ describe('testRule function', () => {
     ]
 
     inputsThatMatch.forEach((input) => {
-      const expected = expectedTokenResult(input, type)
+      const expected = expectSingleTokenResult(input, type)
       expect(starStringRule(input, 0)).toEqual(expected)
       expect(starStringRule(`${input} and more`, 0)).toEqual(expected)
+      expect(starStringRule(`more ${input}`, 5)).toEqual(expected)
+      expect(starStringRule(`more ${input} and more`, 5)).toEqual(expected)
     })
   })
 
@@ -73,7 +77,7 @@ describe('testRule function', () => {
     ]
 
     inputsThatMatch.forEach(([input, type]) => {
-      const expected = expectedTokenResult(input, type)
+      const expected = expectSingleTokenResult(input, type)
       expect(starStringRule(input, 0)).toEqual(expected)
       expect(starStringRule(`${input} and more`, 0)).toEqual(expected)
       expect(starStringRule(`more ${input}`, 5)).toEqual(expected)
@@ -103,8 +107,8 @@ describe('testRule function', () => {
 
     inputsThatMatch.forEach(([input, type]) => {
       const expected = type
-        ? expectedTokenResult(input, type)
-        : expectedTestResult(input)
+        ? expectSingleTokenResult(input, type)
+        : expectTestResult(input)
       expect(starStringRule(input, 0)).toEqual(expected)
       expect(starStringRule(`${input} and more`, 0)).toEqual(expected)
       expect(starStringRule(`more ${input}`, 5)).toEqual(expected)

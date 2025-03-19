@@ -1,5 +1,5 @@
 import { createOneOf, regexpTest, testRule } from '../src'
-import { expectedTestResult, expectedTokenResult } from './tools/create-result'
+import { expectSingleTokenResult, expectTestResult } from './tools/expect'
 
 describe('createOneOf function', () => {
 
@@ -24,9 +24,11 @@ describe('createOneOf function', () => {
       'word',
     ]
     inputsThatMatch.forEach((input) => {
-      const expected = expectedTestResult(input)
+      const expected = expectTestResult(input)
       expect(testWordOrNumber(input, 0)).toEqual(expected)
-      expect(testWordOrNumber(`${input} ???`, 0)).toEqual(expected)
+      expect(testWordOrNumber(`${input} and more`, 0)).toEqual(expected)
+      expect(testWordOrNumber(`more ${input}`, 5)).toEqual(expected)
+      expect(testWordOrNumber(`more ${input} and more`, 5)).toEqual(expected)
     })
   })
 
@@ -42,9 +44,11 @@ describe('createOneOf function', () => {
       ['word', wordType],
     ]
     inputsThatMatch.forEach(([input, expectType]) => {
-      const expected = expectedTokenResult(input, expectType)
+      const expected = expectSingleTokenResult(input, expectType)
       expect(testWordOrNumber(input, 0)).toEqual(expected)
       expect(testWordOrNumber(`${input} and more`, 0)).toEqual(expected)
+      expect(testWordOrNumber(`more ${input}`, 5)).toEqual(expected)
+      expect(testWordOrNumber(`more ${input} and more`, 5)).toEqual(expected)
     })
   })
 
@@ -57,10 +61,12 @@ describe('createOneOf function', () => {
     ]
     inputsThatMatch.forEach(([input, expectType]) => {
       const expected = expectType
-        ? expectedTokenResult(input, expectType)
-        : expectedTestResult(input)
+        ? expectSingleTokenResult(input, expectType)
+        : expectTestResult(input)
       expect(testWordOrNumber(input, 0)).toEqual(expected)
       expect(testWordOrNumber(`${input} and more`, 0)).toEqual(expected)
+      expect(testWordOrNumber(`more ${input}`, 5)).toEqual(expected)
+      expect(testWordOrNumber(`more ${input} and more`, 5)).toEqual(expected)
     })
   })
 
