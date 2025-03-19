@@ -1,5 +1,5 @@
-import { createLexer, regexpRule, regexpTest, stringRule } from '../src'
-import { expectToken } from './tools/expect'
+import { createLexer, regexpRule, regexpTest, stringRule } from '../../src'
+import { expectToken } from '../tools/expect'
 
 describe('createLexer function', () => {
 

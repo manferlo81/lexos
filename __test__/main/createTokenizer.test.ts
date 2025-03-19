@@ -1,5 +1,5 @@
-import { createTokenizer, regexpRule, regexpTest, stringRule } from '../src'
-import { expectToken } from './tools/expect'
+import { createTokenizer, regexpRule, regexpTest, stringRule } from '../../src'
+import { expectToken } from '../tools/expect'
 
 describe('createTokenizer function', () => {
 

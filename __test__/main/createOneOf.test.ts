@@ -1,5 +1,5 @@
-import { createOneOf, regexpTest, testRule } from '../src'
-import { expectSingleTokenResult, expectTestResult } from './tools/expect'
+import { createOneOf, regexpTest, testRule } from '../../src'
+import { expectSingleTokenResult, expectTestResult } from '../tools/expect'
 
 describe('createOneOf function', () => {
 
