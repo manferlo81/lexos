@@ -1,5 +1,5 @@
-import { createOneOf } from './one-of'
-import type { Test } from './types/test-types'
+import { createOneOf } from '../one-of'
+import type { Test } from '../types/test-types'
 
 export function moreOfTest(tests: Test[]): Test {
   // create test
@@ -7,11 +7,11 @@ export function moreOfTest(tests: Test[]): Test {
   // return test
   return (input, pos) => {
     // initialize variables and constants
-    const codeLength = input.length
+    const inputLength = input.length
     let posOffset = 0
 
     // loop
-    Loop: while (pos + posOffset < codeLength) {
+    Loop: while (pos + posOffset < inputLength) {
       // get result of first test that matched
       const result = test(input, pos + posOffset)
 
@@ -19,17 +19,15 @@ export function moreOfTest(tests: Test[]): Test {
       if (!result) break Loop
 
       // advance position and continue loop
-      const { length } = result
-      posOffset += length
+      posOffset += result.length
     }
 
-    // return no match if no code was processed
-    if (!posOffset) return
-
-    // return match result
-    return {
+    // return successful result if some of the input was processed...
+    if (posOffset) return {
       value: input.substring(pos, pos + posOffset),
       length: posOffset,
     }
+
+    // fail otherwise
   }
 }

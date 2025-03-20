@@ -1,10 +1,10 @@
-import { initTokenGenerator } from './generator'
-import { ruleTest } from './tests'
-import { createRule } from './tools/create-rule'
-import type { MultiTokenRule } from './types/multi-rule-types'
-import type { Rule, RuleList, UnifiableRules } from './types/rule-types'
-import type { AnyTest } from './types/test-types'
-import type { TokenType } from './types/token-types'
+import { initTokenGenerator } from '../generator'
+import { ruleTest } from '../tests/rule-test'
+import { createRule } from '../tools/create-rule'
+import type { MultiTokenRule } from '../types/multi-rule-types'
+import type { Rule, RuleList, UnifiableRules } from '../types/rule-types'
+import type { AnyTest } from '../types/test-types'
+import type { TokenType } from '../types/token-types'
 
 export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rule: Rule<T, L>, lastTokenType?: L | null): MultiTokenRule<T, L>
 export function lexerRule<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(test: AnyTest, rule: Rule<T, L>, lastTokenType: X): MultiTokenRule<T, L | X>

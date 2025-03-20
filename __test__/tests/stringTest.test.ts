@@ -17,7 +17,7 @@ describe('stringTest function', () => {
         expect(typeof testKeyword === 'function').toBe(true)
       })
 
-      test('should return result if input matches', () => {
+      test('should return result if input matches string', () => {
         const keyword = 'keyword'
         const testKeyword = stringTest(keyword)
         const expected = expectTestResult(keyword)
@@ -25,6 +25,16 @@ describe('stringTest function', () => {
         expect(testKeyword(`${keyword} and more`, 0)).toEqual(expected)
         expect(testKeyword(`more ${keyword}`, 5)).toEqual(expected)
         expect(testKeyword(`more ${keyword} and more`, 5)).toEqual(expected)
+      })
+
+      test('should return result if input matches number', () => {
+        const num = 45
+        const testKeyword = stringTest(num)
+        const expected = expectTestResult(`${num}`)
+        expect(testKeyword(`${num}`, 0)).toEqual(expected)
+        expect(testKeyword(`${num} and more`, 0)).toEqual(expected)
+        expect(testKeyword(`more ${num}`, 5)).toEqual(expected)
+        expect(testKeyword(`more ${num} and more`, 5)).toEqual(expected)
       })
 
       test('should return falsy if input doesn\'t match', () => {
@@ -113,11 +123,13 @@ describe('stringTest function', () => {
         expect(typeof test === 'function').toBe(true)
       })
 
-      test('should return result if input matches', () => {
-        const test = stringTest(['string', 'array'])
+      test('should return result if input matches string or number', () => {
+        const test = stringTest(['string', 'array', 33, '44'])
         const inputsThatMatch = [
           'string',
           'array',
+          '33',
+          '44',
         ]
         inputsThatMatch.forEach((input) => {
           const expected = expectTestResult(input)
