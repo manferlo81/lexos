@@ -2,17 +2,17 @@ import { unifyRules } from './tools/unify-rules'
 import type { MultiTokenRuleResult } from './types/multi-rule-types'
 import type { Rule, RuleList, UnifiableRules } from './types/rule-types'
 import type { TokenType } from './types/token-types'
-import type { TokenGenerator, TokenGeneratorCreator } from './types/types'
+import type { CreateTokenGenerator, TokenGenerator } from './types/types'
 
-export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rule: Rule<T, L>, lastTokenType?: L | null): TokenGeneratorCreator<T, L>
-export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(rule: Rule<T, L>, lastTokenType: X): TokenGeneratorCreator<T, L | X>
-export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: RuleList<T, L>, lastTokenType?: L | null): TokenGeneratorCreator<T, L>
-export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(rules: RuleList<T, L>, lastTokenType: X): TokenGeneratorCreator<T, L | X>
+export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rule: Rule<T, L>, lastTokenType?: L | null): CreateTokenGenerator<T, L>
+export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(rule: Rule<T, L>, lastTokenType: X): CreateTokenGenerator<T, L | X>
+export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: RuleList<T, L>, lastTokenType?: L | null): CreateTokenGenerator<T, L>
+export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(rules: RuleList<T, L>, lastTokenType: X): CreateTokenGenerator<T, L | X>
 
-export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(unifiable: UnifiableRules<T, L>, lastTokenType?: L | null): TokenGeneratorCreator<T, L>
-export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(unifiable: UnifiableRules<T, L>, lastTokenType: X): TokenGeneratorCreator<T, L | X>
+export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(unifiable: UnifiableRules<T, L>, lastTokenType?: L | null): CreateTokenGenerator<T, L>
+export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(unifiable: UnifiableRules<T, L>, lastTokenType: X): CreateTokenGenerator<T, L | X>
 
-export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType: L | null = null): TokenGeneratorCreator<T, L> {
+export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType: L | null = null): CreateTokenGenerator<T, L> {
 
   const rule = unifyRules(rules)
 

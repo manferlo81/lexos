@@ -12,4 +12,4 @@ export type { PotentialRuleResult, Rule, RuleList, RuleResult, UnifiableRules } 
 export type { PotentialSingleTokenRuleResult, RuleToken, SingleTokenRule, SingleTokenRuleResult } from './types/single-rule-types'
 export type { AnyTest, CompilableTest, PotentialTestResult, StringifyableTest, Test, TestResult } from './types/test-types'
 export type { GetTokenType, LastToken, Token, TokenList, TokenListWithLastToken, TokenType } from './types/token-types'
-export type { GetNextToken, GetNextTokenResult, Lexer, Tokenizer } from './types/types'
+export type { CreateTokenGenerator, GetNextToken, GetNextTokenResult, Lexer, TokenGenerator, Tokenizer } from './types/types'
