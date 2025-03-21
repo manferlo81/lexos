@@ -2,7 +2,7 @@ import { unifyRules } from './tools/unify-rules'
 import type { MultiTokenRuleResult } from './types/multi-rule-types'
 import type { Rule, RuleList, UnifiableRules } from './types/rule-types'
 import type { TokenType } from './types/token-types'
-import type { CreateTokenGenerator, TokenGenerator } from './types/types'
+import type { CreateTokenGenerator } from './types/types'
 
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rule: Rule<T, L>, lastTokenType?: L | null): CreateTokenGenerator<T, L>
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(rule: Rule<T, L>, lastTokenType: X): CreateTokenGenerator<T, L | X>
@@ -16,7 +16,7 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
 
   const rule = unifyRules(rules)
 
-  return function* (input: string, offset: number): TokenGenerator<T, L> {
+  return function* (input, offset) {
 
     // set constants
     const inputLength = input.length
@@ -34,11 +34,11 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
 
         // if done
         if (done) {
-        // advance current position and unregister triggered rule if it's done
+          // advance current position and unregister triggered rule if it's done
           currentPosition += triggered.length
           triggered = null
         } else {
-        // yield token
+          // yield token
           yield value
         }
 
@@ -58,12 +58,14 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
       // register as triggered if result is a multi token result
       // this has to be done before advancing current position
       if ('generator' in result) {
+        // register result
         triggered = result
 
         // continue iteration to get next token
         continue Loop
       }
 
+      // advance current position
       currentPosition += result.length
 
       // yield token if result is a single token result
@@ -73,7 +75,6 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
       }
 
       // continue iteration to get next token
-
     }
 
     // yield the last token (if any) after current position reached the end
