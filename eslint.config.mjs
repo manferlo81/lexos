@@ -80,7 +80,7 @@ export default config(
 )
 
 function normalizeRulesConfig(pluginName, rules) {
-  if (!rules) return pluginName ? normalizeRulesConfig(null, pluginName) : {}
+  if (!rules && pluginName) return normalizeRulesConfig(null, pluginName)
   const entries = Object.entries(rules)
   if (!entries.length) return {}
   const normalizeEntry = createEntryNormalizer(pluginName)
@@ -97,11 +97,10 @@ function createEntryNormalizer(pluginName) {
 
 function createRuleNameNormalizer(pluginName) {
   const pluginPrefix = `${pluginName}/`
-  const normalizeRuleName = (ruleName) => {
+  return (ruleName) => {
     if (ruleName.startsWith(pluginPrefix)) return ruleName
     return `${pluginPrefix}${ruleName}`
   }
-  return normalizeRuleName
 }
 
 function normalizeRuleEntry(entry) {

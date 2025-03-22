@@ -11,7 +11,7 @@ export function createOneOf<T extends TokenType, L extends TokenType>(rules: Rul
   if (rules.length === 1) return rules[0]
 
   // return composite rule
-  return (input: string, pos: number) => {
+  return (input, pos) => {
     for (const rule of rules) {
       const result = rule(input, pos)
       if (result) return result

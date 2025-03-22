@@ -16,7 +16,7 @@ export function createLexer<T extends TokenType = never, L extends TokenType = n
   const createGenerator = initTokenGenerator(rules, lastTokenType)
 
   // return lexer
-  return (input: string) => {
+  return (input) => {
     // create generator
     const generator = createGenerator(input, 0)
 

@@ -15,7 +15,7 @@ export function createTokenizer<T extends TokenType = never, L extends TokenType
   const createGenerator = initTokenGenerator(rules, lastTokenType)
 
   // return tokenize function
-  return (input: string) => {
+  return (input) => {
     // create generator
     const generator = createGenerator(input, 0)
 
