@@ -1,6 +1,6 @@
 import { createOneOf } from '../one-of'
 import { isArray, isType } from '../tools/is'
-import { mapTests } from '../tools/map-tests'
+import { mapItemsWithArgs } from '../tools/map-items'
 import type { AnyTest, StringifyableTest, Test } from '../types/test-types'
 import { regexpTest } from './regexp-test'
 import { singleStringifyableTest } from './string-test'
@@ -21,7 +21,7 @@ export function ruleTest(test: AnyTest, param?: unknown): Test {
   if (isType(test, 'string', 'number')) return singleStringifyableTest(test, param)
 
   // return one-of test if it's an array
-  if (isArray(test)) return createOneOf(mapTests(test, ruleTest, param))
+  if (isArray(test)) return createOneOf(mapItemsWithArgs(test, ruleTest, param))
 
   // return regexp test if it's a regexp
   return regexpTest(test)

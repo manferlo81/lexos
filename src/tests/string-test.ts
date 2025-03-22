@@ -1,6 +1,6 @@
 import { createOneOf } from '../one-of'
 import { isArray, isType } from '../tools/is'
-import { mapTests } from '../tools/map-tests'
+import { mapItemsWithArgs } from '../tools/map-items'
 import type { StringifyableTest, Test } from '../types/test-types'
 
 type StringMatchFunction = (partial: string) => boolean
@@ -25,15 +25,15 @@ function singleStringTest(value: string, insensitive?: unknown): Test {
   const matches = createStringMatchFunction(value, insensitive)
 
   // return test
-  return (input, currentPosition) => {
+  return (input, pos) => {
     // compute end position
-    const end = currentPosition + length
+    const end = pos + length
 
     // fail if there is not enough input to compare
     if (end > input.length) return
 
     // crop input to length
-    const partialToLength = input.substring(currentPosition, end)
+    const partialToLength = input.substring(pos, end)
 
     // return successful result if it matches...
     if (matches(partialToLength)) return { length, value: partialToLength }
@@ -56,6 +56,6 @@ export function stringTest(value: string, insensitive?: boolean): Test
 export function stringTest(values: StringifyableTest[], insensitive?: boolean): Test
 export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): Test
 export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): Test {
-  if (isArray(test)) return createOneOf(mapTests(test, singleStringifyableTest, insensitive))
+  if (isArray(test)) return createOneOf(mapItemsWithArgs(test, singleStringifyableTest, insensitive))
   return singleStringifyableTest(test, insensitive)
 }

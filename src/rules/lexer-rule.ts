@@ -20,7 +20,6 @@ export function lexerRule<T extends TokenType = never, L extends TokenType = nev
   // return rule
   return createRule(ruleTest(test), ({ length, value }, currentPosition) => {
     const generator = createGenerator(value, currentPosition)
-    // const generator = createTokenGenerator(value, unifiedRule, currentPosition, lastTokenType)
     return { length, generator }
   })
 }
