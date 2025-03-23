@@ -13,12 +13,13 @@ export function createLexer<T extends TokenType = never, L extends TokenType = n
 export function createLexer<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(unifiable: UnifiableRules<T, L>, lastTokenType: X): Lexer<T, L | X>
 
 export function createLexer<T extends TokenType = never, L extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType?: L | null): Lexer<T, L> {
+  // initialize token generator
   const createGenerator = initTokenGenerator(rules, lastTokenType)
 
   // return lexer
-  return (input) => {
-    // create generator
-    const generator = createGenerator(input, 0)
+  return (input, offset) => {
+    // create token generator
+    const generator = createGenerator(input, offset)
 
     // return get next token function
     return createGetNextToken(generator)

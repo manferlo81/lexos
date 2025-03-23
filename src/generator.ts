@@ -16,7 +16,7 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
 
   const rule = unifyRules(rules)
 
-  return function* (input, offset) {
+  return function* (input, offset = 0) {
 
     // set constants
     const inputLength = input.length

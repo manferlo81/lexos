@@ -6,7 +6,7 @@ describe('createGetNextToken internal function', () => {
 
   test('should create getNextToken function', () => {
     const createTokenGenerator = initTokenGenerator([])
-    const generator = createTokenGenerator('', 0)
+    const generator = createTokenGenerator('')
     const getNextToken = createGetNextToken(generator)
     expect(typeof getNextToken === 'function').toBe(true)
   })

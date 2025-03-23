@@ -1,36 +1,33 @@
 import { createTokenizer, regexpRule, regexpTest, stringRule } from '../../src'
 import { expectToken } from '../tools/expect'
+import { neverMatchTest, wholeInputRule } from '../tools/rules'
 
 describe('createTokenizer function', () => {
 
-  test('should create tokenizer from array of rules', () => {
-    const tokenize = createTokenizer([
-      () => null,
-    ])
-    expect(typeof tokenize === 'function').toBe(true)
-  })
-
   test('should create tokenizer from single rule', () => {
-    const tokenize = createTokenizer((input) => {
-      return {
-        length: input.length,
-        token: { value: input, type: 'INPUT' },
-      }
-    })
+    const rule = wholeInputRule()
+    const tokenize = createTokenizer(rule)
     expect(typeof tokenize === 'function').toBe(true)
   })
 
-  test('should throw if no rule matched', () => {
-    const neverMatch = () => null
-    const tokenize = createTokenizer([
-      neverMatch,
-    ])
-    const exec = () => tokenize('a + b = c')
-    expect(exec).toThrow('position 0')
+  test('should create tokenizer from array of rules', () => {
+    const rule = wholeInputRule()
+    const tokenize = createTokenizer([rule])
+    expect(typeof tokenize === 'function').toBe(true)
+  })
+
+  test('should throw if no rule matched, using offset', () => {
+    const neverMatch = neverMatchTest()
+    const tokenize = createTokenizer(neverMatch)
+    const offsets = [0, 2, 5]
+    offsets.forEach((offset) => {
+      const exec = () => tokenize('a + b = c', offset)
+      expect(exec).toThrow(`position ${offset}`)
+    })
   })
 
   test('should throw if no rule matched, after started', () => {
-    const neverMatch = () => null
+    const neverMatch = neverMatchTest()
     const tokenize = createTokenizer([
       regexpTest(/\s+/),
       stringRule('KW', 'print'),
@@ -75,6 +72,26 @@ describe('createTokenizer function', () => {
       expectToken('VARIABLE', 8, 'c'),
       expectToken('LT', 9),
     ])
+  })
+
+  test('should tokenize input, using offset', () => {
+    const tokenize = createTokenizer([
+      regexpTest(/[^\S]+/),
+      regexpRule('VARIABLE', /[a-z]+/i),
+      regexpRule('OPERATOR', /[+=]/i),
+    ], 'LT')
+    const offsets = [0, 2, 5]
+    offsets.forEach((offset) => {
+      const tokens = tokenize('a + b = c', offset)
+      expect(tokens).toEqual([
+        expectToken('VARIABLE', 0 + offset, 'a'),
+        expectToken('OPERATOR', 2 + offset, '+'),
+        expectToken('VARIABLE', 4 + offset, 'b'),
+        expectToken('OPERATOR', 6 + offset, '='),
+        expectToken('VARIABLE', 8 + offset, 'c'),
+        expectToken('LT', 9 + offset),
+      ])
+    })
   })
 
   test('should tokenize empty input', () => {

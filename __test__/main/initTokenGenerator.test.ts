@@ -5,10 +5,7 @@ describe('initTokenGenerator function', () => {
 
   test('should create a generator', () => {
     const createTokenGenerator = initTokenGenerator(() => null)
-    const tokenGenerator = createTokenGenerator(
-      '',
-      0,
-    )
+    const tokenGenerator = createTokenGenerator('')
     expect(typeof tokenGenerator === 'object').toBe(true)
     expect(typeof tokenGenerator.next === 'function').toBe(true)
   })
@@ -21,10 +18,7 @@ describe('initTokenGenerator function', () => {
       stringRule(variableType, ['a', 'b', 'c']),
       stringRule(operatorType, ['+', '=']),
     ]))
-    const tokenGenerator = createTokenGenerator(
-      'a + z = c',
-      0,
-    )
+    const tokenGenerator = createTokenGenerator('a + z = c')
 
     const expectedTokens = [
       expectToken(variableType, 0, 'a'),
@@ -52,10 +46,7 @@ describe('initTokenGenerator function', () => {
         stringRule(variableType, ['a', 'b', 'c']),
       ]),
     ]))
-    const tokenGenerator = createTokenGenerator(
-      ' evaluate { a + b - c }',
-      0,
-    )
+    const tokenGenerator = createTokenGenerator(' evaluate { a + b - c }')
 
     const expectedTokens = [
       expectToken(keywordType, 1, 'evaluate'),
@@ -71,6 +62,17 @@ describe('initTokenGenerator function', () => {
     expect(() => tokenGenerator.next()).toThrow('position 14')
   })
 
+  test('should use offset for errors', () => {
+    const createTokenGenerator = initTokenGenerator(regexpTest(/\s+/))
+
+    const offsets = [0, 5]
+
+    offsets.forEach((offset) => {
+      const tokenGenerator = createTokenGenerator('  a + z = c', offset)
+      expect(() => [...tokenGenerator]).toThrow(`position ${2 + offset}`)
+    })
+  })
+
   test('should not generate last token', () => {
     const nullishLastTokens = [
       null,
@@ -78,10 +80,7 @@ describe('initTokenGenerator function', () => {
     ]
     nullishLastTokens.forEach((lastToken) => {
       const createTokenGenerator = initTokenGenerator(() => null, lastToken)
-      const tokenGenerator = createTokenGenerator(
-        '',
-        0,
-      )
+      const tokenGenerator = createTokenGenerator('')
       expect([...tokenGenerator]).toEqual([])
     })
   })
@@ -100,10 +99,7 @@ describe('initTokenGenerator function', () => {
     ]
     lastTokens.forEach((lastToken) => {
       const createTokenGenerator = initTokenGenerator(() => null, lastToken)
-      const tokenGenerator = createTokenGenerator(
-        '',
-        0,
-      )
+      const tokenGenerator = createTokenGenerator('')
       expect([...tokenGenerator]).toEqual([
         expectToken(lastToken, 0),
       ])
@@ -118,10 +114,7 @@ describe('initTokenGenerator function', () => {
       stringRule(variableType, ['a', 'b', 'c']),
       stringRule(operatorType, ['+', '=']),
     ]), 'LT')
-    const tokenGenerator = createTokenGenerator(
-      'a + b = c',
-      0,
-    )
+    const tokenGenerator = createTokenGenerator('a + b = c')
 
     expect([...tokenGenerator]).toEqual([
       expectToken(variableType, 0, 'a'),
@@ -141,10 +134,7 @@ describe('initTokenGenerator function', () => {
       stringRule(variableType, ['a', 'b', 'c']),
       stringRule(operatorType, ['+', '=']),
     ]), 'LT')
-    const tokenGenerator = createTokenGenerator(
-      'a + b = c',
-      0,
-    )
+    const tokenGenerator = createTokenGenerator('a + b = c')
 
     expect([...tokenGenerator]).toEqual([
       expectToken(variableType, 0, 'a'),
@@ -174,10 +164,7 @@ describe('initTokenGenerator function', () => {
       ]),
       'LT',
     )
-    const tokenGenerator = createTokenGenerator(
-      ' evaluate { a + b - c }  ',
-      0,
-    )
+    const tokenGenerator = createTokenGenerator(' evaluate { a + b - c }  ')
 
     expect([...tokenGenerator]).toEqual([
       expectToken(keywordType, 1, 'evaluate'),
@@ -211,10 +198,7 @@ describe('initTokenGenerator function', () => {
         ]),
       ]),
     )
-    const tokenGenerator = createTokenGenerator(
-      ' evaluate { a + b - c } evaluate { c } keyword',
-      0,
-    )
+    const tokenGenerator = createTokenGenerator(' evaluate { a + b - c } evaluate { c } keyword')
 
     expect([...tokenGenerator]).toEqual([
       expectToken(keywordType, 1, 'evaluate'),
@@ -231,6 +215,30 @@ describe('initTokenGenerator function', () => {
       expectToken(curlyType, 37, '}'),
       expectToken(keywordType, 39, 'keyword'),
     ])
+  })
+
+  test('should use offset for token position', () => {
+    const variableType = 'VAR'
+    const operatorType = 'OP'
+    const createTokenGenerator = initTokenGenerator(createOneOf([
+      regexpTest(/\s+/),
+      stringRule(variableType, ['a', 'b', 'c']),
+      stringRule(operatorType, ['+', '=']),
+    ]), 'LT')
+
+    const offset = [0, 5]
+
+    offset.forEach((offset) => {
+      const tokenGenerator = createTokenGenerator('a + b = c', offset)
+      expect([...tokenGenerator]).toEqual([
+        expectToken(variableType, 0 + offset, 'a'),
+        expectToken(operatorType, 2 + offset, '+'),
+        expectToken(variableType, 4 + offset, 'b'),
+        expectToken(operatorType, 6 + offset, '='),
+        expectToken(variableType, 8 + offset, 'c'),
+        expectToken('LT', 9 + offset),
+      ])
+    })
   })
 
 })
