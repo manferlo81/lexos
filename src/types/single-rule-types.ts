@@ -1,9 +1,9 @@
-import type { CodeProcessingFunction, FalsyReturn, Lengthy, Typed, Valued } from './helper-types'
+import type { CodeProcessingFunction, FalsyReturn, WithLength, WithType, WithValue } from './helper-types'
 import type { TokenType } from './token-types'
 
-export interface RuleToken<T extends TokenType> extends Typed<T>, Valued {}
+export interface RuleToken<T extends TokenType> extends WithType<T>, WithValue {}
 
-export interface SingleTokenRuleResult<T extends TokenType> extends Lengthy {
+export interface SingleTokenRuleResult<T extends TokenType> extends WithLength {
   token: RuleToken<T>
 }
 

@@ -4,28 +4,30 @@ import type { Test } from '../types/test-types'
 export function moreOfTest(tests: Test[]): Test {
   // create test
   const test = createOneOf(tests)
+
   // return test
   return (input, pos) => {
     // initialize variables and constants
     const inputLength = input.length
-    let posOffset = 0
+    let currentPos = pos
 
     // loop
-    Loop: while (pos + posOffset < inputLength) {
+    Loop: while (currentPos < inputLength) {
       // get result of first test that matched
-      const result = test(input, pos + posOffset)
+      const result = test(input, currentPos)
 
       // break out of the loop if no test matched
       if (!result) break Loop
 
       // advance position and continue loop
-      posOffset += result.length
+      currentPos += result.length
     }
 
     // return successful result if some of the input was processed...
-    if (posOffset) return {
-      value: input.substring(pos, pos + posOffset),
-      length: posOffset,
+    if (currentPos > pos) {
+      const value = input.slice(pos, currentPos)
+      const length = currentPos - pos
+      return { value, length }
     }
 
     // fail otherwise

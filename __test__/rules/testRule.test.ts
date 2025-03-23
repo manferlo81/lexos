@@ -33,7 +33,7 @@ describe('testRule function', () => {
       if (code.length - pos < 4) return
       if (code[pos] !== '*') return
       if (code[pos + 3] !== '*') return
-      return { value: code.substring(pos, pos + 4), length: 4 }
+      return { value: code.slice(pos, pos + 4), length: 4 }
     }
     const type = 'StartString'
     const starStringRule = testRule(type, starStringTest)

@@ -6,18 +6,19 @@ export type Falsy = Nullish | false
 export type NullishReturn = Nullish | Void
 export type FalsyReturn = Falsy | Void
 
-export interface Typed<T> {
+export interface WithType<T> {
   type: T
 }
 
-export interface Lengthy {
+export interface WithLength {
   length: number
 }
 
-export interface Valued {
+export interface WithValue {
   value: string
 }
 
 export type CodeProcessingFunction<R> = (input: string, pos: number) => R
+export type InitializerFunction<R> = (input: string, offset?: number) => R
 
 export type GetTokenTypeBase<R> = (value: string) => R

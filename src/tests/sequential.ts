@@ -5,28 +5,29 @@ export function sequentialTest(tests: Test[]): Test {
   return (input, pos) => {
     // initialize variables and constants
     const inputLength = input.length
-    let posOffset = 0
+    let currentPos = pos
 
     // loop though tests
     for (const test of tests) {
 
       // fail if current position reaches end of input
-      if (pos + posOffset >= inputLength) return
+      if (currentPos >= inputLength) return
 
       // run test against code on current position
-      const result = test(input, pos + posOffset)
+      const result = test(input, currentPos)
 
       // fail if corresponding test didn't match
       if (!result) return
 
       // advance position and continue loop
-      posOffset += result.length
+      currentPos += result.length
     }
 
     // return successful result if some of the input was processed...
-    if (posOffset) return {
-      value: input.substring(pos, pos + posOffset),
-      length: posOffset,
+    if (currentPos > pos) {
+      const value = input.slice(pos, currentPos)
+      const length = currentPos - pos
+      return { value, length }
     }
 
     // fail otherwise

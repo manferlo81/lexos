@@ -19,7 +19,7 @@ function createStringMatchFunction(value: string, insensitive?: unknown): String
 function singleStringTest(value: string, insensitive?: unknown): Test {
   // throw if value length is zero
   const length = value.length
-  if (!length) throw Error('Zero length string test')
+  if (length <= 0) throw Error('Zero length string test')
 
   // create match function
   const matches = createStringMatchFunction(value, insensitive)
@@ -33,7 +33,7 @@ function singleStringTest(value: string, insensitive?: unknown): Test {
     if (end > input.length) return
 
     // crop input to length
-    const partialToLength = input.substring(pos, end)
+    const partialToLength = input.slice(pos, end)
 
     // return successful result if it matches...
     if (matches(partialToLength)) return { length, value: partialToLength }

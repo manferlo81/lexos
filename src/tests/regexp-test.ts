@@ -18,7 +18,7 @@ export function regexpTest(regexp: RegExp): Test {
     // return successful result if it's not a zero length value
     const value = result[0]
     const length = value.length
-    if (length) return { value, length }
+    if (length > 0) return { value, length }
 
     // fail otherwise
   }

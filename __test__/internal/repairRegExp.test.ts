@@ -12,7 +12,7 @@ describe('repairRegExp internal function', () => {
   test('should remove RegExp start pattern', () => {
     const regexp = /^.*/
     const repaired = repairRegExp(regexp)
-    expect(repaired.source).toBe(regexp.source.substring(1))
+    expect(repaired.source).toBe(regexp.source.slice(1))
   })
 
   test('should keep original flags and add sticky flag', () => {
