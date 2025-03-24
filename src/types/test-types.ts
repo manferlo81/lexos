@@ -1,5 +1,7 @@
 import type { CodeProcessingFunction, FalsyReturn, WithLength, WithValue } from './helper-types'
 
+export type LengthTest = CodeProcessingFunction<number | FalsyReturn>
+
 export interface TestResult extends WithLength, WithValue {}
 export type PotentialTestResult = TestResult | FalsyReturn
 

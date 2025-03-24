@@ -1,8 +1,10 @@
+import { lengthTest } from '../tools/length-test'
 import type { Test } from '../types/test-types'
 
 export function sequentialTest(tests: Test[]): Test {
   // return test
-  return (input, pos) => {
+  return lengthTest((input, pos) => {
+
     // initialize variables and constants
     const inputLength = input.length
     let currentPos = pos
@@ -23,13 +25,9 @@ export function sequentialTest(tests: Test[]): Test {
       currentPos += result.length
     }
 
-    // return successful result if some of the input was processed...
-    if (currentPos > pos) {
-      const value = input.slice(pos, currentPos)
-      const length = currentPos - pos
-      return { value, length }
-    }
+    // return processed length
+    return currentPos - pos
 
-    // fail otherwise
-  }
+  })
+
 }
