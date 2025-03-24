@@ -25,9 +25,9 @@ describe('isType & isArray internal functions', () => {
         [['function', 'number'], [100, () => null, isArray]] as const,
         [['object', 'string'], [{}, [], '', 'string']] as const,
       ]
-      cases.forEach(([types, values]) => {
+      cases.forEach(([[type, ...types], values]) => {
         values.forEach((value) => {
-          expect(isType(value, ...types)).toBe(true)
+          expect(isType(value, type, ...types)).toBe(true)
         })
       })
     })
@@ -39,9 +39,9 @@ describe('isType & isArray internal functions', () => {
         [['function', 'string'], [0, 1, {}, [], null]] as const,
         [['object', 'number'], ['', 'string', true]] as const,
       ]
-      cases.forEach(([types, values]) => {
+      cases.forEach(([[type, ...types], values]) => {
         values.forEach((value) => {
-          expect(isType(value, ...types)).toBe(false)
+          expect(isType(value, type, ...types)).toBe(false)
         })
       })
     })
