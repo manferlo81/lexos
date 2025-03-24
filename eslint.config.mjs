@@ -25,13 +25,10 @@ const importPluginConfig = config(
     'no-cycle': 'error',
     'no-nodejs-modules': 'error',
   }),
-  {
-    ...normalizeRulesConfig('import-x', { 'no-named-as-default-member': 'off' }),
-    files: ['eslint.config.mjs'],
-  },
 )
 
 const stylisticPluginConfig = config(
+  // eslint-disable-next-line import-x/no-named-as-default-member
   pluginStylistic.configs.customize({
     indent: 2,
     semi: false,
