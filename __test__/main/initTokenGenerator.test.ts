@@ -1,4 +1,5 @@
-import { createOneOf, initTokenGenerator, lexerRule, regexpTest, stringRule } from '../../src'
+import type { LengthTest } from '../../src'
+import { createOneOf, initTokenGenerator, lexerRule, regexpRule, regexpTest, stringRule, stringTest } from '../../src'
 import { expectToken } from '../tools/expect'
 
 describe('initTokenGenerator function', () => {
@@ -13,11 +14,11 @@ describe('initTokenGenerator function', () => {
   test('should throw on unknown token', () => {
     const variableType = 'VAR'
     const operatorType = 'OP'
-    const createTokenGenerator = initTokenGenerator(createOneOf([
+    const createTokenGenerator = initTokenGenerator([
       regexpTest(/\s+/),
       stringRule(variableType, ['a', 'b', 'c']),
       stringRule(operatorType, ['+', '=']),
-    ]))
+    ])
     const tokenGenerator = createTokenGenerator('a + z = c')
 
     const expectedTokens = [
@@ -239,6 +240,58 @@ describe('initTokenGenerator function', () => {
         expectToken('LT', 9 + offset),
       ])
     })
+  })
+
+  test('should use different kind or rules', () => {
+    const spaceTest: LengthTest = (input, pos) => {
+      let currentPos = pos
+      while (input[currentPos] === ' ') currentPos++
+      return currentPos - pos
+    }
+    const createTokenGenerator = initTokenGenerator([
+      spaceTest,
+      stringTest(['+', '-']),
+      stringTest('='),
+      regexpRule('A', /a/i),
+      stringRule('B', 'b'),
+      stringRule(() => 'C', 'c'),
+    ])
+    const tokenGenerator = createTokenGenerator('a + A - b = c')
+    expect([...tokenGenerator]).toEqual([
+      expectToken('A', 0, 'a'),
+      expectToken('A', 4, 'A'),
+      expectToken('B', 8, 'b'),
+      expectToken('C', 12, 'c'),
+    ])
+  })
+
+  test('should use single rule with different results', () => {
+    const createTokenGenerator = initTokenGenerator((input, pos) => {
+      if (input[pos] === ' ') {
+        let currentPos = pos + 1
+        while (input[currentPos] === ' ') currentPos++
+        return currentPos - pos
+      }
+      if (['+', '-', '='].includes(input[pos])) {
+        return { length: 1, value: input[pos] }
+      }
+      if (['a', 'A'].includes(input[pos])) {
+        return { length: 1, token: { type: 'A', value: input[pos] } }
+      }
+      if (input[pos] === 'b') {
+        return { length: 1, token: { type: 'B', value: input[pos] } }
+      }
+      if (input[pos] === 'c') {
+        return { length: 1, token: { type: 'C', value: input[pos] } }
+      }
+    })
+    const tokenGenerator = createTokenGenerator('a + A - b = c')
+    expect([...tokenGenerator]).toEqual([
+      expectToken('A', 0, 'a'),
+      expectToken('A', 4, 'A'),
+      expectToken('B', 8, 'b'),
+      expectToken('C', 12, 'c'),
+    ])
   })
 
 })

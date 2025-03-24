@@ -1,7 +1,7 @@
 import { repairRegExp } from '../tools/repair-regexp'
-import type { Test } from '../types/test-types'
+import type { ValueTest } from '../types/value-test-types'
 
-export function regexpTest(regexp: RegExp): Test {
+export function regexpTest(regexp: RegExp): ValueTest {
 
   const matchingRegExp = repairRegExp(regexp)
 

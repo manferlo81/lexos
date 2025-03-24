@@ -1,6 +1,10 @@
-import type { LengthTest, Test } from '../types/test-types'
+import type { LengthTest } from '../types/length-test-types'
+import type { RuleResult } from '../types/rule-types'
+import type { TokenType } from '../types/token-types'
+import type { ValueTest } from '../types/value-test-types'
+import { isType } from './is'
 
-export function lengthTest(getLength: LengthTest): Test {
+export function lengthTest(getLength: LengthTest): ValueTest {
   // return test
   return (input, pos) => {
 
@@ -15,4 +19,9 @@ export function lengthTest(getLength: LengthTest): Test {
 
     // fail otherwise
   }
+}
+
+export function getLengthFromResult(result: RuleResult<TokenType, TokenType>): number {
+  if (isType(result, 'number')) return result
+  return result.length
 }

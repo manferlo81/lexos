@@ -1,7 +1,8 @@
 import { createOneOf } from '../one-of'
 import { isArray, isType } from '../tools/is'
 import { mapItemsWithArgs } from '../tools/map-items'
-import type { StringifyableTest, Test } from '../types/test-types'
+import type { StringifyableTest } from '../types/test-types'
+import type { ValueTest } from '../types/value-test-types'
 
 type StringMatchFunction = (partial: string) => boolean
 
@@ -16,7 +17,7 @@ function createStringMatchFunction(value: string, insensitive?: unknown): String
   return (partial: string) => partial.toLowerCase() === referenceValue
 }
 
-function singleStringTest(value: string, insensitive?: unknown): Test {
+function singleStringTest(value: string, insensitive?: unknown): ValueTest {
   // throw if value length is zero
   const length = value.length
   if (length <= 0) throw Error('Zero length string test')
@@ -42,7 +43,7 @@ function singleStringTest(value: string, insensitive?: unknown): Test {
   }
 }
 
-export function singleStringifyableTest(value: StringifyableTest, insensitive?: unknown): Test {
+export function singleStringifyableTest(value: StringifyableTest, insensitive?: unknown): ValueTest {
   // return string test
   if (isType(value, 'string')) return singleStringTest(value, insensitive)
 
@@ -50,12 +51,12 @@ export function singleStringifyableTest(value: StringifyableTest, insensitive?: 
   return singleStringTest(`${value}`)
 }
 
-export function stringTest(value: number): Test
-export function stringTest(values: number[]): Test
-export function stringTest(value: string, insensitive?: boolean): Test
-export function stringTest(values: StringifyableTest[], insensitive?: boolean): Test
-export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): Test
-export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): Test {
+export function stringTest(value: string, insensitive?: boolean): ValueTest
+export function stringTest(value: number): ValueTest
+export function stringTest(values: number[]): ValueTest
+export function stringTest(values: StringifyableTest[], insensitive?: boolean): ValueTest
+export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest
+export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest {
   if (isArray(test)) return createOneOf(mapItemsWithArgs(test, singleStringifyableTest, insensitive))
   return singleStringifyableTest(test, insensitive)
 }

@@ -13,6 +13,10 @@ export { stringTest } from './tests/string-test'
 export { createTokenizer } from './tokenizer'
 
 export type {
+  LengthTest,
+  PotentialLengthTestResult,
+} from './types/length-test-types'
+export type {
   MultiTokenRule,
   MultiTokenRuleResult,
   PotentialMultiTokenRuleResult,
@@ -54,3 +58,8 @@ export type {
   TokenGenerator,
   Tokenizer,
 } from './types/types'
+export type {
+  PotentialValueTestResult,
+  ValueTest,
+  ValueTestResult,
+} from './types/value-test-types'

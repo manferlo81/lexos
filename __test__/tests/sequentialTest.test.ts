@@ -1,10 +1,15 @@
-import { regexpTest, sequentialTest, stringTest } from '../../src'
+import { regexpTest, ruleTest, sequentialTest } from '../../src'
 import { expectTestResult } from '../tools/expect'
 
 describe('sequentialTest function', () => {
 
   const testInteger = regexpTest(/\d+/)
-  const testDash = stringTest('-')
+  const testDash = ruleTest((input, pos) => {
+    const inputLength = input.length
+    let length = 0
+    while (pos + length < inputLength && input[pos + length] === '-') length += 1
+    return length
+  })
   const testWord = regexpTest(/[a-z]+/i)
 
   test('should be a function', () => {

@@ -1,8 +1,9 @@
 import { createOneOf } from '../one-of'
-import { lengthTest } from '../tools/length-test'
+import { getLengthFromResult, lengthTest } from '../tools/length-test'
 import type { Test } from '../types/test-types'
+import type { ValueTest } from '../types/value-test-types'
 
-export function moreOfTest(tests: Test[]): Test {
+export function moreOfTest(tests: Test[]): ValueTest {
   // create test
   const test = createOneOf(tests)
 
@@ -22,7 +23,7 @@ export function moreOfTest(tests: Test[]): Test {
       if (!result) break Loop
 
       // advance position and continue loop
-      currentPos += result.length
+      currentPos += getLengthFromResult(result)
     }
 
     // return processed length

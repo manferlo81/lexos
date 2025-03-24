@@ -1,4 +1,4 @@
-import type { LastToken, SingleTokenRuleResult, TestResult, Token, TokenType } from '../../src'
+import type { LastToken, SingleTokenRuleResult, Token, TokenType, ValueTestResult } from '../../src'
 import { createSingleTokenResult, createTestResult } from './create'
 
 export const expectFunction = (): unknown => expect.any(Function)
@@ -7,7 +7,7 @@ export const expectGenerator = (): unknown => expect.objectContaining({
   next: expectFunction(),
 })
 
-export function expectTestResult(value: string): TestResult {
+export function expectTestResult(value: string): ValueTestResult {
   return createTestResult(value)
 }
 

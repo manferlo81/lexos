@@ -1,6 +1,6 @@
-import type { SingleTokenRuleResult, TestResult, TokenType } from '../../src'
+import type { SingleTokenRuleResult, TokenType, ValueTestResult } from '../../src'
 
-export function createTestResult(value: string): TestResult {
+export function createTestResult(value: string): ValueTestResult {
   const length = value.length
   return { length, value }
 }

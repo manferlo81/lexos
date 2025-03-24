@@ -1,3 +1,4 @@
+import { isType } from './tools/is'
 import { unifyRules } from './tools/unify-rules'
 import type { MultiTokenRuleResult } from './types/multi-rule-types'
 import type { Rule, RuleList, UnifiableRules } from './types/rule-types'
@@ -54,6 +55,14 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
 
       // throw if no rule matched
       if (!result) throw new SyntaxError(`Unknown token at position ${tokenPosition}`)
+
+      if (isType(result, 'number')) {
+        // advance current position
+        currentPosition += result
+
+        // continue iteration to get next token
+        continue Loop
+      }
 
       // register as triggered if result is a multi token result
       // this has to be done before advancing current position

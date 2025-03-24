@@ -1,16 +1,20 @@
 import { createOneOf } from '../one-of'
 import { isArray, isType } from '../tools/is'
 import { mapItemsWithArgs } from '../tools/map-items'
+import type { LengthTest } from '../types/length-test-types'
 import type { AnyTest, StringifyableTest, Test } from '../types/test-types'
+import type { ValueTest } from '../types/value-test-types'
 import { regexpTest } from './regexp-test'
 import { singleStringifyableTest } from './string-test'
 
+export function ruleTest(test: LengthTest): LengthTest
+export function ruleTest(test: ValueTest): ValueTest
 export function ruleTest(test: Test): Test
-export function ruleTest(regexp: RegExp): Test
-export function ruleTest(value: number): Test
-export function ruleTest(values: number[]): Test
-export function ruleTest(value: string, insensitive?: boolean): Test
-export function ruleTest(values: StringifyableTest[], insensitive?: boolean): Test
+export function ruleTest(regexp: RegExp): ValueTest
+export function ruleTest(value: number): ValueTest
+export function ruleTest(values: number[]): ValueTest
+export function ruleTest(value: string, insensitive?: boolean): ValueTest
+export function ruleTest(values: StringifyableTest[], insensitive?: boolean): ValueTest
 export function ruleTest(anyTest: AnyTest, param?: unknown): Test
 export function ruleTest(test: AnyTest, param?: unknown): Test {
 

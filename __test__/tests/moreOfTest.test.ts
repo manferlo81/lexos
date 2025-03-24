@@ -1,10 +1,15 @@
-import { moreOfTest, regexpTest, stringTest } from '../../src'
+import { moreOfTest, regexpTest, ruleTest } from '../../src'
 import { expectTestResult } from '../tools/expect'
 
 describe('moreOfTest function', () => {
 
   const testInteger = regexpTest(/\d+/)
-  const testDash = stringTest('-')
+  const testDash = ruleTest((input, pos) => {
+    const inputLength = input.length
+    let currentPos = pos
+    while (currentPos < inputLength && input[currentPos] === '-') currentPos += 1
+    return currentPos - pos
+  })
   const testWord = regexpTest(/[a-z]+/i)
 
   test('should be a function', () => {
