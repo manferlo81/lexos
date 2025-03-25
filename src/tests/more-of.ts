@@ -1,5 +1,5 @@
 import { createOneOf } from '../one-of'
-import { getLengthFromResult } from '../tools/length-test'
+import { getLengthFromResult } from '../tools/result-tools'
 import type { LengthTest } from '../types/length-test-types'
 import type { Test } from '../types/test-types'
 
