@@ -4,7 +4,8 @@ import type { TokenType } from '../types/token-types'
 import type { ValueTest } from '../types/value-test-types'
 import { isType } from './is'
 
-export function lengthTest(getLength: LengthTest): ValueTest {
+export function valueTestFromLength(getLength: LengthTest): ValueTest {
+
   // return test
   return (input, pos) => {
 

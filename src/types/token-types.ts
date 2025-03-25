@@ -1,11 +1,8 @@
-import type { FalsyReturn, GetTokenTypeBase, WithType, WithValue } from './helper-types'
+import type { GetTokenTypeBase, PotentiallyFalsy, WithType, WithValue } from './helper-types'
 
 export type TokenType = string | number
 
-export type GetActualTokenType<T extends TokenType> = GetTokenTypeBase<T>
-export type GetNullishTokenType = GetTokenTypeBase<FalsyReturn>
-
-export type GetTokenType<T extends TokenType> = GetTokenTypeBase<T | FalsyReturn>
+export type GetTokenType<T extends TokenType> = GetTokenTypeBase<PotentiallyFalsy<T>>
 
 export interface LastToken<T extends TokenType> extends WithType<T> {
   pos: number

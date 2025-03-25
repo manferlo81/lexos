@@ -1,10 +1,10 @@
-import { getLengthFromResult, lengthTest } from '../tools/length-test'
+import { getLengthFromResult, valueTestFromLength } from '../tools/length-test'
 import type { Test } from '../types/test-types'
 import type { ValueTest } from '../types/value-test-types'
 
 export function sequentialTest(tests: Test[]): ValueTest {
   // return test
-  return lengthTest((input, pos) => {
+  return valueTestFromLength((input, pos) => {
 
     // initialize variables and constants
     const inputLength = input.length
@@ -26,8 +26,8 @@ export function sequentialTest(tests: Test[]): ValueTest {
       currentPos += getLengthFromResult(result)
     }
 
-    // return processed length
-    return currentPos - pos
+    // return processed length (if any)
+    if (currentPos > pos) return currentPos - pos
 
   })
 

@@ -1,5 +1,5 @@
 import { createOneOf } from '../one-of'
-import { getLengthFromResult, lengthTest } from '../tools/length-test'
+import { getLengthFromResult, valueTestFromLength } from '../tools/length-test'
 import type { Test } from '../types/test-types'
 import type { ValueTest } from '../types/value-test-types'
 
@@ -8,7 +8,7 @@ export function moreOfTest(tests: Test[]): ValueTest {
   const test = createOneOf(tests)
 
   // return test
-  return lengthTest((input, pos) => {
+  return valueTestFromLength((input, pos) => {
 
     // initialize variables and constants
     const inputLength = input.length
@@ -26,8 +26,8 @@ export function moreOfTest(tests: Test[]): ValueTest {
       currentPos += getLengthFromResult(result)
     }
 
-    // return processed length
-    return currentPos - pos
+    // return processed length (if any)
+    if (currentPos > pos) return currentPos - pos
 
   })
 }

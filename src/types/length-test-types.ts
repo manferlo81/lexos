@@ -1,5 +1,5 @@
-import type { CodeProcessingFunction, FalsyReturn } from './helper-types'
+import type { CodeProcessingFunction, PotentiallyFalsy } from './helper-types'
 
-export type PotentialLengthTestResult = number | FalsyReturn
+export type PotentialLengthTestResult = PotentiallyFalsy<number>
 
 export type LengthTest = CodeProcessingFunction<PotentialLengthTestResult>

@@ -1,4 +1,4 @@
-import type { CodeProcessingFunction, FalsyReturn, WithLength } from './helper-types'
+import type { CodeProcessingFunction, PotentiallyFalsy, WithLength } from './helper-types'
 import type { TokenType } from './token-types'
 import type { TokenGenerator } from './types'
 
@@ -6,6 +6,6 @@ export interface MultiTokenRuleResult<T extends TokenType, L extends TokenType> 
   generator: TokenGenerator<T, L>
 }
 
-export type PotentialMultiTokenRuleResult<T extends TokenType, L extends TokenType> = MultiTokenRuleResult<T, L> | FalsyReturn
+export type PotentialMultiTokenRuleResult<T extends TokenType, L extends TokenType> = PotentiallyFalsy<MultiTokenRuleResult<T, L>>
 
 export type MultiTokenRule<T extends TokenType, L extends TokenType> = CodeProcessingFunction<PotentialMultiTokenRuleResult<T, L>>

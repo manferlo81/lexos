@@ -43,20 +43,20 @@ function singleStringTest(value: string, insensitive?: unknown): ValueTest {
   }
 }
 
-export function singleStringifyableTest(value: StringifyableTest, insensitive?: unknown): ValueTest {
+export function singleStringifyableTest(stringifyable: StringifyableTest, insensitive?: unknown): ValueTest {
   // return string test
-  if (isType(value, 'string')) return singleStringTest(value, insensitive)
+  if (isType(stringifyable, 'string')) return singleStringTest(stringifyable, insensitive)
 
   // return number as string test is value is a number
-  return singleStringTest(`${value}`)
+  return singleStringTest(`${stringifyable}`)
 }
 
 export function stringTest(value: string, insensitive?: boolean): ValueTest
 export function stringTest(value: number): ValueTest
 export function stringTest(values: number[]): ValueTest
 export function stringTest(values: StringifyableTest[], insensitive?: boolean): ValueTest
-export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest
-export function stringTest(test: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest {
-  if (isArray(test)) return createOneOf(mapItemsWithArgs(test, singleStringifyableTest, insensitive))
-  return singleStringifyableTest(test, insensitive)
+export function stringTest(stringifyable: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest
+export function stringTest(stringifyable: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest {
+  if (isArray(stringifyable)) return createOneOf(mapItemsWithArgs(stringifyable, singleStringifyableTest, insensitive))
+  return singleStringifyableTest(stringifyable, insensitive)
 }

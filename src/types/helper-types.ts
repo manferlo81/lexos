@@ -6,6 +6,8 @@ export type Falsy = Nullish | false
 export type NullishReturn = Nullish | Void
 export type FalsyReturn = Falsy | Void
 
+export type PotentiallyFalsy<R> = R | FalsyReturn
+
 export interface WithType<T> {
   type: T
 }

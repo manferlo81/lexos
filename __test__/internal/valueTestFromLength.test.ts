@@ -1,25 +1,25 @@
-import { lengthTest } from '../../src/tools/length-test'
+import { valueTestFromLength } from '../../src/tools/length-test'
 import { createTestResult } from '../tools/create'
 
-describe('lengthTest internal function', () => {
+describe('valueTestFromLength internal function', () => {
 
   test('should return result if length is greater than 0', () => {
-    const test = lengthTest(() => 5)
+    const test = valueTestFromLength(() => 5)
     expect(test('a + b = c + d', 0)).toEqual(createTestResult('a + b'))
   })
 
   test('should return falsy if length is falsy', () => {
-    const test = lengthTest(() => null)
+    const test = valueTestFromLength(() => null)
     expect(test('a + b = c + d', 0)).toBeFalsy()
   })
 
   test('should return falsy if length is zero', () => {
-    const test = lengthTest(() => 0)
+    const test = valueTestFromLength(() => 0)
     expect(test('a + b = c + d', 0)).toBeFalsy()
   })
 
   test('should return falsy if length is less than zero', () => {
-    const test = lengthTest(() => -3)
+    const test = valueTestFromLength(() => -3)
     expect(test('a + b = c + d', 0)).toBeFalsy()
   })
 

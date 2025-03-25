@@ -1,6 +1,6 @@
-import type { CodeProcessingFunction, FalsyReturn, WithLength, WithValue } from './helper-types'
+import type { CodeProcessingFunction, PotentiallyFalsy, WithLength, WithValue } from './helper-types'
 
 export interface ValueTestResult extends WithLength, WithValue {}
-export type PotentialValueTestResult = ValueTestResult | FalsyReturn
+export type PotentialValueTestResult = PotentiallyFalsy<ValueTestResult>
 
 export type ValueTest = CodeProcessingFunction<PotentialValueTestResult>
