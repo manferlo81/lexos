@@ -1,5 +1,4 @@
 import { regexpTest, ruleTest, sequentialTest } from '../../src'
-import { expectTestResult } from '../tools/expect'
 
 describe('sequentialTest function', () => {
 
@@ -24,11 +23,11 @@ describe('sequentialTest function', () => {
       'X-99',
     ]
     inputsThatMatchSequentially.forEach((input) => {
-      const expected = expectTestResult(input)
-      expect(testId(input, 0)).toEqual(expected)
-      expect(testId(`${input} and more`, 0)).toEqual(expected)
-      expect(testId(`more ${input}`, 5)).toEqual(expected)
-      expect(testId(`more ${input} and more`, 5)).toEqual(expected)
+      const expected = input.length
+      expect(testId(input, 0)).toBe(expected)
+      expect(testId(`${input} and more`, 0)).toBe(expected)
+      expect(testId(`more ${input}`, 5)).toBe(expected)
+      expect(testId(`more ${input} and more`, 5)).toBe(expected)
     })
   })
 

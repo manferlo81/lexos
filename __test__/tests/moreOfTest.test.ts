@@ -1,5 +1,4 @@
 import { moreOfTest, regexpTest, ruleTest } from '../../src'
-import { expectTestResult } from '../tools/expect'
 
 describe('moreOfTest function', () => {
 
@@ -32,11 +31,11 @@ describe('moreOfTest function', () => {
       '...',
     ]
     inputsThatMatch.forEach((input) => {
-      const expected = expectTestResult(input)
-      expect(testId(input, 0)).toEqual(expected)
+      const expected = input.length
+      expect(testId(input, 0)).toBe(expected)
       inputsThatDoNotMatch.forEach((addition) => {
-        expect(testId(`${input}${addition}`, 0)).toEqual(expected)
-        expect(testId(`more ${input}${addition}`, 5)).toEqual(expected)
+        expect(testId(`${input}${addition}`, 0)).toBe(expected)
+        expect(testId(`more ${input}${addition}`, 5)).toBe(expected)
       })
     })
   })
