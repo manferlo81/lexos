@@ -1,5 +1,5 @@
 import type { CodeProcessingFunction, PotentiallyFalsy } from './helper-types'
-import type { ValueTestResult } from './value-test-types'
+import type { ValueTestResult } from './test-value-types'
 
 export type TestResult = number | ValueTestResult
 export type PotentialTestResult = PotentiallyFalsy<TestResult>

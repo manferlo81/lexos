@@ -1,6 +1,6 @@
 import { createOneOf } from '../one-of'
 import { getLengthFromResult } from '../tools/result-tools'
-import type { LengthTest } from '../types/length-test-types'
+import type { LengthTest } from '../types/test-length-types'
 import type { Test } from '../types/test-types'
 
 export function moreOfTest(tests: Test[]): LengthTest {

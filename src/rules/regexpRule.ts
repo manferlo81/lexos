@@ -1,9 +1,9 @@
 import { regexpTest } from '../tests/regexp-test'
 import { singleTokenRule } from '../tools/single-token-rule'
 import type { GetActualTokenType, GetNullishTokenType, SingleTokenRuleOrTest } from '../types/private-types'
-import type { SingleTokenRule } from '../types/single-rule-types'
+import type { SingleTokenRule } from '../types/rule-single-types'
+import type { ValueTest } from '../types/test-value-types'
 import type { GetTokenType, TokenType } from '../types/token-types'
-import type { ValueTest } from '../types/value-test-types'
 
 export function regexpRule(type: GetNullishTokenType, regexp: RegExp): ValueTest
 export function regexpRule<T extends TokenType>(type: T | GetActualTokenType<T>, regexp: RegExp): SingleTokenRule<T>

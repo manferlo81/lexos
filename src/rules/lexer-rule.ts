@@ -1,7 +1,7 @@
 import { initTokenGenerator } from '../generator'
 import { ruleTest } from '../tests/rule-test'
 import { createRule } from '../tools/create-rule'
-import type { MultiTokenRule } from '../types/multi-rule-types'
+import type { MultiTokenRule } from '../types/rule-multi-types'
 import type { Rule, RuleList, UnifiableRules } from '../types/rule-types'
 import type { AnyTest } from '../types/test-types'
 import type { TokenType } from '../types/token-types'

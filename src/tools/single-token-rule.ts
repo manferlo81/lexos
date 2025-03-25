@@ -1,8 +1,8 @@
 import type { AnySingleTokenRuleOrTest, GetActualTokenType, GetNullishTokenType, SingleTokenRuleOrTest, SingleTokenRuleOrTestResult } from '../types/private-types'
-import type { SingleTokenRule, SingleTokenRuleResult } from '../types/single-rule-types'
+import type { SingleTokenRule, SingleTokenRuleResult } from '../types/rule-single-types'
 import type { Test } from '../types/test-types'
+import type { ValueTest } from '../types/test-value-types'
 import type { GetTokenType, TokenType } from '../types/token-types'
-import type { ValueTest } from '../types/value-test-types'
 import { createRule } from './create-rule'
 import { isType } from './is'
 

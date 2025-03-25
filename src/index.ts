@@ -13,14 +13,16 @@ export { stringTest } from './tests/string-test'
 export { createTokenizer } from './tokenizer'
 
 export type {
-  LengthTest,
-  PotentialLengthTestResult,
-} from './types/length-test-types'
-export type {
   MultiTokenRule,
   MultiTokenRuleResult,
   PotentialMultiTokenRuleResult,
-} from './types/multi-rule-types'
+} from './types/rule-multi-types'
+export type {
+  PotentialSingleTokenRuleResult,
+  RuleToken,
+  SingleTokenRule,
+  SingleTokenRuleResult,
+} from './types/rule-single-types'
 export type {
   PotentialRuleResult,
   Rule,
@@ -29,11 +31,9 @@ export type {
   UnifiableRules,
 } from './types/rule-types'
 export type {
-  PotentialSingleTokenRuleResult,
-  RuleToken,
-  SingleTokenRule,
-  SingleTokenRuleResult,
-} from './types/single-rule-types'
+  LengthTest,
+  PotentialLengthTestResult,
+} from './types/test-length-types'
 export type {
   AnyTest,
   CompilableTest,
@@ -42,6 +42,11 @@ export type {
   Test,
   TestResult,
 } from './types/test-types'
+export type {
+  PotentialValueTestResult,
+  ValueTest,
+  ValueTestResult,
+} from './types/test-value-types'
 export type {
   GetTokenType,
   LastToken,
@@ -58,8 +63,3 @@ export type {
   TokenGenerator,
   Tokenizer,
 } from './types/types'
-export type {
-  PotentialValueTestResult,
-  ValueTest,
-  ValueTestResult,
-} from './types/value-test-types'

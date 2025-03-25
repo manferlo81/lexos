@@ -1,6 +1,6 @@
 import { isType } from './tools/is'
 import { unifyRules } from './tools/unify-rules'
-import type { MultiTokenRuleResult } from './types/multi-rule-types'
+import type { MultiTokenRuleResult } from './types/rule-multi-types'
 import type { Rule, RuleList, UnifiableRules } from './types/rule-types'
 import type { TokenType } from './types/token-types'
 import type { CreateTokenGenerator } from './types/types'

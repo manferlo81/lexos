@@ -1,6 +1,6 @@
 import type { CodeProcessingFunction, PotentiallyFalsy } from './helper-types'
-import type { MultiTokenRuleResult } from './multi-rule-types'
-import type { SingleTokenRuleResult } from './single-rule-types'
+import type { MultiTokenRuleResult } from './rule-multi-types'
+import type { SingleTokenRuleResult } from './rule-single-types'
 import type { TestResult } from './test-types'
 import type { TokenType } from './token-types'
 

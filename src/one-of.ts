@@ -1,9 +1,9 @@
 import type { CodeProcessingFunction } from './types/helper-types'
-import type { LengthTest } from './types/length-test-types'
 import type { PotentialRuleResult, Rule, RuleList } from './types/rule-types'
+import type { LengthTest } from './types/test-length-types'
 import type { Test } from './types/test-types'
+import type { ValueTest } from './types/test-value-types'
 import type { TokenType } from './types/token-types'
-import type { ValueTest } from './types/value-test-types'
 
 export function createOneOf(rules: LengthTest[]): LengthTest
 export function createOneOf(rules: ValueTest[]): ValueTest

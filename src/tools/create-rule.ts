@@ -1,6 +1,6 @@
 import type { CodeProcessingFunction, PotentiallyFalsy } from '../types/helper-types'
 import type { Test } from '../types/test-types'
-import type { ValueTestResult } from '../types/value-test-types'
+import type { ValueTestResult } from '../types/test-value-types'
 import { isType } from './is'
 
 type CreateRuleResult<R> = (result: ValueTestResult, pos: number) => R

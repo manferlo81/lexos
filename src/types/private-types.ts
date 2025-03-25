@@ -1,7 +1,7 @@
 import type { CodeProcessingFunction, FalsyReturn, GetTokenTypeBase, PotentiallyFalsy } from './helper-types'
-import type { SingleTokenRule, SingleTokenRuleResult } from './single-rule-types'
+import type { SingleTokenRule, SingleTokenRuleResult } from './rule-single-types'
+import type { ValueTest, ValueTestResult } from './test-value-types'
 import type { TokenType } from './token-types'
-import type { ValueTest, ValueTestResult } from './value-test-types'
 
 export type GetActualTokenType<T extends TokenType> = GetTokenTypeBase<T>
 export type GetNullishTokenType = GetTokenTypeBase<FalsyReturn>

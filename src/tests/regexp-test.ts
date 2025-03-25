@@ -1,5 +1,5 @@
 import { repairRegExp } from '../tools/repair-regexp'
-import type { ValueTest } from '../types/value-test-types'
+import type { ValueTest } from '../types/test-value-types'
 
 export function regexpTest(regexp: RegExp): ValueTest {
 
@@ -17,8 +17,8 @@ export function regexpTest(regexp: RegExp): ValueTest {
 
     // return successful result if it's not a zero length value
     const value = result[0]
-    const length = value.length
-    if (length > 0) return { value, length }
+    const valueLength = value.length
+    if (valueLength > 0) return { value, length: valueLength }
 
     // fail otherwise
   }
