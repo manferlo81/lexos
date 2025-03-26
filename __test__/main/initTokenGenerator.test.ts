@@ -1,4 +1,4 @@
-import type { LengthTest } from '../../src'
+import type { LengthTest, MultiTokenRule, SingleTokenRule, ValueTest } from '../../src'
 import { createOneOf, initTokenGenerator, lexerRule, regexpRule, regexpTest, stringRule, stringTest } from '../../src'
 import { expectToken } from '../tools/expect'
 
@@ -32,6 +32,27 @@ describe('initTokenGenerator function', () => {
       expect(value).toEqual(token)
     })
     expect(() => tokenGenerator.next()).toThrow('position 4')
+  })
+
+  test('should throw on invalid length', () => {
+    const invalidLengthLengthTest: LengthTest = () => 4
+    const invalidLengthValueTest: ValueTest = () => ({ length: 4, value: 'abc' })
+    const invalidLengthSingleTokenRule: SingleTokenRule<'TYPE'> = () => ({ length: 4, token: { type: 'TYPE', value: 'abc' } })
+    const invalidLengthMultiTokenRule: MultiTokenRule<never, never> = () => {
+      const createGenerator = initTokenGenerator(() => 1)
+      return { length: 4, generator: createGenerator('abc') }
+    }
+    const invalidLengthRules = [
+      invalidLengthLengthTest,
+      invalidLengthValueTest,
+      invalidLengthSingleTokenRule,
+      invalidLengthMultiTokenRule,
+    ]
+    invalidLengthRules.forEach((rule) => {
+      const createTokenGenerator = initTokenGenerator(rule)
+      const tokenGenerator = createTokenGenerator('abc')
+      expect(() => [...tokenGenerator]).toThrow('Invalid length')
+    })
   })
 
   test('should throw from lexer rule', () => {
