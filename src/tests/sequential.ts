@@ -1,8 +1,8 @@
 import { getLengthFromResult } from '../tools/result-tools'
+import type { TestList } from '../types/private-types'
 import type { LengthTest } from '../types/test-length-types'
-import type { Test } from '../types/test-types'
 
-export function sequentialTest(tests: Test[]): LengthTest {
+export function sequentialTest(tests: TestList): LengthTest {
   // return test
   return (input, pos) => {
 

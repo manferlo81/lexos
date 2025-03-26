@@ -1,11 +1,11 @@
-import type { CodeProcessingFunction, PotentiallyFalsy } from '../types/helper-types'
+import type { RuleBase } from '../types/private-types'
 import type { Test } from '../types/test-types'
 import type { ValueTestResult } from '../types/test-value-types'
 import { isType } from './is'
 
 type CreateRuleResult<R> = (result: ValueTestResult, pos: number) => R
 
-export function createRule<R>(test: Test, createResult: CreateRuleResult<R>): CodeProcessingFunction<PotentiallyFalsy<R>> {
+export function createRule<R>(test: Test, createResult: CreateRuleResult<R>): RuleBase<R> {
 
   // return rule
   return (input, pos) => {

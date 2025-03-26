@@ -99,6 +99,7 @@ describe('initTokenGenerator function', () => {
     const nullishLastTokens = [
       null,
       undefined,
+      false as const,
     ]
     nullishLastTokens.forEach((lastToken) => {
       const createTokenGenerator = initTokenGenerator(() => null, lastToken)
