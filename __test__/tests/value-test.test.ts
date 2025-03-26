@@ -1,11 +1,14 @@
-import type { LengthTest } from '../../src'
+import type { ValueTest } from '../../src'
 import { initTokenGenerator, lexerRule, testRule } from '../../src'
 import { expectToken } from '../tools/expect'
 
-describe('LengthTest', () => {
+describe('ValueTest', () => {
 
   test('should work with generator', () => {
-    const test: LengthTest = () => 1
+    const test: ValueTest = (input, pos) => {
+      const char = input[pos]
+      return { length: char.length, value: char }
+    }
     const createGenerator = initTokenGenerator(test)
     const regenerate = () => createGenerator('a + b = c')
     expect(() => [...regenerate()]).not.toThrow()
@@ -13,7 +16,10 @@ describe('LengthTest', () => {
   })
 
   test('should serve as test for a rule', () => {
-    const test: LengthTest = () => 1
+    const test: ValueTest = (input, pos) => {
+      const char = input[pos]
+      return { length: char.length, value: char }
+    }
     const rule = testRule('TYPE', test)
     const createGenerator = initTokenGenerator(rule)
     const generator = createGenerator('a + b = c')
@@ -31,10 +37,12 @@ describe('LengthTest', () => {
   })
 
   test('should serve as test for a lexer rule', () => {
-    const test: LengthTest = (input) => input.length
+    const test: ValueTest = (input) => {
+      return { length: input.length, value: input }
+    }
     const rule = lexerRule(test, (input, pos) => {
       const char = input[pos]
-      if (char === ' ') return 1
+      if (char === ' ') return { length: 1, value: char }
       return { length: 1, token: { type: 'TYPE', value: char } }
     })
     const createGenerator = initTokenGenerator(rule)
