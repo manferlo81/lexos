@@ -1,4 +1,4 @@
-import type { RuleBase } from '../types/private-types'
+import type { RuleBase } from '../types/helper-types'
 import type { Test } from '../types/test-types'
 import type { ValueTestResult } from '../types/test-value-types'
 import { isType } from './is'

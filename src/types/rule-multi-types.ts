@@ -1,5 +1,4 @@
-import type { PotentiallyFalsy, WithLength } from './helper-types'
-import type { RuleBase } from './private-types'
+import type { PotentiallyFalsy, RuleBase, WithLength } from './helper-types'
 import type { TokenType } from './token-types'
 import type { TokenGenerator } from './types'
 

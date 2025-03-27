@@ -1,5 +1,4 @@
-import type { Void } from './helper-types'
-import type { InitializerFunction } from './private-types'
+import type { InitializerFunction, Void } from './helper-types'
 import type { LastToken, Token, TokenListWithLastToken, TokenType } from './token-types'
 
 export type TokenGenerator<T extends TokenType, L extends TokenType> = Generator<Token<T> | LastToken<L>, Void, Void>

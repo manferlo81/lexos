@@ -1,5 +1,4 @@
-import type { PotentiallyFalsyReturn, WithType, WithValue } from './helper-types'
-import type { GetTokenTypeBase } from './private-types'
+import type { GetTokenTypeBase, PotentiallyFalsyReturn, WithType, WithValue } from './helper-types'
 
 export type TokenType = string | number
 

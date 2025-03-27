@@ -1,5 +1,4 @@
-import type { PotentiallyFalsy, WithLength, WithValue } from './helper-types'
-import type { RuleBase } from './private-types'
+import type { PotentiallyFalsy, RuleBase, WithLength, WithValue } from './helper-types'
 
 export interface ValueTestResult extends WithLength, WithValue {}
 export type PotentialValueTestResult = PotentiallyFalsy<ValueTestResult>

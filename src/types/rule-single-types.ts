@@ -1,5 +1,4 @@
-import type { PotentiallyFalsy, WithLength, WithType, WithValue } from './helper-types'
-import type { RuleBase } from './private-types'
+import type { PotentiallyFalsy, RuleBase, WithLength, WithType, WithValue } from './helper-types'
 import type { TokenType } from './token-types'
 
 export interface RuleToken<T extends TokenType> extends WithType<T>, WithValue {}

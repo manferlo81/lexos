@@ -1,5 +1,4 @@
-import type { PotentiallyFalsy } from './helper-types'
-import type { RuleBase } from './private-types'
+import type { PotentiallyFalsy, RuleBase } from './helper-types'
 import type { MultiTokenRuleResult } from './rule-multi-types'
 import type { SingleTokenRuleResult } from './rule-single-types'
 import type { TestResult } from './test-types'

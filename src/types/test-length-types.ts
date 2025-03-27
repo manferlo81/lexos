@@ -1,5 +1,4 @@
-import type { PotentiallyFalsy } from './helper-types'
-import type { RuleBase } from './private-types'
+import type { PotentiallyFalsy, RuleBase } from './helper-types'
 
 export type PotentialLengthTestResult = PotentiallyFalsy<number>
 
