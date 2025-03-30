@@ -6,8 +6,6 @@ describe('Exports', () => {
   test('should export', () => {
     expect(lexos).toEqual<Record<keyof typeof lexos, unknown>>({
       initTokenGenerator: expectFunction(),
-      createLexer: expectFunction(),
-      createTokenizer: expectFunction(),
       createOneOf: expectFunction(),
 
       regexpTest: expectFunction(),

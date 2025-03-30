@@ -1,5 +1,4 @@
 export { initTokenGenerator } from './generator'
-export { createLexer } from './lexer'
 export { createOneOf } from './one-of'
 export { lexerRule } from './rules/lexer-rule'
 export { regexpRule } from './rules/regexpRule'
@@ -10,7 +9,6 @@ export { regexpTest } from './tests/regexp-test'
 export { ruleTest } from './tests/rule-test'
 export { sequentialTest } from './tests/sequential'
 export { stringTest } from './tests/string-test'
-export { createTokenizer } from './tokenizer'
 
 export type {
   MultiTokenRule,
@@ -51,15 +49,9 @@ export type {
   GetTokenType,
   LastToken,
   Token,
-  TokenList,
-  TokenListWithLastToken,
   TokenType,
 } from './types/token-types'
 export type {
   CreateTokenGenerator,
-  GetNextToken,
-  GetNextTokenResult,
-  Lexer,
   TokenGenerator,
-  Tokenizer,
 } from './types/types'
