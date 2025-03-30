@@ -1,10 +1,9 @@
 import { isType } from './tools/is'
-import { validateLength } from './tools/length-tools'
+import { advanceCurrentPos } from './tools/position-tools'
 import { unifyRules } from './tools/unify-rules'
 import type { Falsy, PotentiallyFalsy } from './types/helper-types'
-import type { MultiTokenRuleResult } from './types/rule-multi-types'
 import type { UnifiableRules } from './types/rule-types'
-import type { TokenType } from './types/token-types'
+import type { LastToken, Token, TokenType } from './types/token-types'
 import type { CreateTokenGenerator } from './types/types'
 
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType?: Falsy): CreateTokenGenerator<T, L>
@@ -17,33 +16,11 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
 
   return function* (input, offset = 0) {
 
-    // set constants
+    // initialize constants & variables
     const inputLength = input.length
-
-    // initialize variables
     let currentPosition = 0
-    let triggered: MultiTokenRuleResult<T, L> | null = null
 
     Loop: while (currentPosition < inputLength) {
-
-      if (triggered) {
-
-        // return token if it produced one
-        const { done, value } = triggered.generator.next()
-
-        // if done
-        if (done) {
-          // advance current position and unregister triggered rule if it's done
-          currentPosition += triggered.length
-          triggered = null
-        } else {
-          // yield token
-          yield value
-        }
-
-        // continue iteration to get next token
-        continue Loop
-      }
 
       // compute token position for easy access
       const tokenPosition = currentPosition + offset
@@ -57,33 +34,34 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
       if (isType(result, 'number')) {
 
         // advance current position
-        currentPosition += validateLength(result, currentPosition, inputLength)
-
-        // continue iteration to get next token
-        continue Loop
-      }
-
-      // register as triggered if result is a multi token result
-      // this has to be done before advancing current position
-      if ('generator' in result) {
-
-        // register result
-        triggered = {
-          length: validateLength(result.length, currentPosition, inputLength),
-          generator: result.generator,
-        }
+        currentPosition = advanceCurrentPos(result, currentPosition, inputLength)
 
         // continue iteration to get next token
         continue Loop
       }
 
       // advance current position
-      currentPosition += validateLength(result.length, currentPosition, inputLength)
+      currentPosition = advanceCurrentPos(result.length, currentPosition, inputLength)
+
+      // delegate if result is a multi token result
+      if ('generator' in result) {
+
+        // delegate to result token generator
+        yield* result.generator
+
+        // continue iteration to get next token
+        continue Loop
+      }
 
       // yield token if result is a single token result
       if ('token' in result) {
         const { token: { type, value } } = result
-        yield { type, value, pos: tokenPosition }
+        const token: Token<T> = {
+          type,
+          value,
+          pos: tokenPosition,
+        }
+        yield token
       }
 
       // continue iteration to get next token
@@ -92,7 +70,11 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
     // yield the last token (if any) after current position reached the end
     if (lastTokenType != null && lastTokenType !== false) {
       const tokenPosition = inputLength + offset
-      yield { type: lastTokenType, pos: tokenPosition }
+      const token: LastToken<L> = {
+        type: lastTokenType,
+        pos: tokenPosition,
+      }
+      yield token
     }
 
   }
