@@ -1,7 +1,7 @@
-import { oneOf } from '../one-of'
+import { oneOf } from '../main/one-of'
 import { isArray } from '../tools/is'
 import { mapItemsWithArgs } from '../tools/map-items'
-import { singleStringifyableTest } from '../tools/strint-test-tools'
+import { singleStringifyableTest } from '../tools/string-test-tools'
 import type { StringifyableTest } from '../types/test-types'
 import type { ValueTest } from '../types/test-value-types'
 

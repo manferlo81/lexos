@@ -1,10 +1,10 @@
-import { isType } from './tools/is'
-import { advanceCurrentPos } from './tools/position-tools'
-import { unifyRules } from './tools/unify-rules'
-import type { Falsy, PotentiallyFalsy } from './types/helper-types'
-import type { UnifiableRules } from './types/rule-types'
-import type { LastToken, Token, TokenType } from './types/token-types'
-import type { CreateTokenGenerator } from './types/types'
+import { isType } from '../tools/is'
+import { advanceCurrentPos } from '../tools/position-tools'
+import { unifyRules } from '../tools/unify-rules'
+import type { Falsy, PotentiallyFalsy } from '../types/helper-types'
+import type { UnifiableRules } from '../types/rule-types'
+import type { LastToken, Token, TokenType } from '../types/token-types'
+import type { CreateTokenGenerator } from '../types/types'
 
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType?: Falsy): CreateTokenGenerator<T, L>
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType: X): CreateTokenGenerator<T, L | X>

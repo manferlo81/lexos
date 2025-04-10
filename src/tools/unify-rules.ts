@@ -1,4 +1,4 @@
-import { oneOf } from '../one-of'
+import { oneOf } from '../main/one-of'
 import type { Rule, UnifiableRules } from '../types/rule-types'
 import type { TokenType } from '../types/token-types'
 import { isType } from './is'

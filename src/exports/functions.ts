@@ -1,5 +1,5 @@
-export { initTokenGenerator } from '../generator'
-export { oneOf as createOneOf, oneOf, oneOf as oneOfRule, oneOf as oneOfTest } from '../one-of'
+export { initTokenGenerator } from '../main/generator'
+export { oneOf as createOneOf, oneOf, oneOf as oneOfRule, oneOf as oneOfTest } from '../main/one-of'
 export { lexerRule } from '../rules/lexer-rule'
 export { regexpRule } from '../rules/regexpRule'
 export { stringRule } from '../rules/string-rule'

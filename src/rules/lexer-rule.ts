@@ -1,4 +1,4 @@
-import { initTokenGenerator } from '../generator'
+import { initTokenGenerator } from '../main/generator'
 import { ruleTest } from '../tests/rule-test'
 import { createRule } from '../tools/create-rule'
 import type { MultiTokenRule } from '../types/rule-multi-types'

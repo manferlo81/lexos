@@ -1,11 +1,11 @@
-import type { LengthTestList, MultiTokenRuleList, SingleTokenRuleList, TestList, ValueTestList } from './types/private-types'
-import type { MultiTokenRule } from './types/rule-multi-types'
-import type { SingleTokenRule } from './types/rule-single-types'
-import type { Rule, RuleList } from './types/rule-types'
-import type { LengthTest } from './types/test-length-types'
-import type { Test } from './types/test-types'
-import type { ValueTest } from './types/test-value-types'
-import type { TokenType } from './types/token-types'
+import type { LengthTestList, MultiTokenRuleList, SingleTokenRuleList, TestList, ValueTestList } from '../types/private-types'
+import type { MultiTokenRule } from '../types/rule-multi-types'
+import type { SingleTokenRule } from '../types/rule-single-types'
+import type { Rule, RuleList } from '../types/rule-types'
+import type { LengthTest } from '../types/test-length-types'
+import type { Test } from '../types/test-types'
+import type { ValueTest } from '../types/test-value-types'
+import type { TokenType } from '../types/token-types'
 
 export function oneOf(rules: LengthTestList): LengthTest
 export function oneOf(rules: ValueTestList): ValueTest
