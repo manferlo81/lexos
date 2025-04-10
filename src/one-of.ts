@@ -7,13 +7,13 @@ import type { Test } from './types/test-types'
 import type { ValueTest } from './types/test-value-types'
 import type { TokenType } from './types/token-types'
 
-export function createOneOf(rules: LengthTestList): LengthTest
-export function createOneOf(rules: ValueTestList): ValueTest
-export function createOneOf(rules: TestList): Test
-export function createOneOf<T extends TokenType = never>(rules: SingleTokenRuleList<T>): SingleTokenRule<T>
-export function createOneOf<T extends TokenType = never, L extends TokenType = never>(rules: MultiTokenRuleList<T, L>): MultiTokenRule<T, L>
-export function createOneOf<T extends TokenType = never, L extends TokenType = never>(rules: RuleList<T, L>): Rule<T, L>
-export function createOneOf<T extends TokenType, L extends TokenType>(rules: RuleList<T, L>): Rule<T, L> {
+export function oneOf(rules: LengthTestList): LengthTest
+export function oneOf(rules: ValueTestList): ValueTest
+export function oneOf(rules: TestList): Test
+export function oneOf<T extends TokenType = never>(rules: SingleTokenRuleList<T>): SingleTokenRule<T>
+export function oneOf<T extends TokenType = never, L extends TokenType = never>(rules: MultiTokenRuleList<T, L>): MultiTokenRule<T, L>
+export function oneOf<T extends TokenType = never, L extends TokenType = never>(rules: RuleList<T, L>): Rule<T, L>
+export function oneOf<T extends TokenType, L extends TokenType>(rules: RuleList<T, L>): Rule<T, L> {
 
   // return first rule if only one provided
   if (rules.length === 1) return rules[0]

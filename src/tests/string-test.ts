@@ -1,4 +1,4 @@
-import { createOneOf } from '../one-of'
+import { oneOf } from '../one-of'
 import { isArray } from '../tools/is'
 import { mapItemsWithArgs } from '../tools/map-items'
 import { singleStringifyableTest } from '../tools/strint-test-tools'
@@ -11,6 +11,6 @@ export function stringTest(values: number[]): ValueTest
 export function stringTest(values: StringifyableTest[], insensitive?: boolean): ValueTest
 export function stringTest(stringifyable: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest
 export function stringTest(stringifyable: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest {
-  if (isArray(stringifyable)) return createOneOf(mapItemsWithArgs(stringifyable, singleStringifyableTest, insensitive))
+  if (isArray(stringifyable)) return oneOf(mapItemsWithArgs(stringifyable, singleStringifyableTest, insensitive))
   return singleStringifyableTest(stringifyable, insensitive)
 }

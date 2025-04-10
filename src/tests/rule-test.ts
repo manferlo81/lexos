@@ -1,4 +1,4 @@
-import { createOneOf } from '../one-of'
+import { oneOf } from '../one-of'
 import { isArray, isType } from '../tools/is'
 import { mapItemsWithArgs } from '../tools/map-items'
 import { singleStringifyableTest } from '../tools/strint-test-tools'
@@ -22,7 +22,7 @@ export function ruleTest(test: AnyTest, param?: unknown): Test {
   if (isType(test, 'string', 'number')) return singleStringifyableTest(test, param)
 
   // return one-of test if it's an array
-  if (isArray(test)) return createOneOf(mapItemsWithArgs(test, ruleTest, param))
+  if (isArray(test)) return oneOf(mapItemsWithArgs(test, ruleTest, param))
 
   // return regexp test if it's a regexp
   return regexpTest(test)

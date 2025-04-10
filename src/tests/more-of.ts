@@ -1,11 +1,11 @@
-import { createOneOf } from '../one-of'
+import { oneOf } from '../one-of'
 import { getLengthFromResult } from '../tools/result-tools'
 import type { TestList } from '../types/private-types'
 import type { LengthTest } from '../types/test-length-types'
 
 export function moreOfTest(tests: TestList): LengthTest {
   // create test
-  const test = createOneOf(tests)
+  const test = oneOf(tests)
 
   // return test
   return (input, pos) => {
