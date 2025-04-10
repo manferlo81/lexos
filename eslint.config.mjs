@@ -1,8 +1,8 @@
 import pluginJavascript from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
-import pluginImportX from 'eslint-plugin-import-x'
+import { flatConfigs as importPluginConfigs } from 'eslint-plugin-import-x'
 import globals from 'globals'
-import { config, configs as typescriptConfigs } from 'typescript-eslint'
+import { config, configs as typescriptPluginConfigs } from 'typescript-eslint'
 
 const javascriptPluginConfig = config(
   pluginJavascript.configs.recommended,
@@ -16,8 +16,8 @@ const javascriptPluginConfig = config(
 )
 
 const importPluginConfig = config(
-  pluginImportX.flatConfigs.recommended,
-  pluginImportX.flatConfigs.typescript,
+  importPluginConfigs.recommended,
+  importPluginConfigs.typescript,
   normalizeRulesConfig('import-x', {
     'consistent-type-specifier-style': 'error',
     'no-useless-path-segments': 'error',
@@ -46,8 +46,8 @@ const stylisticPluginConfig = config(
 )
 
 const typescriptPluginConfig = config(
-  typescriptConfigs.strictTypeChecked,
-  typescriptConfigs.stylisticTypeChecked,
+  typescriptPluginConfigs.strictTypeChecked,
+  typescriptPluginConfigs.stylisticTypeChecked,
   { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
   normalizeRulesConfig('@typescript-eslint', {
     'array-type': { default: 'array-simple', readonly: 'array-simple' },
@@ -61,7 +61,7 @@ const typescriptPluginConfig = config(
     },
   }),
   {
-    ...typescriptConfigs.disableTypeChecked,
+    ...typescriptPluginConfigs.disableTypeChecked,
     files: ['**/*.{js,mjs,cjs}'],
   },
 )
