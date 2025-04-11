@@ -3,7 +3,6 @@
   "displayName": "Lexos",
   "description": "A very simple lexer generator",
   "version": "0.0.1",
-  "private": true,
   "keywords": [
     "lexer",
     "lex",
