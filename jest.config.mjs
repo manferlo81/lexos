@@ -1,12 +1,14 @@
+import { createDefaultPreset } from 'ts-jest'
+
 const isCI = process.env.CI
+
+const typescriptJestPreset = createDefaultPreset({
+  tsconfig: './tsconfig-test.json',
+})
 
 /** @type { import("ts-jest").JestConfigWithTsJest } */
 const config = {
-  transform: {
-    '^.+\\.ts$': ['ts-jest', {
-      tsconfig: './tsconfig-test.json',
-    }],
-  },
+  ...typescriptJestPreset,
 
   collectCoverage: true,
   collectCoverageFrom: [
