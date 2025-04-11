@@ -1,5 +1,7 @@
 {
   "cSpell.words": [
-    "bundlib"
-  ]
+    "bundlib",
+    "lexos"
+  ],
+  "liveServer.settings.root": "./coverage"
 }
