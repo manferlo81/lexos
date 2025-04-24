@@ -1,20 +1,22 @@
 import { initTokenGenerator } from '../main/generator'
 import { ruleTest } from '../tests/rule-test'
 import { createRule } from '../tools/create-rule'
+import type { Falsy, PotentiallyFalsy } from '../types/helper-types'
 import type { MultiTokenRule } from '../types/rule-multi-types'
 import type { Rule, RuleList, UnifiableRules } from '../types/rule-types'
 import type { AnyTest } from '../types/test-types'
 import type { TokenType } from '../types/token-types'
 
-export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rule: Rule<T, L>, lastTokenType?: L | null): MultiTokenRule<T, L>
-export function lexerRule<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(test: AnyTest, rule: Rule<T, L>, lastTokenType: X): MultiTokenRule<T, L | X>
-export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: RuleList<T, L>, lastTokenType?: L | null): MultiTokenRule<T, L>
-export function lexerRule<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(test: AnyTest, rules: RuleList<T, L>, lastTokenType: X): MultiTokenRule<T, L | X>
+export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rule: Rule<T, L>, lastTokenType?: Falsy): MultiTokenRule<T, L>
+export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rule: Rule<T, L>, lastTokenType: L): MultiTokenRule<T, L>
 
-export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, unifiable: UnifiableRules<T, L>, lastTokenType?: L | null): MultiTokenRule<T, L>
-export function lexerRule<T extends TokenType = never, L extends TokenType = never, X extends TokenType = never>(test: AnyTest, unifiable: UnifiableRules<T, L>, lastTokenType: X): MultiTokenRule<T, L | X>
+export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: RuleList<T, L>, lastTokenType?: Falsy): MultiTokenRule<T, L>
+export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: RuleList<T, L>, lastTokenType: L): MultiTokenRule<T, L>
+
+export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastTokenType?: PotentiallyFalsy<L>): MultiTokenRule<T, L>
 
 export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastTokenType?: L | null): MultiTokenRule<T, L> {
+  // initialize generator
   const createGenerator = initTokenGenerator(rules, lastTokenType)
 
   // return rule
