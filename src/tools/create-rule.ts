@@ -9,6 +9,7 @@ export function createRule<R>(test: Test, createResult: CreateRuleResult<R>): Ru
 
   // return rule
   return (input, pos) => {
+
     // test code at current position
     const result = test(input, pos)
 

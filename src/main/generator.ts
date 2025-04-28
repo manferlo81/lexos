@@ -12,8 +12,7 @@ export function initTokenGenerator<T extends TokenType = never, L extends TokenT
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: RuleList<T, L>, lastTokenType?: Falsy): CreateTokenGenerator<T, L>
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: RuleList<T, L>, lastTokenType: L): CreateTokenGenerator<T, L>
 
-export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType: PotentiallyFalsy<L>): CreateTokenGenerator<T, L>
-
+export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType?: PotentiallyFalsy<L>): CreateTokenGenerator<T, L>
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: UnifiableRules<T, L>, lastTokenType: PotentiallyFalsy<L> = null): CreateTokenGenerator<T, L> {
 
   const rule = unifyRules(rules)

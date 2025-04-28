@@ -12,7 +12,8 @@ export function ruleTest(value: number): ValueTest
 export function ruleTest(values: number[]): ValueTest
 export function ruleTest(value: string, insensitive?: boolean): ValueTest
 export function ruleTest(values: StringifyableTest[], insensitive?: boolean): ValueTest
-export function ruleTest(anyTest: AnyTest, param?: unknown): Test
+
+export function ruleTest(test: AnyTest, param?: unknown): Test
 export function ruleTest(test: AnyTest, param?: unknown): Test {
 
   // return function as test if it's a function

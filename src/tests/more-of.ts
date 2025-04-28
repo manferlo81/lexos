@@ -4,6 +4,7 @@ import type { TestList } from '../types/private-types'
 import type { LengthTest } from '../types/test-length-types'
 
 export function moreOfTest(tests: TestList): LengthTest {
+
   // create test
   const test = oneOf(tests)
 

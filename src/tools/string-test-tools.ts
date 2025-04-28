@@ -4,6 +4,7 @@ import { isType } from './is'
 import { createStringMatchFunction } from './match-string'
 
 function singleStringTest(value: string, insensitive?: unknown): ValueTest {
+
   // throw if value length is zero
   const valueLength = value.length
   if (valueLength <= 0) throw Error('Zero length string test')

@@ -1,12 +1,13 @@
 type StringMatchFunction = (partial: string) => boolean
 
-export function createStringMatchFunction(value: string, insensitive?: unknown): StringMatchFunction {
+export function createStringMatchFunction(reference: string, insensitive?: unknown): StringMatchFunction {
+
   // return case sensitive string match function
-  if (!insensitive) return (partial: string) => partial === value
+  if (!insensitive) return (value: string) => value === reference
 
   // make value insensitive
-  const referenceValue = value.toLowerCase()
+  const lowerCaseReference = reference.toLowerCase()
 
   // return case insensitive string match function
-  return (partial: string) => partial.toLowerCase() === referenceValue
+  return (value: string) => value.toLowerCase() === lowerCaseReference
 }

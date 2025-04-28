@@ -14,8 +14,7 @@ export function lexerRule<T extends TokenType = never, L extends TokenType = nev
 export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: RuleList<T, L>, lastTokenType: L): MultiTokenRule<T, L>
 
 export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastTokenType?: PotentiallyFalsy<L>): MultiTokenRule<T, L>
-
-export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastTokenType?: L | null): MultiTokenRule<T, L> {
+export function lexerRule<T extends TokenType = never, L extends TokenType = never>(test: AnyTest, rules: UnifiableRules<T, L>, lastTokenType?: PotentiallyFalsy<L>): MultiTokenRule<T, L> {
   // initialize generator
   const createGenerator = initTokenGenerator(rules, lastTokenType)
 

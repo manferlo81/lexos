@@ -6,8 +6,12 @@ import type { GetTokenType, TokenType } from '../types/token-types'
 import { createRule } from './create-rule'
 import { isType } from './is'
 
-export function singleTokenRule(type: GetFalsyTokenType, test: Test): ValueTest
-export function singleTokenRule<T extends TokenType>(type: T | GetActualTokenType<T>, test: Test): SingleTokenRule<T>
+export function singleTokenRule(getType: GetFalsyTokenType, test: Test): ValueTest
+export function singleTokenRule<T extends TokenType>(getType: GetActualTokenType<T>, test: Test): SingleTokenRule<T>
+export function singleTokenRule<T extends TokenType>(getType: GetTokenType<T>, test: Test): SingleTokenRuleOrTest<T>
+
+export function singleTokenRule<T extends TokenType>(type: T, test: Test): SingleTokenRule<T>
+
 export function singleTokenRule<T extends TokenType>(type: T | GetTokenType<T>, test: Test): SingleTokenRuleOrTest<T>
 export function singleTokenRule<T extends TokenType>(type: T | GetTokenType<T>, test: Test): AnySingleTokenRuleOrTest<T> {
 

@@ -3,6 +3,7 @@ import type { TestList } from '../types/private-types'
 import type { LengthTest } from '../types/test-length-types'
 
 export function sequentialTest(tests: TestList): LengthTest {
+
   // return test
   return (input, pos) => {
 
