@@ -5,5 +5,5 @@ export default config({
   esModule: true,
   name: 'Lexos',
   min: ['api', '!main'],
-  project: './tsconfig-build.json',
+  project: './tsconfig.build.json',
 })
