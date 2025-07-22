@@ -47,4 +47,20 @@ describe('sequentialTest function', () => {
     })
   })
 
+  test('should return falsy if no input precessed', () => {
+    const testId = sequentialTest([])
+    const inputThatDoNotMathSequentially = [
+      '1234',
+      '-1234',
+      'word',
+      'word-',
+      '1234-word',
+      'word7890',
+      '1234-text-6789',
+    ]
+    inputThatDoNotMathSequentially.forEach((value) => {
+      expect(testId(value, 0)).toBeFalsy()
+    })
+  })
+
 })

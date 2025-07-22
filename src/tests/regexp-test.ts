@@ -15,11 +15,15 @@ export function regexpTest(regexp: RegExp): ValueTest {
     // fail if RegExp didn't match
     if (!result) return
 
-    // return successful result if it's not a zero length value
+    // get value and length
     const value = result[0]
     const valueLength = value.length
-    if (valueLength > 0) return { value, length: valueLength }
 
-    // fail otherwise
+    // no need to check for zero length value, as result will always have a length > 0
+    // if (valueLength <= 0) return
+
+    // return successful result
+    return { value, length: valueLength }
+
   }
 }
