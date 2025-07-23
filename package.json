@@ -48,7 +48,7 @@
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "@eslint/js": "^9.31.0",
-    "@stylistic/eslint-plugin": "^5.2.1",
+    "@stylistic/eslint-plugin": "^5.2.2",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.15",
     "bundlib": "^0.21.4",
