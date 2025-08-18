@@ -50,7 +50,7 @@
     "@eslint/js": "^9.31.0",
     "@stylistic/eslint-plugin": "^5.2.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.15",
+    "@types/node": "^24.3.0",
     "bundlib": "^0.21.4",
     "chokidar": "^4.0.3",
     "core-js": "^3.44.0",
