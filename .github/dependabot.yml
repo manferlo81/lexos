@@ -11,5 +11,34 @@ updates:
       timezone: "Asia/Jakarta"
       time: "07:00"
 
+    groups:
+      lint:
+        dependency-type: development
+        patterns:
+          - eslint
+          - eslint-plugin-*
+          - "*eslint-plugin"
+          - globals
+      types:
+        dependency-type: development
+        patterns:
+          - "@types/*"
+      jest:
+        dependency-type: development
+        patterns:
+          - jest
+      babel:
+        dependency-type: development
+        patterns:
+          - "@babel"
+          - core-js
+      others:
+        dependency-type: development
+        patterns:
+          - husky
+          - npm-run-all
+          - rimraf
+          - chokidar
+
     assignees:
       - "manferlo81"
