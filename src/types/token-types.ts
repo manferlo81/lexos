@@ -8,4 +8,4 @@ export interface LastToken<T extends TokenType> extends WithType<T> {
   pos: number
 }
 
-export interface Token<T extends TokenType> extends LastToken<T>, WithValue {}
+export interface Token<T extends TokenType> extends LastToken<T>, WithValue<string> {}

@@ -5,13 +5,13 @@ import { singleStringifyableTest } from '../tools/string-test-tools'
 import type { StringifyableTest } from '../types/test-types'
 import type { ValueTest } from '../types/test-value-types'
 
-export function stringTest(value: number): ValueTest
-export function stringTest(values: number[]): ValueTest
+export function stringTest(number: number): ValueTest
+export function stringTest(numbers: readonly number[]): ValueTest
 export function stringTest(value: string, insensitive?: boolean): ValueTest
-export function stringTest(values: StringifyableTest[], insensitive?: boolean): ValueTest
+export function stringTest(stringifyables: readonly StringifyableTest[], insensitive?: boolean): ValueTest
 
-export function stringTest(stringifyable: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest
-export function stringTest(stringifyable: StringifyableTest | StringifyableTest[], insensitive?: boolean): ValueTest {
+export function stringTest(stringifyable: StringifyableTest | readonly StringifyableTest[], insensitive?: boolean): ValueTest
+export function stringTest(stringifyable: StringifyableTest | readonly StringifyableTest[], insensitive?: boolean): ValueTest {
   if (isArray(stringifyable)) return oneOf(mapItemsWithArgs(stringifyable, singleStringifyableTest, insensitive))
   return singleStringifyableTest(stringifyable, insensitive)
 }
