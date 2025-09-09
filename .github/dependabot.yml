@@ -16,9 +16,11 @@ updates:
         dependency-type: development
         patterns:
           - eslint
-          - eslint-plugin-*
-          - "*eslint-plugin"
+          - "@eslint/*"
           - globals
+          - eslint-plugin-*
+          - "*/eslint-plugin"
+          - typescript-eslint
       types:
         dependency-type: development
         patterns:
