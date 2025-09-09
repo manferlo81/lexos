@@ -13,8 +13,8 @@ export type SingleTokenRuleOrTestResult<T extends TokenType> = SingleTokenRuleRe
 export type SingleTokenRuleOrTest<T extends TokenType> = SingleTokenRule<T> | ValueTest
 export type AnySingleTokenRuleOrTest<T extends TokenType> = RuleBase<SingleTokenRuleOrTestResult<T>>
 
-export type LengthTestList = LengthTest[]
-export type ValueTestList = ValueTest[]
-export type TestList = Test[]
-export type SingleTokenRuleList<T extends TokenType> = Array<SingleTokenRule<T>>
-export type MultiTokenRuleList<T extends TokenType, L extends TokenType> = Array<MultiTokenRule<T, L>>
+export type LengthTestList = readonly LengthTest[]
+export type ValueTestList = readonly ValueTest[]
+export type TestList = readonly Test[]
+export type SingleTokenRuleList<T extends TokenType> = ReadonlyArray<SingleTokenRule<T>>
+export type MultiTokenRuleList<T extends TokenType, L extends TokenType> = ReadonlyArray<MultiTokenRule<T, L>>

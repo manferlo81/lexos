@@ -9,9 +9,9 @@ import { regexpTest } from './regexp-test'
 export function ruleTest<T extends Test>(test: T): T
 export function ruleTest(regexp: RegExp): ValueTest
 export function ruleTest(value: number): ValueTest
-export function ruleTest(values: number[]): ValueTest
+export function ruleTest(values: readonly number[]): ValueTest
 export function ruleTest(value: string, insensitive?: boolean): ValueTest
-export function ruleTest(values: StringifyableTest[], insensitive?: boolean): ValueTest
+export function ruleTest(values: readonly StringifyableTest[], insensitive?: boolean): ValueTest
 
 export function ruleTest(test: AnyTest, param?: unknown): Test
 export function ruleTest(test: AnyTest, param?: unknown): Test {
