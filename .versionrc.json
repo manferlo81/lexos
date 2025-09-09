@@ -2,9 +2,6 @@
   "header": "# Lexos changelog\n\n## Changes\n",
   "types": [
     {
-      "type": "chore"
-    },
-    {
       "type": "feat",
       "section": "Features"
     },

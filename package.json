@@ -41,6 +41,7 @@
     "ci-build": "run-s lint test build",
     "clean-build": "run-s clean ci-build",
     "prerelease": "run-s clean-build",
+    "release-dry": "standard-version --dry-run",
     "release": "standard-version",
     "prepare": "husky"
   },
