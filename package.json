@@ -36,13 +36,13 @@
     "lint": "eslint .",
     "test": "jest --color",
     "test:watch": "jest --color --watch",
-    "build": "bundlib build -d",
     "dev": "bundlib watch -d",
+    "build": "bundlib build -d",
     "ci-build": "run-s lint test build",
     "clean-build": "run-s clean ci-build",
     "prerelease": "run-s clean-build",
-    "release-dry": "standard-version --dry-run",
     "release": "standard-version",
+    "release-dry": "standard-version --dry-run",
     "prepare": "husky"
   },
   "devDependencies": {
