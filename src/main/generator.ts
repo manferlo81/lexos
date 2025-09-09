@@ -4,11 +4,13 @@ import { unifyRules } from '../tools/unify-rules'
 import type { Falsy, PotentiallyFalsy } from '../types/helper-types'
 import type { Rule, RuleList, UnifiableRules } from '../types/rule-types'
 import type { LastToken, Token, TokenType } from '../types/token-types'
-import type { CreateTokenGenerator } from '../types/types'
+import type { CreateTokenGenerator, CreateTokenGeneratorNoLastToken } from '../types/types'
 
+export function initTokenGenerator<T extends TokenType = never>(rule: Rule<T, never>, lastTokenType?: Falsy): CreateTokenGeneratorNoLastToken<T>
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rule: Rule<T, L>, lastTokenType?: Falsy): CreateTokenGenerator<T, L>
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rule: Rule<T, L>, lastTokenType: L): CreateTokenGenerator<T, L>
 
+export function initTokenGenerator<T extends TokenType = never>(rules: RuleList<T, never>, lastTokenType?: Falsy): CreateTokenGeneratorNoLastToken<T>
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: RuleList<T, L>, lastTokenType?: Falsy): CreateTokenGenerator<T, L>
 export function initTokenGenerator<T extends TokenType = never, L extends TokenType = never>(rules: RuleList<T, L>, lastTokenType: L): CreateTokenGenerator<T, L>
 
