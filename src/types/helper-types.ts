@@ -16,8 +16,8 @@ export interface WithLength {
   length: number
 }
 
-export interface WithValue {
-  value: string
+export interface WithValue<V extends string> {
+  value: V
 }
 
 export type GetTokenTypeBase<R> = (value: string) => R
