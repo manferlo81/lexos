@@ -19,20 +19,21 @@ updates:
           - "@eslint/*"
           - globals
           - eslint-plugin-*
-          - "*/eslint-plugin"
+          - "@*/eslint-plugin"
           - typescript-eslint
       types:
         dependency-type: development
         patterns:
           - "@types/*"
-      jest:
+      test:
         dependency-type: development
         patterns:
           - jest
+          - ts-jest
       babel:
         dependency-type: development
         patterns:
-          - "@babel"
+          - "@babel/*"
           - core-js
       others:
         dependency-type: development
