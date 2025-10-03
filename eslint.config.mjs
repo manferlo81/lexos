@@ -8,7 +8,7 @@ import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
 // Javascript Plugin
 
-const rulesPluginJavascript = normalizeRules(null, {
+const rulesPluginJavascript = ruleNormalizer()({
   'no-useless-rename': 'error',
   'object-shorthand': 'error',
   'prefer-template': 'error',
@@ -16,55 +16,17 @@ const rulesPluginJavascript = normalizeRules(null, {
   eqeqeq: 'smart',
 })
 
-const configPluginJavascript = defineConfig(
-  pluginJavascript.configs.recommended,
-  { rules: rulesPluginJavascript },
-)
-
-// Import Plugin
-
-const rulesPluginImport = normalizeRules('import-x', {
-  'consistent-type-specifier-style': 'error',
-  'no-useless-path-segments': 'error',
-  'no-absolute-path': 'error',
-  'no-cycle': 'error',
-  'no-nodejs-modules': 'error',
+const configPluginJavascript = defineConfig({
+  files: ['**/*.{js,mjs,cjs}', '**/*.{ts,mts,cts}'],
+  extends: [
+    pluginJavascript.configs.recommended,
+  ],
+  rules: rulesPluginJavascript,
 })
-
-const configPluginImport = defineConfig(
-  pluginImportConfigs.recommended,
-  pluginImportConfigs.typescript,
-  { rules: rulesPluginImport },
-)
-
-// Stylistic Plugin
-
-const rulesPluginStylistic = normalizeRules('@stylistic', {
-  quotes: 'single',
-  'linebreak-style': 'unix',
-  'no-extra-parens': 'all',
-  'no-extra-semi': 'error',
-  'padded-blocks': 'off',
-})
-
-const configPluginStylistic = defineConfig(
-  pluginStylistic.configs.customize({
-    quotes: 'single',
-    indent: 2,
-    semi: false,
-    arrowParens: true,
-    quoteProps: 'as-needed',
-    braceStyle: '1tbs',
-    commaDangle: 'always-multiline',
-    blockSpacing: true,
-    jsx: false,
-  }),
-  { rules: rulesPluginStylistic },
-)
 
 // Typescript Plugin
 
-const rulesPluginTypescript = normalizeRules('@typescript-eslint', {
+const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
   'array-type': { default: 'array-simple', readonly: 'array-simple' },
   'restrict-template-expressions': {
     allowNumber: true,
@@ -79,56 +41,107 @@ const rulesPluginTypescript = normalizeRules('@typescript-eslint', {
   'consistent-type-imports': 'error',
 })
 
-const configPluginTypescript = defineConfig(
-  pluginTypescriptConfigs.strictTypeChecked,
-  pluginTypescriptConfigs.stylisticTypeChecked,
-  { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
-  { rules: rulesPluginTypescript },
-)
+const configPluginTypescript = defineConfig({
+  files: ['**/*.{ts,mts,cts}'],
+  languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
+  extends: [
+    pluginTypescriptConfigs.strictTypeChecked,
+    pluginTypescriptConfigs.stylisticTypeChecked,
+  ],
+  rules: rulesPluginTypescript,
+})
 
-const configDisableJavascriptTypeCheck = {
-  ...pluginTypescriptConfigs.disableTypeChecked,
-  files: ['**/*.{js,mjs,cjs}'],
-}
+// Import Plugin
+
+const rulesPluginImport = ruleNormalizer({ plugin: 'import-x' })({
+  'consistent-type-specifier-style': 'error',
+  'no-useless-path-segments': 'error',
+  'no-absolute-path': 'error',
+  'no-cycle': 'error',
+  'no-nodejs-modules': 'error',
+})
+
+const configPluginImport = defineConfig({
+  files: ['**/*.{js,mjs,cjs}', '**/*.{ts,mts,cts}'],
+  extends: [
+    pluginImportConfigs.recommended,
+    pluginImportConfigs.typescript,
+  ],
+  rules: rulesPluginImport,
+})
+
+// Stylistic Plugin
+
+const rulesPluginStylistic = ruleNormalizer({ plugin: '@stylistic' })({
+  indent: 2,
+  quotes: 'single',
+  'linebreak-style': 'unix',
+  'no-extra-parens': 'all',
+  'no-extra-semi': 'error',
+  'padded-blocks': 'off',
+})
+
+const configPluginStylistic = defineConfig({
+  files: ['**/*.{js,mjs,cjs}', '**/*.{ts,mts,cts}'],
+  extends: [
+    pluginStylistic.configs.customize({
+      arrowParens: true,
+      quoteProps: 'as-needed',
+      braceStyle: '1tbs',
+      jsx: false,
+    }),
+  ],
+  rules: rulesPluginStylistic,
+})
 
 // Config
 
 export default defineConfig(
   globalIgnores(['dist', 'coverage']),
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  { files: ['**/*.{js,mjs,cjs,ts}'] },
   configPluginJavascript,
+  configPluginTypescript,
   configPluginImport,
   configPluginStylistic,
-  configPluginTypescript,
-  configDisableJavascriptTypeCheck,
 )
 
 // Helpers
 
-function normalizeRuleEntry(entry) {
-  if (Array.isArray(entry)) return entry
-  if (['error', 'off', 'warn'].includes(entry)) return entry
-  return ['error', entry]
-}
+function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginName } = {}) {
+  const normalizeRuleEntry = (entry) => {
+    if (Array.isArray(entry)) return entry
+    if (['error', 'off', 'warn'].includes(entry)) return entry
+    return [defaultSeverity, entry]
+  }
 
-function createRuleNameNormalizer(pluginName) {
+  const createRuleNormalizer = (normalizeObjectEntry) => {
+    return (rules) => {
+      const entries = Object.entries(rules)
+      const entriesNormalized = entries.map(normalizeObjectEntry)
+      return Object.fromEntries(entriesNormalized)
+    }
+  }
+
+  if (!pluginName) {
+    return createRuleNormalizer(
+      ([ruleName, ruleEntry]) => [
+        ruleName,
+        normalizeRuleEntry(ruleEntry),
+      ],
+    )
+  }
+
   const pluginPrefix = `${pluginName}/`
-  return (ruleName) => {
+
+  const normalizeRuleName = (ruleName) => {
     if (ruleName.startsWith(pluginPrefix)) return ruleName
     return `${pluginPrefix}${ruleName}`
   }
-}
 
-function createObjectEntryNormalizer(pluginName) {
-  if (!pluginName) return ([ruleName, ruleEntry]) => [ruleName, normalizeRuleEntry(ruleEntry)]
-  const normalizeRuleName = createRuleNameNormalizer(pluginName)
-  return ([ruleName, ruleEntry]) => [normalizeRuleName(ruleName), normalizeRuleEntry(ruleEntry)]
-}
-
-function normalizeRules(pluginName, rules) {
-  const entries = Object.entries(rules)
-  const normalizeObjectEntry = createObjectEntryNormalizer(pluginName)
-  const entriesNormalized = entries.map(normalizeObjectEntry)
-  return Object.fromEntries(entriesNormalized)
+  return createRuleNormalizer(
+    ([ruleName, ruleEntry]) => [
+      normalizeRuleName(ruleName),
+      normalizeRuleEntry(ruleEntry),
+    ],
+  )
 }
