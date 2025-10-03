@@ -3,7 +3,7 @@ import globals from 'globals'
 
 import pluginJavascript from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
-import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import-x'
+import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import'
 import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
 // Javascript Plugin
@@ -53,7 +53,7 @@ const configPluginTypescript = defineConfig({
 
 // Import Plugin
 
-const rulesPluginImport = ruleNormalizer({ plugin: 'import-x' })({
+const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
   'consistent-type-specifier-style': 'error',
   'no-useless-path-segments': 'error',
   'no-absolute-path': 'error',
@@ -63,6 +63,8 @@ const rulesPluginImport = ruleNormalizer({ plugin: 'import-x' })({
 
 const configPluginImport = defineConfig({
   files: ['**/*.{js,mjs,cjs}', '**/*.{ts,mts,cts}'],
+  languageOptions: { ecmaVersion: 'latest', sourceType: 'module' },
+  settings: { 'import/resolver': { typescript: true } },
   extends: [
     pluginImportConfigs.recommended,
     pluginImportConfigs.typescript,
