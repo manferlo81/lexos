@@ -1,2 +1,2 @@
 export * from './exports/functions'
-export * from './exports/types'
+export type * from './exports/types'

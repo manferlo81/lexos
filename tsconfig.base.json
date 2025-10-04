@@ -7,8 +7,10 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "verbatimModuleSyntax": true,
     // Strict
     "strict": true,
+    "strictNullChecks": true,
     "noImplicitReturns": null,
     "noImplicitAny": true,
     "noImplicitThis": true,
