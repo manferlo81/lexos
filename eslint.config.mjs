@@ -16,87 +16,82 @@ const ALL_FILES = [PATTERN_JS, PATTERN_TS]
 
 // Plugin Javascript
 
-const rulesPluginJavascript = ruleNormalizer()({
-  'no-useless-rename': 'on',
-  'object-shorthand': 'on',
-  'prefer-template': 'on',
-  'no-useless-concat': 'on',
-  eqeqeq: 'smart',
-  'no-inner-declarations': ['functions', { blockScopedFunctions: 'disallow' }],
-  'no-unassigned-vars': 'on',
-  'no-unmodified-loop-condition': 'on',
-  'no-unreachable-loop': 'on',
-  'no-useless-assignment': 'on',
-  curly: ['on', 'multi-line'],
-  'no-array-constructor': 'on',
-  'no-else-return': { allowElseIf: false },
-  'no-eval': 'on',
-  'no-implied-eval': 'on',
-  'no-new-func': 'on',
-  'no-object-constructor': 'on',
-  'no-useless-computed-key': 'on',
-  'no-var': 'on',
-  'prefer-const': 'on',
-  'prefer-exponentiation-operator': 'on',
-  'prefer-object-has-own': 'on',
-  'prefer-regex-literals': 'on',
-  'require-await': 'on',
-  'no-unused-expressions': 'on',
-  'no-useless-constructor': 'on',
-  'no-throw-literal': 'on',
-  'prefer-rest-params': 'on',
-  'prefer-spread': 'on',
-})
-
 const configPluginJavascript = defineConfig({
+  rules: ruleNormalizer()({
+    'no-useless-rename': 'on',
+    'object-shorthand': 'on',
+    'prefer-template': 'on',
+    'no-useless-concat': 'on',
+    eqeqeq: 'smart',
+    'no-inner-declarations': ['functions', { blockScopedFunctions: 'disallow' }],
+    'no-unassigned-vars': 'on',
+    'no-unmodified-loop-condition': 'on',
+    'no-unreachable-loop': 'on',
+    'no-useless-assignment': 'on',
+    curly: ['on', 'multi-line'],
+    'no-array-constructor': 'on',
+    'no-else-return': { allowElseIf: false },
+    'no-eval': 'on',
+    'no-implied-eval': 'on',
+    'no-new-func': 'on',
+    'no-object-constructor': 'on',
+    'no-useless-computed-key': 'on',
+    'no-var': 'on',
+    'prefer-const': 'on',
+    'prefer-exponentiation-operator': 'on',
+    'prefer-object-has-own': 'on',
+    'prefer-regex-literals': 'on',
+    'require-await': 'on',
+    'no-unused-expressions': 'on',
+    'no-useless-constructor': 'on',
+    'no-throw-literal': 'on',
+    'prefer-rest-params': 'on',
+    'prefer-spread': 'on',
+  }),
   files: ALL_FILES,
   extends: [
     pluginJavascript.configs.recommended,
   ],
-  rules: rulesPluginJavascript,
 })
 
 // Plugin Typescript
 
-const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
-  'array-type': { default: 'array-simple', readonly: 'array-simple' },
-  'restrict-template-expressions': {
-    allowNumber: true,
-    allowBoolean: false,
-    allowNullish: false,
-    allowRegExp: false,
-    allowArray: false,
-    allowNever: false,
-    allowAny: false,
-  },
-  'unified-signatures': { ignoreDifferentlyNamedParameters: true },
-  'consistent-type-imports': 'on',
-  'consistent-type-exports': {
-    fixMixedExportsWithInlineTypeSpecifier: false,
-  },
-})
-
 const configPluginTypescript = defineConfig({
+  rules: ruleNormalizer({ plugin: '@typescript-eslint' })({
+    'array-type': { default: 'array-simple', readonly: 'array-simple' },
+    'restrict-template-expressions': {
+      allowNumber: true,
+      allowBoolean: false,
+      allowNullish: false,
+      allowRegExp: false,
+      allowArray: false,
+      allowNever: false,
+      allowAny: false,
+    },
+    'unified-signatures': { ignoreDifferentlyNamedParameters: true },
+    'consistent-type-imports': 'on',
+    'consistent-type-exports': {
+      fixMixedExportsWithInlineTypeSpecifier: false,
+    },
+  }),
   files: TS_FILES,
   languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
   extends: [
     pluginTypescriptConfigs.strictTypeChecked,
     pluginTypescriptConfigs.stylisticTypeChecked,
   ],
-  rules: rulesPluginTypescript,
 })
 
 // Plugin Import
 
-const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
-  'consistent-type-specifier-style': 'prefer-top-level',
-  'no-useless-path-segments': 'on',
-  'no-absolute-path': 'on',
-  'no-cycle': 'on',
-  'no-nodejs-modules': 'on',
-})
-
 const configPluginImport = defineConfig({
+  rules: ruleNormalizer({ plugin: 'import' })({
+    'consistent-type-specifier-style': 'prefer-top-level',
+    'no-useless-path-segments': 'on',
+    'no-absolute-path': 'on',
+    'no-cycle': 'on',
+    'no-nodejs-modules': 'on',
+  }),
   files: ALL_FILES,
   languageOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { 'import/resolver': { typescript: true } },
@@ -104,21 +99,19 @@ const configPluginImport = defineConfig({
     pluginImportConfigs.recommended,
     pluginImportConfigs.typescript,
   ],
-  rules: rulesPluginImport,
 })
 
 // Plugin Stylistic
 
-const rulesPluginStylistic = ruleNormalizer({ plugin: '@stylistic' })({
-  indent: ['on', 2],
-  quotes: 'single',
-  'linebreak-style': 'unix',
-  'no-extra-parens': 'all',
-  'no-extra-semi': 'on',
-  'padded-blocks': 'off',
-})
-
 const configPluginStylistic = defineConfig({
+  rules: ruleNormalizer({ plugin: '@stylistic' })({
+    indent: ['on', 2],
+    quotes: 'single',
+    'linebreak-style': 'unix',
+    'no-extra-parens': 'all',
+    'no-extra-semi': 'on',
+    'padded-blocks': 'off',
+  }),
   files: ALL_FILES,
   extends: [
     pluginStylistic.configs.customize({
@@ -128,7 +121,6 @@ const configPluginStylistic = defineConfig({
       jsx: false,
     }),
   ],
-  rules: rulesPluginStylistic,
 })
 
 // Config
