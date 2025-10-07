@@ -1,22 +1,22 @@
 {
   "compilerOptions": {
     // Module
-    "module": "ESNext",
-    "moduleResolution": "Node10",
+    "target": "es2020",
+    "module": "esnext",
+    "moduleResolution": "node10",
     "esModuleInterop": true,
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "lib": [],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "verbatimModuleSyntax": true,
     // Strict
     "strict": true,
-    "strictNullChecks": true,
-    "noImplicitReturns": null,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
+    "noImplicitReturns": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     // Others
+    "noEmit": true,
     "declaration": true,
     "declarationMap": true,
     "newLine": "lf"
