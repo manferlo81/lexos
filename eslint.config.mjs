@@ -64,15 +64,11 @@ const configPluginTypescript = defineConfig({
       allowBoolean: false,
       allowNullish: false,
       allowRegExp: false,
-      allowArray: false,
-      allowNever: false,
       allowAny: false,
     },
     'unified-signatures': { ignoreDifferentlyNamedParameters: true },
     'consistent-type-imports': 'on',
-    'consistent-type-exports': {
-      fixMixedExportsWithInlineTypeSpecifier: false,
-    },
+    'consistent-type-exports': 'on',
   }),
   files: TS_FILES,
   languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
@@ -138,34 +134,50 @@ export default defineConfig(
 
 function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginName } = {}) {
 
-  const isDefaultSeverity = (ruleEntry) => {
-    return ruleEntry === 'error' || ruleEntry === 'warn' || ruleEntry === 1 || ruleEntry === 2
+  // Throw TypeError if default severity is not valid
+  const isDefaultSeverity = (entry) => ['error', 'warn', 1, 2].includes(entry)
+  if (!isDefaultSeverity(defaultSeverity)) throw new TypeError('Invalid default severity.')
+
+  // User severity resolver
+  const resolveSeverity = (entry) => {
+
+    // Resolve to default severity if entry is "on" or true
+    if (entry === 'on' || entry === true) return [true, defaultSeverity]
+
+    // Resolve to "off" if entry is false or nullish
+    if (entry === false | entry == null) return [true, 'off']
+
+    // Resolve to entry if it's a valid severity
+    return [entry === 'off' || entry === 0 || isDefaultSeverity(entry), entry]
   }
 
-  if (!isDefaultSeverity(defaultSeverity)) throw new TypeError('Default severity has to be "error", "warn", 1, or 2')
+  // Rule entry normalizer
+  const normalizeRuleEntry = (entry) => {
 
-  const resolveSeverity = (ruleEntry) => {
-    if (ruleEntry === 'on' || ruleEntry === true) return [defaultSeverity, true]
-    if (ruleEntry === false) return ['off', true]
-    if (ruleEntry === 'off' || ruleEntry === 0 || isDefaultSeverity(ruleEntry)) return [ruleEntry, true]
-    return [ruleEntry, false]
-  }
-
-  const normalizeRuleEntry = (ruleEntry) => {
-    const [severity, isValidSeverity] = resolveSeverity(ruleEntry)
-
+    // Return severity if it resolves to a valid severity
+    const [isValidSeverity, severity] = resolveSeverity(entry)
     if (isValidSeverity) return severity
 
-    if (Array.isArray(ruleEntry)) {
-      const [first, ...rest] = ruleEntry
-      const [severity, isValidSeverity] = resolveSeverity(first)
+    // Process entry as array
+    if (Array.isArray(entry)) {
+
+      // Return default severity if array is empty
+      if (!entry.length) return defaultSeverity
+
+      // Return severity rule first element resolves to a valid severity
+      const [first, ...rest] = entry
+      const [isValidSeverity, severity] = resolveSeverity(first)
       if (isValidSeverity) return [severity, ...rest]
-      return [defaultSeverity, ...ruleEntry]
+
+      // Return default severity rule with options
+      return [defaultSeverity, ...entry]
     }
 
-    return [defaultSeverity, ruleEntry]
+    // Return default severity rule with one option
+    return [defaultSeverity, entry]
   }
 
+  // Rule normalizer factory
   const createRuleNormalizer = (normalizeObjectEntry) => {
     return (rules) => {
       const entries = Object.entries(rules)
@@ -174,26 +186,30 @@ function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginNam
     }
   }
 
+  // Return simplified normalizer if no plugin defined
   if (!pluginName) {
     return createRuleNormalizer(
-      ([ruleName, ruleEntry]) => [
+      ([ruleName, entry]) => [
         ruleName,
-        normalizeRuleEntry(ruleEntry),
+        normalizeRuleEntry(entry),
       ],
     )
   }
 
+  // Declare plugin prefix
   const pluginPrefix = `${pluginName}/`
 
+  // Rule name normalizer
   const normalizeRuleName = (ruleName) => {
     if (ruleName.startsWith(pluginPrefix)) return ruleName
     return `${pluginPrefix}${ruleName}`
   }
 
+  // Return rule normalizer
   return createRuleNormalizer(
-    ([ruleName, ruleEntry]) => [
+    ([ruleName, entry]) => [
       normalizeRuleName(ruleName),
-      normalizeRuleEntry(ruleEntry),
+      normalizeRuleEntry(entry),
     ],
   )
 

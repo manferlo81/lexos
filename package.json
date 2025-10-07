@@ -33,7 +33,7 @@
     "lint:test": "eslint __test__",
     "lint:config": "eslint *.config.mjs",
     "lint-p": "run-p lint:*",
-    "lint": "eslint .",
+    "lint": "eslint",
     "test": "jest --color",
     "test:watch": "jest --color --watch",
     "dev": "bundlib watch -d",
@@ -42,7 +42,7 @@
     "clean-build": "run-s clean ci-build",
     "prerelease": "run-s clean-build",
     "release": "standard-version",
-    "release-dry": "standard-version --dry-run",
+    "dry-release": "standard-version --dry-run",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -51,7 +51,7 @@
     "@stylistic/eslint-plugin": "^5.4.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.7.0",
-    "bundlib": "^0.21.7",
+    "bundlib": "^0.21.8",
     "chokidar": "^4.0.3",
     "core-js": "^3.45.1",
     "eslint": "^9.37.0",
@@ -65,7 +65,7 @@
     "standard-version": "^9.5.0",
     "ts-jest": "^29.4.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.45.0"
+    "typescript-eslint": "^8.46.0"
   },
   "overrides": {
     "bundlib": {
