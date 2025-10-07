@@ -1,4 +1,4 @@
-import type { PotentiallyFalsy, RuleBase, WithLength } from './helper-types'
+import type { Falsy, RuleBase, WithLength } from './helper-types'
 import type { TokenType } from './token-types'
 import type { TokenGenerator, TokenGeneratorNoLastToken } from './types'
 
@@ -10,7 +10,7 @@ export interface MultiTokenRuleResultNoLastToken<T extends TokenType> extends Wi
   generator: TokenGeneratorNoLastToken<T>
 }
 
-export type PotentialMultiTokenRuleResult<T extends TokenType, L extends TokenType> = PotentiallyFalsy<MultiTokenRuleResult<T, L>>
+export type PotentialMultiTokenRuleResult<T extends TokenType, L extends TokenType> = MultiTokenRuleResult<T, L> | Falsy
 
 export type MultiTokenRule<T extends TokenType, L extends TokenType> = RuleBase<MultiTokenRuleResult<T, L>>
 export type MultiTokenRuleNoLastToken<T extends TokenType> = RuleBase<MultiTokenRuleResultNoLastToken<T>>

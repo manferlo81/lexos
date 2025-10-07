@@ -1,4 +1,4 @@
-import type { FalsyReturn, GetTokenTypeBase, RuleBase } from './helper-types'
+import type { Falsy, GetTokenTypeBase, RuleBase } from './helper-types'
 import type { MultiTokenRule } from './rule-multi-types'
 import type { SingleTokenRule, SingleTokenRuleResult } from './rule-single-types'
 import type { LengthTest } from './test-length-types'
@@ -7,7 +7,7 @@ import type { ValueTest, ValueTestResult } from './test-value-types'
 import type { TokenType } from './token-types'
 
 export type GetActualTokenType<T extends TokenType> = GetTokenTypeBase<T>
-export type GetFalsyTokenType = GetTokenTypeBase<FalsyReturn>
+export type GetFalsyTokenType = GetTokenTypeBase<Falsy> | GetTokenTypeBase<void>
 
 export type SingleTokenRuleOrTestResult<T extends TokenType> = SingleTokenRuleResult<T> | ValueTestResult
 export type SingleTokenRuleOrTest<T extends TokenType> = SingleTokenRule<T> | ValueTest
