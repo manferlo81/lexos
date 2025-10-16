@@ -3,5 +3,6 @@
     "bundlib",
     "lexos"
   ],
-  "liveServer.settings.root": "./coverage"
+  "liveServer.settings.root": "./coverage",
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

@@ -7,6 +7,6 @@ export interface SingleTokenRuleResult<T extends TokenType, V extends string = s
   token: RuleToken<T, V>
 }
 
-export type PotentialSingleTokenRuleResult<T extends TokenType> = SingleTokenRuleResult<T> | Falsy
+export type PotentialSingleTokenRuleResult<T extends TokenType, V extends string = string> = SingleTokenRuleResult<T, V> | Falsy
 
 export type SingleTokenRule<T extends TokenType, V extends string = string> = RuleBase<SingleTokenRuleResult<T, V>>
