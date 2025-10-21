@@ -1,5 +1,5 @@
 import type { CreateTokenGenerator, GetTokenType, LastToken, Token, TokenGenerator, TokenType } from '../../src'
-import type { And, Equals, Expect, Extends, ObjectPropertyEquals } from './types-test-tools'
+import type { And, AssignableTo, Equals, Expect } from './types-test-tools'
 
 export type Results = And<[
   Expect<Equals<CreateTokenGenerator<TokenType, TokenType>, (input: string, offset?: number) => TokenGenerator<TokenType, TokenType>>>,
@@ -11,14 +11,14 @@ export type Results = And<[
   Expect<Equals<GetTokenType<TokenType>, (value: string) => TokenType | false | null | undefined>>,
   Expect<Equals<TokenType, string | number>>,
 
-  Expect<Extends<Token<TokenType>, object>>,
-  Expect<ObjectPropertyEquals<Token<TokenType>, 'type', TokenType>>,
-  Expect<ObjectPropertyEquals<Token<TokenType>, 'value', string>>,
-  Expect<ObjectPropertyEquals<Token<TokenType>, 'pos', number>>,
-  Expect<ObjectPropertyEquals<Token<'X'>, 'type', 'X'>>,
+  Expect<AssignableTo<Token<TokenType>, object>>,
+  Expect<Equals<Token<TokenType>['type'], TokenType>>,
+  Expect<Equals<Token<TokenType>['value'], string>>,
+  Expect<Equals<Token<TokenType>['pos'], number>>,
+  Expect<Equals<Token<'X'>['type'], 'X'>>,
 
-  Expect<Extends<LastToken<TokenType>, object>>,
-  Expect<ObjectPropertyEquals<LastToken<TokenType>, 'type', TokenType>>,
-  Expect<ObjectPropertyEquals<LastToken<TokenType>, 'pos', number>>,
-  Expect<ObjectPropertyEquals<LastToken<'X'>, 'type', 'X'>>,
+  Expect<AssignableTo<LastToken<TokenType>, object>>,
+  Expect<Equals<LastToken<TokenType>['type'], TokenType>>,
+  Expect<Equals<LastToken<TokenType>['pos'], number>>,
+  Expect<Equals<LastToken<'X'>['type'], 'X'>>,
 ]>
