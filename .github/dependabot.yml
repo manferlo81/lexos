@@ -8,8 +8,8 @@ updates:
 
     schedule:
       interval: daily
-      timezone: Asia/Jakarta
-      time: 07:00
+      timezone: "Asia/Jakarta"
+      time: "07:00"
 
     assignees:
       - manferlo81
@@ -48,7 +48,7 @@ updates:
           - "@types/*"
           - typescript
 
-      babel:
+      build:
         dependency-type: development
         update-types:
           - minor
@@ -56,9 +56,12 @@ updates:
         patterns:
           - "@babel/*"
           - core-js
+          - bundlib
 
       others:
         dependency-type: development
         update-types:
           - minor
           - patch
+        patterns:
+          - "*"
