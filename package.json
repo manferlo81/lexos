@@ -52,7 +52,7 @@
     "@babel/preset-env": "^7.28.3",
     "@stylistic/eslint-plugin": "^5.5.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.9.1",
+    "@types/node": "^24.9.2",
     "bundlib": "^0.21.9",
     "chokidar": "^4.0.3",
     "core-js": "^3.46.0",
