@@ -17,7 +17,7 @@ const ALL_FILES = [PATTERN_JS, PATTERN_TS]
 // Plugin Javascript
 
 const configPluginJavascript = defineConfig({
-  rules: ruleNormalizer()({
+  rules: rulesNormalizer()({
     // Safety
     'no-eval': 'on',
     'no-implied-eval': 'on',
@@ -62,7 +62,7 @@ const configPluginJavascript = defineConfig({
 // Plugin Typescript
 
 const configPluginTypescript = defineConfig({
-  rules: ruleNormalizer({ plugin: '@typescript-eslint' })({
+  rules: rulesNormalizer({ plugin: '@typescript-eslint' })({
     'array-type': { default: 'array-simple', readonly: 'array-simple' },
     'restrict-template-expressions': {
       allowBoolean: false,
@@ -85,7 +85,7 @@ const configPluginTypescript = defineConfig({
 // Plugin Import
 
 const configPluginImport = defineConfig({
-  rules: ruleNormalizer({ plugin: 'import' })({
+  rules: rulesNormalizer({ plugin: 'import' })({
     'consistent-type-specifier-style': 'prefer-top-level',
     'no-useless-path-segments': 'on',
     'no-absolute-path': 'on',
@@ -104,7 +104,7 @@ const configPluginImport = defineConfig({
 // Plugin Stylistic
 
 const configPluginStylistic = defineConfig({
-  rules: ruleNormalizer({ plugin: '@stylistic' })({
+  rules: rulesNormalizer({ plugin: '@stylistic' })({
     indent: ['on', 2],
     quotes: 'single',
     'linebreak-style': 'unix',
@@ -136,7 +136,7 @@ export default defineConfig(
 
 // Helpers
 
-function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginName } = {}) {
+function rulesNormalizer({ severity: defaultSeverity = 'error', plugin: pluginName } = {}) {
 
   // Throw TypeError if default severity is not valid
   const isDefaultSeverity = (entry) => ['error', 'warn', 1, 2].includes(entry)
@@ -182,7 +182,7 @@ function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginNam
   }
 
   // Rule normalizer factory
-  const createRuleNormalizer = (normalizeObjectEntry) => {
+  const createRulesNormalizer = (normalizeObjectEntry) => {
     return (rules) => {
       const entries = Object.entries(rules)
       const entriesNormalized = entries.map(normalizeObjectEntry)
@@ -192,7 +192,7 @@ function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginNam
 
   // Return simplified normalizer if no plugin defined
   if (!pluginName) {
-    return createRuleNormalizer(
+    return createRulesNormalizer(
       ([ruleName, entry]) => [
         ruleName,
         normalizeRuleEntry(entry),
@@ -210,7 +210,7 @@ function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginNam
   }
 
   // Return rule normalizer
-  return createRuleNormalizer(
+  return createRulesNormalizer(
     ([ruleName, entry]) => [
       normalizeRuleName(ruleName),
       normalizeRuleEntry(entry),

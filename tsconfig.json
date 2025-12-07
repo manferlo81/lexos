@@ -2,7 +2,7 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "noEmit": true,
-    "tsBuildInfoFile": "node_modules/.tsbuildinfo/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "./node_modules/.tsbuildinfo/tsconfig.tsbuildinfo"
   },
   "include": [
     "src",
