@@ -7,7 +7,9 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "lib": [],
+    "lib": [
+      "ES2015"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     // Strict
