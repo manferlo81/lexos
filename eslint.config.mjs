@@ -3,7 +3,7 @@ import globals from 'globals'
 
 import pluginJavascript from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
-import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import'
+import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import-x'
 import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
 // Constants
@@ -85,7 +85,7 @@ const configPluginTypescript = defineConfig({
 // Plugin Import
 
 const configPluginImport = defineConfig({
-  rules: rulesNormalizer({ plugin: 'import' })({
+  rules: rulesNormalizer({ plugin: 'import-x' })({
     'consistent-type-specifier-style': 'prefer-top-level',
     'no-useless-path-segments': 'on',
     'no-absolute-path': 'on',
@@ -93,8 +93,7 @@ const configPluginImport = defineConfig({
     'no-nodejs-modules': 'on',
   }),
   files: ALL_FILES,
-  languageOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-  settings: { 'import/resolver': { typescript: true } },
+  settings: { 'import-x/resolver': { typescript: true } },
   extends: [
     pluginImportConfigs.recommended,
     pluginImportConfigs.typescript,
