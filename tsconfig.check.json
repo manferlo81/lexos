@@ -1,11 +1,12 @@
 {
   "include": [
+    "./src",
     "./__test__"
   ],
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "target": "es2020",
-    "lib": [],
+    "tsBuildInfoFile": "./node_modules/.tsbuildinfo/tsconfig.tsbuildinfo",
+    "noEmit": true,
     "types": [
       "node",
       "jest"

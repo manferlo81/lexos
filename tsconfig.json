@@ -1,11 +1,3 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "noEmit": true,
-    "tsBuildInfoFile": "./node_modules/.tsbuildinfo/tsconfig.tsbuildinfo"
-  },
-  "include": [
-    "src",
-    "__test__"
-  ]
+  "extends": "./tsconfig.check.json"
 }

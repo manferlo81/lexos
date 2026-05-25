@@ -3,12 +3,12 @@
     // Module
     "target": "es2020",
     "module": "esnext",
-    "moduleResolution": "node10",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "lib": [
-      "ES2015"
+      "ES2017"
     ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
